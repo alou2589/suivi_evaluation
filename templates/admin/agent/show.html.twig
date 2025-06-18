@@ -1,0 +1,65 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title = 'Agent' %}
+
+{% block title %}Agent{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row row-demo-grid">
+              <div class="col-md-6 ms-auto me-auto">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Prenom</th>
+                            <td>{{ agent.prenom }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom</th>
+                            <td>{{ agent.nom }}</td>
+                        </tr>
+                        <tr>
+                            <th>Matricule</th>
+                            <td>{{ agent.matricule }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fonction</th>
+                            <td>{{ agent.fonction }}</td>
+                        </tr>
+                        <tr>
+                            <th>Service_affecté</th>
+                            <td>{{ agent.serviceAffecte.nomService }}</td>
+                        </tr>
+                        <tr>
+                            <th>CreatedAt</th>
+                            <td>{{ agent.createdAt ? agent.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>UpdatedAt</th>
+                            <td>{{ agent.updatedAt ? agent.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex gap-1">
+                                    <a class="btn btn-primary" href="{{ path('app_admin_agent_index') }}"><i class="fa fa-home"></i> Retour</a>
+                                    <a class="btn btn-warning" href="{{ path('app_admin_agent_edit', {'id': agent.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                                    <form action="{{ path('app_admin_agent_delete', {id:agent.id})}}" method="POST">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ agent.id) }}">
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

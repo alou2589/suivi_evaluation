@@ -1,0 +1,59 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Programme' %}
+
+{% block title %}Programme{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex align-items-center">
+                    <h4 class="card-title">Liste des programmes</h4>
+                    <a href="{{ path('app_admin_programme_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle programme" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Code</th>
+                                    <th class="text-center">Responsable</th>
+                                    <th class="text-center">Nom</th>
+                                    <th class="text-center">Coût</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for programme in programmes %}
+                                <tr>
+                                    <td class="text-center">{{ programme.codeProgramme }}</td>
+                                    <td class="text-center">{{ programme.responsableProgramme.prenom }} {{ programme.responsableProgramme.nom}}</td>
+                                    <td class="text-center">{{ programme.nomProgramme }}</td>
+                                    <td class="text-center">{{ programme.coutProgramme }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_admin_programme_show', {'id': programme.id}) }}"><i class="fa fa-eye text-primary"></i></a>
+                                        <a href="{{ path('app_admin_programme_edit', {'id': programme.id}) }}"><i class="fa fa-edit text-secondary"></i></a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

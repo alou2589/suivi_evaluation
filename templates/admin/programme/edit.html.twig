@@ -1,0 +1,63 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title = 'Programme' %}
+
+{% block title %}Programme{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Modifier Programme</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4">
+                            {{ form_start(form, {'attr':{'class':'form'}}) }}
+                            <div class="form-group form-group-default">
+                                {{form_row(form.nom_programme, {'attr': {'class': 'form-control', 'placeholder':'Nom Programme...','id':'nomProgramme', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.responsable_programme, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Responsable programme...','id':'rprog', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.annee_programme, {'attr': {'class': 'form-control','id':'comment', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.cout_programme, {'attr': {'class': 'form-control','id':'coutProgramme', 'required':'required' }}) }}
+                            </div>
+                            <div class="card-action">
+                                <button type="submit" class="btn btn-secondary">Modifier</button>
+                                <a class="btn btn-danger" href="{{ path('app_admin_programme_index') }}">Annuler</a>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            // Custom JavaScript for the Programme form can be added here
+            console.log("Programme form loaded successfully.");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}

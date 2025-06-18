@@ -1,0 +1,29 @@
+{% extends 'admin/adminbase.html.twig' %}
+
+
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    {% include '/admin/partials/_page_header_partials.html.twig' %}
+</div>
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            // Custom JavaScript for the dashboard can be added here
+            console.log("Dashboard loaded successfully.");
+        });
+    </script>
+    <!-- jQuery Sparkline -->
+    <script src="{{asset('../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+            <!-- jQuery Vector Maps -->
+            <script src="{{asset('../assets/js/plugin/jsvectormap/jsvectormap.min.js')}}"></script>
+            <script src="{{asset('../assets/js/plugin/jsvectormap/world.js')}}"></script>
+
+{% endblock %}

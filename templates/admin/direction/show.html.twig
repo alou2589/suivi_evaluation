@@ -1,0 +1,43 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title = 'Direction' %}
+
+{% block title %}Direction{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row row-demo-grid">
+              <div class="col-md-6 ms-auto me-auto">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Nom_direction</th>
+                            <td>{{ direction.nomDirection }}</td>
+                        </tr>
+                        <tr>
+
+                            <td colspan="2">
+                                <div class="d-flex gap-1">
+                                    <a class="btn btn-primary" href="{{ path('app_admin_direction_index') }}"><i class="fa fa-home"></i> Retour</a>
+                                    <a class="btn btn-warning" href="{{ path('app_admin_direction_edit', {'id': direction.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                                    <form action="{{ path('app_admin_direction_delete', {id:direction.id})}}" method="POST">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ direction.id) }}">
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
