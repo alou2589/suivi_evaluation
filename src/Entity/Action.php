@@ -48,9 +48,16 @@ class Action
     #[ORM\ManyToOne(inversedBy: 'actions')]
     private ?Agent $responsable_action = null;
 
+    /**
+     * @var Collection<int, NatureDepense>
+     */
+    #[ORM\OneToMany(targetEntity: NatureDepense::class, mappedBy: 'action')]
+    private Collection $natureDepenses;
+
     public function __construct()
     {
         $this->actions = new ArrayCollection();
+        $this->natureDepenses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +158,36 @@ class Action
     public function setResponsableAction(?Agent $responsable_action): static
     {
         $this->responsable_action = $responsable_action;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NatureDepense>
+     */
+    public function getNatureDepenses(): Collection
+    {
+        return $this->natureDepenses;
+    }
+
+    public function addNatureDepense(NatureDepense $natureDepense): static
+    {
+        if (!$this->natureDepenses->contains($natureDepense)) {
+            $this->natureDepenses->add($natureDepense);
+            $natureDepense->setAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNatureDepense(NatureDepense $natureDepense): static
+    {
+        if ($this->natureDepenses->removeElement($natureDepense)) {
+            // set the owning side to null (unless already changed)
+            if ($natureDepense->getAction() === $this) {
+                $natureDepense->setAction(null);
+            }
+        }
 
         return $this;
     }
