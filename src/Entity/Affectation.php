@@ -37,6 +37,9 @@ class Affectation
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $statut_affectation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,5 +140,17 @@ class Affectation
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getStatutAffectation(): ?string
+    {
+        return $this->statut_affectation;
+    }
+
+    public function setStatutAffectation(string $statut_affectation): static
+    {
+        $this->statut_affectation = $statut_affectation;
+
+        return $this;
     }
 }

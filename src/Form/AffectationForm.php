@@ -8,6 +8,7 @@ use App\Entity\Poste;
 use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,6 +54,17 @@ class AffectationForm extends AbstractType
                 'attr' => [
                     'data-placeholder' => 'Select a service',
                     'class' => 'js-example-basic-single',
+                ],
+            ])
+            ->add('statut_affectation', ChoiceType::class, [
+                'choices' => [
+                    'En Service' => 'en service',
+                    'Affecté' => 'affecté',
+                ],
+                'placeholder' => 'Select a status',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-select',
                 ],
             ])
         ;

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Direction;
 use App\Form\DirectionForm;
+use App\Repository\AffectationRepository;
 use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,10 +45,13 @@ final class DirectionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Direction $direction): Response
+    public function show(Direction $direction, AffectationRepository $affectationRepository): Response
     {
+        // Fetching all affectations related to the direction and the statut_affectation
+        $affectations = $affectationRepository->findByDirectionStatutAffectation($direction, 'en service');
         return $this->render('admin/direction/show.html.twig', [
             'direction' => $direction,
+            'affectations' => $affectations,
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Service;
 use App\Form\ServiceForm;
+use App\Repository\AffectationRepository;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,10 +44,13 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Service $service): Response
+    public function show(Service $service, AffectationRepository $affectationRepository): Response
     {
+        // Fetching all affectations related to the service and statut_service
+        $affectations = $affectationRepository->findBy(['service' => $service, 'statut_affectation' => 'en service']);
         return $this->render('admin/service/show.html.twig', [
             'service' => $service,
+            'affectations' => $affectations,
         ]);
     }
 

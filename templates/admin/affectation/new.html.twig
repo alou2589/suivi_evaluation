@@ -33,6 +33,9 @@
                             <div class="form-group form-group-default">
                                 {{form_row(form.date_fin, {'attr': {'class': 'form-control', 'placeholder':'Fonction...','id':'fonction' }}) }}
                             </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.statut_affectation, {'attr': {'class': 'form-control', 'placeholder':'Statut Affectation...','id':'statutAffectation', 'required':'required' }}) }}
+                            </div>
                             <div class="card-action">
                                 <button type="submit" class="btn btn-primary">Valider</button>
                                 <a class="btn btn-danger" href="{{ path('app_admin_affectation_index') }}">Annuler</a>

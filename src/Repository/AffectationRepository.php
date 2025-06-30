@@ -26,6 +26,18 @@ class AffectationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByDirectionStatutAffectation($direction, $statut_affectation): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.service', 's')
+            ->andWhere('s.structure_rattachee = :direction')
+            ->andWhere('a.statut_affectation = :statut_affectation')
+            ->setParameter('direction', $direction)
+            ->setParameter('statut_affectation', $statut_affectation)
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Affectation[] Returns an array of Affectation objects
     //     */
