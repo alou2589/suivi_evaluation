@@ -37,9 +37,6 @@ class Agent
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'agents')]
-    private ?Service $service_affecte = null;
-
     /**
      * @var Collection<int, Programme>
      */
@@ -52,10 +49,17 @@ class Agent
     #[ORM\OneToMany(targetEntity: Action::class, mappedBy: 'responsable_action')]
     private Collection $actions;
 
+    /**
+     * @var Collection<int, Affectation>
+     */
+    #[ORM\OneToMany(targetEntity: Affectation::class, mappedBy: 'agent')]
+    private Collection $affectations;
+
     public function __construct()
     {
         $this->programmes = new ArrayCollection();
         $this->actions = new ArrayCollection();
+        $this->affectations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,18 +151,6 @@ class Agent
         return $this;
     }
 
-    public function getServiceAffecte(): ?Service
-    {
-        return $this->service_affecte;
-    }
-
-    public function setServiceAffecte(?Service $service_affecte): static
-    {
-        $this->service_affecte = $service_affecte;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Programme>
      */
@@ -213,6 +205,36 @@ class Agent
             // set the owning side to null (unless already changed)
             if ($action->getResponsableAction() === $this) {
                 $action->setResponsableAction(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affectation>
+     */
+    public function getAffectations(): Collection
+    {
+        return $this->affectations;
+    }
+
+    public function addAffectation(Affectation $affectation): static
+    {
+        if (!$this->affectations->contains($affectation)) {
+            $this->affectations->add($affectation);
+            $affectation->setAgent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAffectation(Affectation $affectation): static
+    {
+        if ($this->affectations->removeElement($affectation)) {
+            // set the owning side to null (unless already changed)
+            if ($affectation->getAgent() === $this) {
+                $affectation->setAgent(null);
             }
         }
 

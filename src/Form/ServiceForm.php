@@ -7,6 +7,7 @@ use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,6 +16,17 @@ class ServiceForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('type_service', ChoiceType::class, [
+                'choices' => [
+                    'Service' => 'service',
+                    'Cellule' => 'cellule',
+                ],
+                'placeholder' => 'Select a type of service',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-select',
+                ],
+            ])
             ->add('nom_service')
             ->add('description', TextareaType::class, [
                 'required' => false,

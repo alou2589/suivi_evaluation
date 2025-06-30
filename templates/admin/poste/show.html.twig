@@ -1,7 +1,7 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = 'Service' %}
+{% set page_title = 'Direction' %}
 
-{% block title %}Service{% endblock %}
+{% block title %}Direction{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -10,11 +10,11 @@
     <div class="card">
 		<div class="card-header">
             <div class="d-flex gap-3 align-items-right">
-                <h4 class="card-title"> {{ service.description}} </h4>
-                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_service_index') }}"><i class="fa fa-home"></i> Retour</a>
-                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_service_edit', {'id': service.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
-                <form action="{{ path('app_admin_service_delete', {id:service.id})}}" method="POST">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                <h4 class="card-title"> {{ poste.description}} </h4>
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_poste_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_poste_edit', {'id': poste.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_poste_delete', {id:poste.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste.id) }}">
                     <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
                 </form>
             </div>
@@ -30,10 +30,10 @@
 			</ul>
 			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
 				<div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
-                    {% include 'admin/service/show_info.html.twig' %}
+                    {% include 'admin/poste/show_info.html.twig' %}
 				</div>
 				<div class="tab-pane fade" id="pills-profile-nobd" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
-					{% include 'admin/service/show_agents.html.twig' %}
+					{% include 'admin/poste/show_agents.html.twig' %}
 				</div>
 			</div>
 		</div>

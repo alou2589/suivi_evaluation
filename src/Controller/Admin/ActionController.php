@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/action', name: 'app_admin_action_')]
+#[Route(path: '/admin/action', name: 'app_admin_action_')]
 final class ActionController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]

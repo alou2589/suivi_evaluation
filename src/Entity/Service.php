@@ -36,16 +36,20 @@ class Service
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $type_service = null;
+
     /**
-     * @var Collection<int, Agent>
+     * @var Collection<int, Affectation>
      */
-    #[ORM\OneToMany(targetEntity: Agent::class, mappedBy: 'service_affecte')]
-    private Collection $agents;
+    #[ORM\OneToMany(targetEntity: Affectation::class, mappedBy: 'service')]
+    private Collection $affectations;
 
     public function __construct()
     {
-        $this->agents = new ArrayCollection();
+        $this->affectations = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -125,30 +129,43 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, Agent>
-     */
-    public function getAgents(): Collection
+
+    public function getTypeService(): ?string
     {
-        return $this->agents;
+        return $this->type_service;
     }
 
-    public function addAgent(Agent $agent): static
+    public function setTypeService(string $type_service): static
     {
-        if (!$this->agents->contains($agent)) {
-            $this->agents->add($agent);
-            $agent->setServiceAffecte($this);
+        $this->type_service = $type_service;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affectation>
+     */
+    public function getAffectations(): Collection
+    {
+        return $this->affectations;
+    }
+
+    public function addAffectation(Affectation $affectation): static
+    {
+        if (!$this->affectations->contains($affectation)) {
+            $this->affectations->add($affectation);
+            $affectation->setService($this);
         }
 
         return $this;
     }
 
-    public function removeAgent(Agent $agent): static
+    public function removeAffectation(Affectation $affectation): static
     {
-        if ($this->agents->removeElement($agent)) {
+        if ($this->affectations->removeElement($affectation)) {
             // set the owning side to null (unless already changed)
-            if ($agent->getServiceAffecte() === $this) {
-                $agent->setServiceAffecte(null);
+            if ($affectation->getService() === $this) {
+                $affectation->setService(null);
             }
         }
 

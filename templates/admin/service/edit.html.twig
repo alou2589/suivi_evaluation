@@ -18,6 +18,9 @@
                         <div class="col-md-6 col-lg-4">
                             {{ form_start(form, {'attr':{'class':'form'}}) }}
                             <div class="form-group form-group-default">
+                                {{form_row(form.type_service, {'attr': {'class': 'form-control', 'placeholder':'Type de service...','id':'codeDirection', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
                                 {{form_row(form.nom_service, {'attr': {'class': 'form-control', 'placeholder':'Nom du service...','id':'nomService', 'required':'required' }}) }}
                             </div>
                             <div class="form-group form-group-default">

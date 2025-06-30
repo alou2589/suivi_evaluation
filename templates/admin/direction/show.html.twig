@@ -8,35 +8,42 @@
         {% include '/admin/partials/_page_header_partials.html.twig' %}
     </div>
     <div class="card">
-        <div class="card-body">
-            <div class="row row-demo-grid">
-              <div class="col-md-6 ms-auto me-auto">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>Nom_direction</th>
-                            <td>{{ direction.nomDirection }}</td>
-                        </tr>
-                        <tr>
-
-                            <td colspan="2">
-                                <div class="d-flex gap-1">
-                                    <a class="btn btn-primary" href="{{ path('app_admin_direction_index') }}"><i class="fa fa-home"></i> Retour</a>
-                                    <a class="btn btn-warning" href="{{ path('app_admin_direction_edit', {'id': direction.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
-                                    <form action="{{ path('app_admin_direction_delete', {id:direction.id})}}" method="POST">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ direction.id) }}">
-                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> Supprimer</button>
-                                    </form>
-                                </div>
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-              </div>
+		<div class="card-header">
+            <div class="d-flex gap-3 align-items-right">
+                <h4 class="card-title"> {{ direction.description}} </h4>
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_direction_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_direction_edit', {'id': direction.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_direction_delete', {id:direction.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ direction.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
             </div>
-        </div>
-    </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Liste services</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-messages-tab-nobd" data-bs-toggle="pill" href="#pills-messages-nobd" role="tab" aria-controls="pills-messages-nobd" aria-selected="false">Liste des agents</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+				<div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    {% include 'admin/direction/show_info.html.twig' %}
+				</div>
+				<div class="tab-pane fade" id="pills-profile-nobd" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
+					{% include 'admin/direction/show_services.html.twig' %}
+				</div>
+				<div class="tab-pane fade" id="pills-messages-nobd" role="tabpanel" aria-labelledby="pills-messages-tab-nobd">
+					{% include 'admin/direction/show_agents.html.twig' %}
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 

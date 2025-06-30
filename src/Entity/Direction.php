@@ -40,6 +40,9 @@ class Direction
     #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'structure_rattachee')]
     private Collection $services;
 
+    #[ORM\Column(length: 255)]
+    private ?string $type_direction = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -137,6 +140,18 @@ class Direction
                 $service->setStructureRattachee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeDirection(): ?string
+    {
+        return $this->type_direction;
+    }
+
+    public function setTypeDirection(string $type_direction): static
+    {
+        $this->type_direction = $type_direction;
 
         return $this;
     }

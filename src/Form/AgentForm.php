@@ -37,15 +37,6 @@ class AgentForm extends AbstractType
                 ],
             ])
             ->add('fonction')
-            ->add('service_affecte', EntityType::class, [
-                'class' => Service::class,
-                'choice_label' => 'nom_service',
-                'required' => false,
-                'attr' => [
-                    'data-placeholder' => 'Select a service',
-                    'class' => 'js-example-basic-single',
-                ],
-            ])
         ;
     }
 
