@@ -1,0 +1,44 @@
+<div class="row row-demo-grid">
+    <div class="col-md-12 ms-auto me-auto">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Cadre Statuaire</th>
+                    <td>{{ agent.cadreStatuaire }}</td>
+                </tr>
+                <tr>
+                    <th>Grade & Échelon </th>
+                    <td>{{ agent.grade }} {{ agent.echelon }} </td>
+                </tr>
+                <tr>
+                    <th>Hiérarchie</th>
+                    <td>{{ agent.hierarchie }}</td>
+                </tr>
+                <tr>
+                    <th>Date de recrutement</th>
+                    <td> {{ agent.dateRecrutement ? agent.dateRecrutement|date('Y-m-d') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Numéro de Décision ou du Contrat </th>
+                    <td>{{ agent.numeroDecisionContrat }}</td>
+                </tr>
+                <tr>
+                    <th>Décision ou Contrat</th>
+                    <td>{{ agent.decisionContrat }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ agent.identification.telephone }}</td>
+                </tr>
+                <tr>
+                    <th>Banque</th>
+                    <td>{{ agent.banque }}</td>
+                </tr>
+                <tr>
+                    <th>Numéro de compte</th>
+                    <td>{{ agent.numeroCompte }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

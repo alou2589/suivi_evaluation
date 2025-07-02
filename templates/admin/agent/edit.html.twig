@@ -18,10 +18,7 @@
                         <div class="col-md-6 col-lg-4">
                            {{ form_start(form, {'attr':{'class':'form'}}) }}
                             <div class="form-group form-group-default">
-                                {{form_row(form.prenom, {'attr': {'class': 'form-control', 'placeholder':'Prénom...','id':'prenom', 'required':'required' }}) }}
-                            </div>
-                            <div class="form-group form-group-default">
-                                {{form_row(form.nom, {'attr': {'class': 'form-control', 'placeholder':'Nom...','id':'nom', 'required':'required' }}) }}
+                                {{form_row(form.identification, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Nom complet agent...','id':'agent', 'required':'required' }}) }}
                             </div>
                             <div class="form-group form-group-default">
                                 {{form_row(form.matricule, {'attr': {'class': 'form-control', 'placeholder':'Matricule...','id':'matricule', 'required':'required' }}) }}
@@ -29,8 +26,38 @@
                             <div class="form-group form-group-default">
                                 {{form_row(form.fonction, {'attr': {'class': 'form-control', 'placeholder':'Fonction...','id':'fonction', 'required':'required' }}) }}
                             </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.cadre_statuaire, {'attr': {'class': 'form-control', 'placeholder':'Fonction...','id':'fonction', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.hierarchie, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Hiérarchie...','id':'hierarchie', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.grade, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Grade...','id':'grade', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.echelon, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Échelon...','id':'echelon', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.decision_contrat, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Décision ou Contrat...','id':'decisionContrat', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.numero_decision_contrat, {'attr': {'class': 'form-control', 'placeholder':'Numéro décision ou contrat...','id':'matricule', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.date_recrutement, {'attr': {'class': 'form-control', 'placeholder':'Date de Recrutement...','id':'dateRecrutement', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.banque, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Échelon...','id':'echelon', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.numeroCompte, {'attr': {'class': 'form-control', 'placeholder':'Numéro de Compte...','id':'numeroCompte', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.status, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Status agent...','id':'statusAgent', 'required':'required' }}) }}
+                            </div>
                             <div class="card-action">
-                                    <button type="submit" class="btn btn-secondary">Modifier</button>
+                                <button type="submit" class="btn btn-secondary">Modifier</button>
                                 <a class="btn btn-danger" href="{{ path('app_admin_agent_index') }}">Annuler</a>
                             </div>
                             {{ form_end(form) }}

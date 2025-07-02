@@ -1,0 +1,86 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title = 'Info Perso' %}
+
+{% block title %}Info Perso{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Modifier info</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4">
+                           {{ form_start(form, {'attr':{'class':'form'}}) }}
+                            <div class="form-group form-group-default">
+                                {{form_row(form.prenom, {'attr': {'class': 'form-control', 'placeholder':'Prénom...','id':'prenom', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.nom, {'attr': {'class': 'form-control', 'placeholder':'Nom...','id':'nom', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.sexe, {'attr': {'class': 'form-control', 'placeholder':'Sexe ...','id':'sexe', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.date_naissance, {'attr': {'class': 'form-control', 'placeholder':'Date de Naissance...','id':'dateNaissance', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.lieu_naissance, {'attr': {'class': 'form-control', 'placeholder':'Lieu de Naissance...','id':'lieuNaissance', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default" >
+                                {{form_row(form.email, {'attr': {'class': 'form-control', 'placeholder':'Email...','id':'email', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default" >
+                                {{form_row(form.telephone, {'attr': {'class': 'form-control', 'placeholder':'Téléphone...','id':'telephone', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.situation_matrimoniale, {'attr': {'class': 'form-control', 'placeholder':'Situation Matrimoniale ...','id':'situationMatrimoniale', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.adresse, {'attr': {'class': 'form-control','id':'comment', 'required':'required' }}) }}
+                            </div>
+
+                            <div class="card-action">
+                                <button type="submit" class="btn btn-secondary">Modifier</button>
+                                <a class="btn btn-danger" href="{{ path('app_admin_info_perso_index') }}">Annuler</a>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+        $(document).ready(function () {
+        // In your Javascript (external .js resource or <script> tag)
+
+            // Custom JavaScript for the service form can be added here
+            console.log("Service form loaded successfully.");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+

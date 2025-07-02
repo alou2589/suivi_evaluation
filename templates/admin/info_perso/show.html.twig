@@ -1,0 +1,81 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title =  info_perso.prenom ~ " " ~ info_perso.nom  %}
+
+{% block title %}Info Perso{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+		<div class="card-header">
+            <div class="d-flex gap-3 justify-content-end">
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_info_perso_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_info_perso_edit', {'id': info_perso.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_info_perso_delete', {id:info_perso.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ info_perso.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
+            </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Liste services</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-messages-tab-nobd" data-bs-toggle="pill" href="#pills-messages-nobd" role="tab" aria-controls="pills-messages-nobd" aria-selected="false">Liste des agents</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    <div class="row row-demo-grid">
+                      <div class="col-md-6 ms-auto me-auto">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Prenom</th>
+                                    <td>{{ info_perso.prenom }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nom</th>
+                                    <td>{{ info_perso.nom }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sexe</th>
+                                    <td>{{ info_perso.sexe }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date et lieu de naissance</th>
+                                    <td> le {{ info_perso.dateNaissance ? info_perso.dateNaissance|date('Y-m-d') : '' }} à {{ info_perso.lieuNaissance }} </td>
+                                </tr>
+                                <tr>
+                                    <th>Adresse </th>
+                                    <td>{{ info_perso.adresse }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Adresse email</th>
+                                    <td>{{ info_perso.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Téléphone</th>
+                                    <td>{{ info_perso.telephone }}</td>
+                                </tr>
+                                    <th>Situation matrimoniale</th>
+                                    <td>{{ info_perso.situationMatrimoniale }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

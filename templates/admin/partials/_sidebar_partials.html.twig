@@ -37,7 +37,7 @@
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
                 </span>
-                <h4 class="text-section">Primaire</h4>
+                <h4 class="text-section">Ressources Humaines</h4>
               </li>
               <li class="nav-item {{app.current_route == 'app_admin_direction_index' ? 'active' : ''}}">
                 <a href="{{ path('app_admin_direction_index') }}">
@@ -57,17 +57,31 @@
                   <p>Poste</p>
                 </a>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_agent_index' ? 'active' : ''}}">
-                <a href="{{ path('app_admin_agent_index') }}">
-                  <i class="fas fa-users"></i>
-                  <p>Agent</p>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base">
+                    <i class="fas fa-users"></i>
+                    <p>Personnel</p>
+                    <span class="caret"></span>
                 </a>
-              </li>
-              <li class="nav-item {{app.current_route == 'app_admin_affectation_index' ? 'active' : ''}}">
-                <a href="{{ path('app_admin_affectation_index') }}">
-                  <i class="fas fa-users"></i>
-                  <p>Affectation</p>
-                </a>
+                <div class="collapse {{app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="base">
+                  <ul class="nav nav-collapse">
+                    <li class="nav-item" {{app.current_route == 'app_admin_info_perso_index' ? 'active' : ''}}>
+                      <a href="{{ path('app_admin_info_perso_index') }}">
+                        <span class="sub-item">Info Personnelle</span>
+                      </a>
+                    </li>
+                    <li class="nav-item {{app.current_route == 'app_admin_agent_index' ? 'active' : ''}}">
+                      <a href="{{ path('app_admin_agent_index') }}">
+                        <span class="sub-item">Agent</span>
+                      </a>
+                    </li>
+                    <li class="nav-item {{app.current_route == 'app_admin_affectation_index' ? 'active' : ''}}">
+                      <a href="{{ path('app_admin_affectation_index') }}">
+                        <span class="sub-item">Affectation</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
               <li class="nav-section">
                 <span class="sidebar-mini-icon">

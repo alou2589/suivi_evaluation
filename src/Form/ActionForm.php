@@ -54,7 +54,7 @@ class ActionForm extends AbstractType
                     if($agent->getId()== 0) {
                         return null;
                     }
-                    return $agent->getPrenom() . ' ' . $agent->getNom();
+                    return $agent->getIdentification()->getPrenom() . ' ' . $agent->getIdentification()->getNom();
                 },
                 'required' => false,
                 'attr' => [

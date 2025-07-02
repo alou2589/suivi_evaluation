@@ -1,0 +1,63 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Information personnelle' %}
+
+{% block title %}Information Personnelle{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex align-items-center">
+                    <h4 class="card-title">Liste des informations</h4>
+                    <a href="{{ path('app_admin_info_perso_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvel agent" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" >Nom Complet</th>
+                                    <th class="text-center" >Sexe</th>
+                                    <th class="text-center" >Adresse</th>
+                                    <th class="text-center" >Telephone</th>
+                                    <th class="text-center" >Email</th>
+                                    <th class="text-center" >Situation Matrimoniale</th>
+                                    <th class="text-center" >actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for info_perso in info_persos %}
+                                <tr>
+                                    <td class="text-center" >{{ info_perso.prenom }} {{ info_perso.nom }}</td>
+                                    <td class="text-center" >{{ info_perso.sexe }}</td>
+                                    <td class="text-center" >{{ info_perso.adresse }}</td>
+                                    <td class="text-center" >{{ info_perso.telephone }}</td>
+                                    <td class="text-center" >{{ info_perso.email }}</td>
+                                    <td class="text-center" >{{ info_perso.situationMatrimoniale }}</td>
+                                    <td class="text-center" >
+                                        <a href="{{ path('app_admin_info_perso_show', {'id': info_perso.id}) }}"> <i class="fa fa-eye text-primary" aria-hidden="true"></i>   </a>
+                                        <a href="{{ path('app_admin_info_perso_edit', {'id': info_perso.id}) }}"> <i class="fa fa-edit text-secondary" aria-hidden="true"></i> </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="9">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

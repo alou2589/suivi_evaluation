@@ -1,7 +1,7 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = 'Direction' %}
+{% set page_title = poste.nomPoste %}
 
-{% block title %}Direction{% endblock %}
+{% block title %}Poste{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -9,8 +9,7 @@
     </div>
     <div class="card">
 		<div class="card-header">
-            <div class="d-flex gap-3 align-items-right">
-                <h4 class="card-title"> {{ poste.description}} </h4>
+            <div class="d-flex gap-1 justify-content-end">
                 <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_poste_index') }}"><i class="fa fa-home"></i> Retour</a>
                 <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_poste_edit', {'id': poste.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
                 <form action="{{ path('app_admin_poste_delete', {id:poste.id})}}" method="POST">

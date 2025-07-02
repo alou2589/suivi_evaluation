@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AgentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -17,20 +18,6 @@ class Agent
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $nom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $matricule = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $fonction = null;
-
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -55,6 +42,45 @@ class Agent
     #[ORM\OneToMany(targetEntity: Affectation::class, mappedBy: 'agent')]
     private Collection $affectations;
 
+    #[ORM\Column(length: 255)]
+    private ?string $cadre_statuaire = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $matricule = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $fonction = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $grade = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $echelon = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $numero_decision_contrat = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $decision_contrat = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?InfoPerso $identification = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $hierarchie = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $date_recrutement = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $banque = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $numeroCompte = null;
+
     public function __construct()
     {
         $this->programmes = new ArrayCollection();
@@ -65,30 +91,6 @@ class Agent
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
     }
 
     public function getMatricule(): ?string
@@ -240,4 +242,137 @@ class Agent
 
         return $this;
     }
+
+    public function getCadreStatuaire(): ?string
+    {
+        return $this->cadre_statuaire;
+    }
+
+    public function setCadreStatuaire(string $cadre_statuaire): static
+    {
+        $this->cadre_statuaire = $cadre_statuaire;
+
+        return $this;
+    }
+
+    public function getGrade(): ?string
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(string $grade): static
+    {
+        $this->grade = $grade;
+
+        return $this;
+    }
+
+    public function getEchelon(): ?string
+    {
+        return $this->echelon;
+    }
+
+    public function setEchelon(string $echelon): static
+    {
+        $this->echelon = $echelon;
+
+        return $this;
+    }
+
+    public function getNumeroDecisionContrat(): ?string
+    {
+        return $this->numero_decision_contrat;
+    }
+
+    public function setNumeroDecisionContrat(string $numero_decision_contrat): static
+    {
+        $this->numero_decision_contrat = $numero_decision_contrat;
+
+        return $this;
+    }
+
+    public function getDecisionContrat(): ?string
+    {
+        return $this->decision_contrat;
+    }
+
+    public function setDecisionContrat(string $decision_contrat): static
+    {
+        $this->decision_contrat = $decision_contrat;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getIdentification(): ?InfoPerso
+    {
+        return $this->identification;
+    }
+
+    public function setIdentification(?InfoPerso $identification): static
+    {
+        $this->identification = $identification;
+
+        return $this;
+    }
+
+    public function getHierarchie(): ?string
+    {
+        return $this->hierarchie;
+    }
+
+    public function setHierarchie(string $hierarchie): static
+    {
+        $this->hierarchie = $hierarchie;
+
+        return $this;
+    }
+
+    public function getDateRecrutement(): ?\DateTime
+    {
+        return $this->date_recrutement;
+    }
+
+    public function setDateRecrutement(?\DateTime $date_recrutement): static
+    {
+        $this->date_recrutement = $date_recrutement;
+
+        return $this;
+    }
+
+    public function getBanque(): ?string
+    {
+        return $this->banque;
+    }
+
+    public function setBanque(string $banque): static
+    {
+        $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function getNumeroCompte(): ?string
+    {
+        return $this->numeroCompte;
+    }
+
+    public function setNumeroCompte(?string $numeroCompte): static
+    {
+        $this->numeroCompte = $numeroCompte;
+
+        return $this;
+    }
+
 }
