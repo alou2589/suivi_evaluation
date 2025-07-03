@@ -38,6 +38,16 @@ class AffectationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAffectationByPoste($poste): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.poste = :poste')
+            ->setParameter('poste', $poste)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Affectation[] Returns an array of Affectation objects
     //     */

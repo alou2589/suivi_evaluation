@@ -1,5 +1,5 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = 'Direction' %}
+{% set page_title = direction.description|raw %}
 
 {% block title %}Direction{% endblock %}
 
@@ -9,8 +9,7 @@
     </div>
     <div class="card">
 		<div class="card-header">
-            <div class="d-flex gap-3 align-items-right">
-                <h4 class="card-title"> {{ direction.description}} </h4>
+            <div class="d-flex gap-3 justify-content-end">
                 <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_direction_index') }}"><i class="fa fa-home"></i> Retour</a>
                 <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_direction_edit', {'id': direction.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
                 <form action="{{ path('app_admin_direction_delete', {id:direction.id})}}" method="POST">

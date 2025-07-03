@@ -16,6 +16,7 @@ class PosteRepository extends ServiceEntityRepository
         parent::__construct($registry, Poste::class);
     }
 
+
     //    /**
     //     * @return Poste[] Returns an array of Poste objects
     //     */

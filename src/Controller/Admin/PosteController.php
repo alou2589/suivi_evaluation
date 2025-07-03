@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Poste;
 use App\Form\PosteForm;
+use App\Repository\AffectationRepository;
 use App\Repository\PosteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,10 +44,13 @@ final class PosteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Poste $poste): Response
+    public function show(Poste $poste, AffectationRepository $affectationRepository): Response
     {
+        // Fetching all affectations related to the table poste
+        $affectations=$affectationRepository->findAffectationByPoste($poste);
         return $this->render('admin/poste/show.html.twig', [
             'poste' => $poste,
+            'effectif' => count($affectations),
         ]);
     }
 

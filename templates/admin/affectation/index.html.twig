@@ -35,7 +35,7 @@
                             <tbody>
                             {% for affectation in affectations %}
                                 <tr>
-                                    <td class="text-center">{{ affectation.agent.prenom }} {{ affectation.agent.nom }}</td>
+                                    <td class="text-center">{{ affectation.agent.identification.prenom }} {{ affectation.agent.identification.nom }}</td>
                                     <td class="text-center">{{ affectation.agent.matricule }}</td>
                                     <td class="text-center">{{ affectation.service.nomService }}</td>
                                     <td class="text-center">{{ affectation.poste.nomPoste }}</td>
