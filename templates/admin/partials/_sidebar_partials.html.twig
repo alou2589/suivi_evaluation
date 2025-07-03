@@ -63,9 +63,9 @@
                     <p>Personnel</p>
                     <span class="caret"></span>
                 </a>
-                <div class="collapse {{app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="base">
+                <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="base">
                     <ul class="nav nav-collapse">
-                        <li class="nav-item" {{app.current_route == 'app_admin_info_perso_index' ? 'active' : ''}}>
+                        <li class="nav-item {{app.current_route == 'app_admin_info_perso_index' ? 'active' : ''}} ">
                           <a href="{{ path('app_admin_info_perso_index') }}">
                             <span class="sub-item">Info Personnelle</span>
                           </a>
