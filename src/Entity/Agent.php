@@ -81,11 +81,18 @@ class Agent
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $numeroCompte = null;
 
+    /**
+     * @var Collection<int, DocumentAdministratif>
+     */
+    #[ORM\OneToMany(targetEntity: DocumentAdministratif::class, mappedBy: 'agent')]
+    private Collection $documentAdministratifs;
+
     public function __construct()
     {
         $this->programmes = new ArrayCollection();
         $this->actions = new ArrayCollection();
         $this->affectations = new ArrayCollection();
+        $this->documentAdministratifs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -371,6 +378,36 @@ class Agent
     public function setNumeroCompte(?string $numeroCompte): static
     {
         $this->numeroCompte = $numeroCompte;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentAdministratif>
+     */
+    public function getDocumentAdministratifs(): Collection
+    {
+        return $this->documentAdministratifs;
+    }
+
+    public function addDocumentAdministratif(DocumentAdministratif $documentAdministratif): static
+    {
+        if (!$this->documentAdministratifs->contains($documentAdministratif)) {
+            $this->documentAdministratifs->add($documentAdministratif);
+            $documentAdministratif->setAgent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentAdministratif(DocumentAdministratif $documentAdministratif): static
+    {
+        if ($this->documentAdministratifs->removeElement($documentAdministratif)) {
+            // set the owning side to null (unless already changed)
+            if ($documentAdministratif->getAgent() === $this) {
+                $documentAdministratif->setAgent(null);
+            }
+        }
 
         return $this;
     }

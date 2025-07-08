@@ -2,40 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Agent;
+use App\Entity\CarteProfessionnelle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Affectation;
 
 /**
- * @extends ServiceEntityRepository<Agent>
+ * @extends ServiceEntityRepository<CarteProfessionnelle>
  */
-class AgentRepository extends ServiceEntityRepository
+class CarteProfessionnelleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Agent::class);
+        parent::__construct($registry, CarteProfessionnelle::class);
     }
 
     //    /**
-    //     * @return Agent[] Returns an array of Agent objects
+    //     * @return CarteProfessionnelle[] Returns an array of CarteProfessionnelle objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
+    //            ->orderBy('c.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Agent
+    //    public function findOneBySomeField($value): ?CarteProfessionnelle
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

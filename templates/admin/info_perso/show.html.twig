@@ -23,12 +23,6 @@
 				<li class="nav-item">
 					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Liste services</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="pills-messages-tab-nobd" data-bs-toggle="pill" href="#pills-messages-nobd" role="tab" aria-controls="pills-messages-nobd" aria-selected="false">Liste des agents</a>
-				</li>
 			</ul>
 			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
                 <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
@@ -53,6 +47,10 @@
                                     <td> le {{ info_perso.dateNaissance ? info_perso.dateNaissance|date('Y-m-d') : '' }} à {{ info_perso.lieuNaissance }} </td>
                                 </tr>
                                 <tr>
+                                    <th>Numéro Carte d'Identité Nationale</th>
+                                    <td> {{ info_perso.cin }} </td>
+                                </tr>
+                                <tr>
                                     <th>Adresse </th>
                                     <td>{{ info_perso.adresse }}</td>
                                 </tr>
@@ -64,8 +62,13 @@
                                     <th>Téléphone</th>
                                     <td>{{ info_perso.telephone }}</td>
                                 </tr>
+                                <tr>
                                     <th>Situation matrimoniale</th>
                                     <td>{{ info_perso.situationMatrimoniale }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Code QR de l'agent</th>
+                                    <td> <img src="{{ qr_code }}" alt="" width="100"> </td>
                                 </tr>
                             </tbody>
                         </table>

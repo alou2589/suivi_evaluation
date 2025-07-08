@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DocumentAdministratif{% endblock %}
+
+{% block body %}
+    <h1>DocumentAdministratif</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ document_administratif.id }}</td>
+            </tr>
+            <tr>
+                <th>Type_doc</th>
+                <td>{{ document_administratif.typeDoc }}</td>
+            </tr>
+            <tr>
+                <th>Nom_doc</th>
+                <td>{{ document_administratif.nomDoc }}</td>
+            </tr>
+            <tr>
+                <th>Document</th>
+                <td>{{ document_administratif.document }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ document_administratif.createdAt ? document_administratif.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ document_administratif.updatedAt ? document_administratif.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_doc_admin_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_doc_admin_edit', {'id': document_administratif.id}) }}">edit</a>
+
+    {{ include('admin/doc_admin/_delete_form.html.twig') }}
+{% endblock %}

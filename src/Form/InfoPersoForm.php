@@ -47,6 +47,23 @@ class InfoPersoForm extends AbstractType
                 ],
             ]
             )
+            ->add('cin', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Entrez le numéro de la carte d\'identité nationale',
+                ],
+                'constraints' => [
+                    new Length([
+                        'min' => 13,
+                        'max' => 15,
+                        'minMessage' => 'Le numéro de la carte d\'identité doit comporter au moins {{ limit }} chiffres',
+                        'maxMessage' => 'Le numéro de la carte d\'identité ne peut pas dépasser {{ limit }} chiffres',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^\d+$/',
+                        'message' => 'Le numéro de la carte d\'identité doit contenir uniquement des chiffres',
+                    ]),
+                ],
+            ])
             ->add('adresse', TextareaType::class, [
                 'required' => false,
                 'attr' => [

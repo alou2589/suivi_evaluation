@@ -53,6 +53,12 @@ class InfoPerso
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $qr_code = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $cin = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -204,6 +210,30 @@ class InfoPerso
     public function setAdresse(string $adresse): static
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getQrCode(): ?string
+    {
+        return $this->qr_code;
+    }
+
+    public function setQrCode(?string $qr_code): static
+    {
+        $this->qr_code = $qr_code;
+
+        return $this;
+    }
+
+    public function getCin(): ?string
+    {
+        return $this->cin;
+    }
+
+    public function setCin(string $cin): static
+    {
+        $this->cin = $cin;
 
         return $this;
     }

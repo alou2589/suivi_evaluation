@@ -58,12 +58,12 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#base">
+                <a data-bs-toggle="collapse" href="#personnel">
                     <i class="fas fa-users"></i>
                     <p>Personnel</p>
                     <span class="caret"></span>
                 </a>
-                <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="base">
+                <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="personnel">
                     <ul class="nav nav-collapse">
                         <li class="nav-item {{app.current_route == 'app_admin_info_perso_index' ? 'active' : ''}} ">
                           <a href="{{ path('app_admin_info_perso_index') }}">
@@ -79,6 +79,27 @@
                           <a href="{{ path('app_admin_affectation_index') }}">
                             <span class="sub-item">Affectation</span>
                           </a>
+                        </li>
+                    </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#docs">
+                    <i class="fas fa-file-alt"></i>
+                    <p>Documents</p>
+                    <span class="caret"></span>
+                </a>
+                <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' ? 'show' : ''}}" id="docs">
+                    <ul class="nav nav-collapse">
+                        <li class="nav-item {{app.current_route == 'app_admin_doc_admin_index' ? 'active' : ''}} ">
+                          <a href="#">
+                            <span class="sub-item">Dossiers Administratifs</span>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">
+                                <span class="sub-item">Carte Professionnelle</span>
+                            </a>
                         </li>
                     </ul>
                 </div>

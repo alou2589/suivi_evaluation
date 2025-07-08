@@ -146,7 +146,7 @@ class AgentForm extends AbstractType
                     'Banque Islamique'=> 'Banque Islamique',
                     'Banque Atlantique'=> 'Banque Atlantique',
                 ],
-                'placeholder' => 'Selectionner grade',
+                'placeholder' => 'Selectionner Banque',
                 'required' => 'required',
                 'attr' => [
                     'class' => 'form-select',

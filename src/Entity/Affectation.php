@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AffectationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -39,6 +41,18 @@ class Affectation
 
     #[ORM\Column(length: 255)]
     private ?string $statut_affectation = null;
+
+    /**
+     * @var Collection<int, CarteProfessionnelle>
+     */
+    #[ORM\OneToMany(targetEntity: CarteProfessionnelle::class, mappedBy: 'identite')]
+    private Collection $carteProfessionnelles;
+
+    public function __construct()
+    {
+        $this->carteProfessionnelles = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -153,4 +167,35 @@ class Affectation
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, CarteProfessionnelle>
+     */
+    public function getCarteProfessionnelles(): Collection
+    {
+        return $this->carteProfessionnelles;
+    }
+
+    public function addCarteProfessionnelle(CarteProfessionnelle $carteProfessionnelle): static
+    {
+        if (!$this->carteProfessionnelles->contains($carteProfessionnelle)) {
+            $this->carteProfessionnelles->add($carteProfessionnelle);
+            $carteProfessionnelle->setIdentite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarteProfessionnelle(CarteProfessionnelle $carteProfessionnelle): static
+    {
+        if ($this->carteProfessionnelles->removeElement($carteProfessionnelle)) {
+            // set the owning side to null (unless already changed)
+            if ($carteProfessionnelle->getIdentite() === $this) {
+                $carteProfessionnelle->setIdentite(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

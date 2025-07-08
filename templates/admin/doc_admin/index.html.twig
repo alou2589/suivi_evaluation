@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DocumentAdministratif index{% endblock %}
+
+{% block body %}
+    <h1>DocumentAdministratif index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type_doc</th>
+                <th>Nom_doc</th>
+                <th>Document</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for document_administratif in document_administratifs %}
+            <tr>
+                <td>{{ document_administratif.id }}</td>
+                <td>{{ document_administratif.typeDoc }}</td>
+                <td>{{ document_administratif.nomDoc }}</td>
+                <td>{{ document_administratif.document }}</td>
+                <td>{{ document_administratif.createdAt ? document_administratif.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ document_administratif.updatedAt ? document_administratif.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_doc_admin_show', {'id': document_administratif.id}) }}">show</a>
+                    <a href="{{ path('app_admin_doc_admin_edit', {'id': document_administratif.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_doc_admin_new') }}">Create new</a>
+{% endblock %}

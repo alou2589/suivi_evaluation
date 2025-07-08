@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Agent;
 use App\Form\AgentForm;
 use App\Repository\AgentRepository;
+use App\Repository\AffectationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +44,13 @@ final class AgentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Agent $agent): Response
+    public function show(Agent $agent, AffectationRepository $affectationRepository): Response
     {
+        // Fetching the last affectation of the agent
+        $lastAffectation = $affectationRepository->findLastAffectationByAgent($agent);
         return $this->render('admin/agent/show.html.twig', [
             'agent' => $agent,
+            'lastAffectation' => $lastAffectation,
         ]);
     }
 

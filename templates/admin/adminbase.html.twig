@@ -8,7 +8,8 @@
             <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
             <link rel="stylesheet" href="{{asset('assets/css/plugins.min.css')}}">
             <link rel="stylesheet" href="{{asset('assets/css/kaiadmin.min.css')}}">
-            <link rel="shortcut icon" href="{{asset('assets/img/kaiadmin/favicon.ico')}}" type="image/x-icon">
+            <link rel="shortcut icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon">
+            <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
         {% endblock %}
 
     </head>
@@ -40,11 +41,14 @@
                     {% include '/admin/partials/_footer_partials.html.twig' %}
                 </footer>
             </div>
+            {% include '/admin/partials/_custom_template.html.twig' %}
         </div>
 
         {% block javascripts %}
             <script src="{{asset('assets/js/plugin/webfont/webfont.min.js')}}"></script>
             <script src="{{asset('assets/js/custom_fontawesome.js')}}"></script>
+            <script src="assets/js/setting-demo.js"></script>
+            <script src="assets/js/demo.js"></script>
             <script>
               WebFont.load({
                 google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -86,7 +90,8 @@
 
             <!-- KaiAdmin JS -->
             <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
-
+            <script src="{{asset('assets/js/setting-demo.js')}}"></script>
+            <script src="{{asset('assets/js/demo.js')}}"></script>
 
         {% endblock %}
     </body>

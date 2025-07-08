@@ -1,40 +1,27 @@
 <div class="row row-demo-grid">
     <div class="col-md-12 ms-auto me-auto">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Prenom</th>
-                    <td>{{ agent.identification.prenom }}</td>
-                </tr>
-                <tr>
-                    <th>Nom</th>
-                    <td>{{ agent.identification.nom }}</td>
-                </tr>
-                <tr>
-                    <th>Sexe</th>
-                    <td>{{ agent.identification.sexe }}</td>
-                </tr>
-                <tr>
-                    <th>Date et lieu de naissance</th>
-                    <td> le {{ agent.identification.dateNaissance ? agent.identification.dateNaissance|date('Y-m-d H:i:s') : '' }} à {{ agent.identification.lieuNaissance }} </td>
-                </tr>
-                <tr>
-                    <th>Adresse </th>
-                    <td>{{ agent.identification.adresse }}</td>
-                </tr>
-                <tr>
-                    <th>Adresse email</th>
-                    <td>{{ agent.identification.email }}</td>
-                </tr>
-                <tr>
-                    <th>Téléphone</th>
-                    <td>{{ agent.identification.telephone }}</td>
-                </tr>
-                <tr>
-                    <th>Situation matrimoniale</th>
-                    <td>{{ agent.identification.situationMatrimoniale }}</td>
-                </tr>
-            </tbody>
-        </table>
+        {% if lastAffectation %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Poste</th>
+                        <td>{{ lastAffectation.poste.nomPoste }}</td>
+                    </tr>
+                    <tr>
+                        <th>Service</th>
+                        <td>{{ lastAffectation.service.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <strong>Aucune affectation trouvée pour cet agent.</strong> <br>
+                Voulez-vous ajouter une nouvelle affectation ?
+                <a href="{{ path('app_admin_affectation_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvel agent" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>

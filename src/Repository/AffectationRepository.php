@@ -48,6 +48,17 @@ class AffectationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findLastAffectationByAgent($agent): ?Affectation
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.agent = :agent')
+            ->setParameter('agent', $agent)
+            ->orderBy('a.date_debut', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Affectation[] Returns an array of Affectation objects
     //     */
