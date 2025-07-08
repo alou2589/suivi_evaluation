@@ -12,11 +12,14 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <div class="d-flex align-items-center">
-                    <h4 class="card-title">Liste des postes</h4>
-                    <a href="{{ path('app_admin_poste_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle poste" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                  <div class="d-flex gap-3 justify-content-end">
+                    <a href="{{ path('app_admin_poste_create') }}"  title="Nouveau poste" class="rounded-pill btn btn-black" >
                       <i class="fa fa-plus"></i>
                       Ajouter
+                    </a>
+                    <a href="{{ path('app_admin_poste_upload') }}"   title="Importer liste poste" class="rounded-pill btn btn-secondary " >
+                      <i class="fa fa-file-upload"></i>
+                      Importer
                     </a>
                   </div>
                 </div>

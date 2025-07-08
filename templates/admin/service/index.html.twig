@@ -11,11 +11,15 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex gap-3 justify-content-end">
                         <h4 class="card-title">Liste des services</h4>
-                        <a href="{{ path('app_admin_service_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle direction" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                        <a href="{{ path('app_admin_service_create') }}" title="Nouveau service" class="rounded-pill btn btn-black btn-lg ms-auto" >
                           <i class="fa fa-plus"></i>
                           Ajouter
+                        </a>
+                        <a href="{{ path('app_admin_service_upload') }}"   title="Importer service" class="rounded-pill btn btn-secondary " >
+                          <i class="fa fa-file-upload"></i>
+                          Importer
                         </a>
                     </div>
                 </div>

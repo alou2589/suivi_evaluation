@@ -93,6 +93,7 @@ final class DirectionController extends AbstractController
         return $this->render('admin/uploadfiles/upload.html.twig', [
             'form' => $form->createView(),
             'nom_fichier' => 'Direction', // This can be dynamic based on the file type
+            'redirectCancelRoute' => 'app_admin_direction_index', // Redirect route after cancellation
         ]);
     }
 

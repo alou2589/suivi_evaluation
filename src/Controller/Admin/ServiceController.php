@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Service;
+use App\Entity\Direction;
 use App\Form\ServiceForm;
 use App\Form\UploadFileForm;
 use App\Repository\AffectationRepository;
@@ -57,7 +58,6 @@ final class ServiceController extends AbstractController
             $file= $form->get('excel_file')->getData();
             if ($file) {
                 // Process the uploaded file (e.g., read data, save to database)
-                // This is where you would implement your file processing logic
                 $spreadsheet= IOFactory::load($file->getPathname());
                 $sheet=$spreadsheet->getActiveSheet();
                 $rows = $sheet->toArray();
@@ -66,8 +66,14 @@ final class ServiceController extends AbstractController
                         // Skip header row
                         continue;
                     }
+                    $direction=$entityManager->getRepository(Direction::class)->findOneBy(['nom_direction' => $row[2]]);
+                    if (!$direction) {
+                        $this->addFlash('error', 'La direction ' . $row[2] . ' n\'existe pas.');
+                        continue;
+                    }
+
                     // Vérification des doublons
-                    $existingService = $entityManager->getRepository(Service::class)->findOneBy(['type_service' => $row[0],'nom_service' => $row[1], 'structure_rattachee_id' => $row[2]]);
+                    $existingService = $entityManager->getRepository(Service::class)->findOneBy(['type_service' => $row[0],'nom_service' => $row[1], 'structure_rattachee' => $direction]);
                     if ($existingService) {
                         $this->addFlash('error', 'Le service ' . $row[1] . ' existe déjà.');
                         continue;
@@ -75,7 +81,7 @@ final class ServiceController extends AbstractController
                     $service = new Service();
                     $service->setTypeService( $row[0]); // Assuming the first column is the name
                     $service->setNomService($row[1]); // Assuming the first column is the name
-                    $service->setStructureRattachee($row[2]);
+                    $service->setStructureRattachee($direction);
                     $service->setDescription($row[3]); // Assuming the second column is the description
                     // Add other fields as necessary
 
@@ -87,12 +93,13 @@ final class ServiceController extends AbstractController
             }
 
             $this->addFlash('success', 'Fichier importé avec succès.');
-            return $this->redirectToRoute('app_admin_direction_index');
+            return $this->redirectToRoute('app_admin_service_index');
         }
 
         return $this->render('admin/uploadfiles/upload.html.twig', [
             'form' => $form->createView(),
             'nom_fichier' => 'Service', // This can be dynamic based on the file type
+            'redirectCancelRoute' => 'app_admin_service_index', // Redirect route after cancellation
         ]);
     }
 
