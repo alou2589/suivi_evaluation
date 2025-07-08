@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Service;
 use App\Form\ServiceForm;
+use App\Form\UploadFileForm;
 use App\Repository\AffectationRepository;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 #[Route('/admin/service', 'app_admin_service_')]
 final class ServiceController extends AbstractController
@@ -40,6 +42,57 @@ final class ServiceController extends AbstractController
         return $this->render('admin/service/new.html.twig', [
             'service' => $service,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/upload', name: 'upload', methods: ['GET', 'POST'])]
+    public function upload(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UploadFileForm::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle the file upload and processing logic here
+            // ...
+            $file= $form->get('excel_file')->getData();
+            if ($file) {
+                // Process the uploaded file (e.g., read data, save to database)
+                // This is where you would implement your file processing logic
+                $spreadsheet= IOFactory::load($file->getPathname());
+                $sheet=$spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray();
+                foreach ($rows as $index=> $row) {
+                    if ($index === 0) {
+                        // Skip header row
+                        continue;
+                    }
+                    // Vérification des doublons
+                    $existingService = $entityManager->getRepository(Service::class)->findOneBy(['type_service' => $row[0],'nom_service' => $row[1], 'structure_rattachee_id' => $row[2]]);
+                    if ($existingService) {
+                        $this->addFlash('error', 'Le service ' . $row[1] . ' existe déjà.');
+                        continue;
+                    }
+                    $service = new Service();
+                    $service->setTypeService( $row[0]); // Assuming the first column is the name
+                    $service->setNomService($row[1]); // Assuming the first column is the name
+                    $service->setStructureRattachee($row[2]);
+                    $service->setDescription($row[3]); // Assuming the second column is the description
+                    // Add other fields as necessary
+
+                    $entityManager->persist($service);
+                }
+                $entityManager->flush();
+
+
+            }
+
+            $this->addFlash('success', 'Fichier importé avec succès.');
+            return $this->redirectToRoute('app_admin_direction_index');
+        }
+
+        return $this->render('admin/uploadfiles/upload.html.twig', [
+            'form' => $form->createView(),
+            'nom_fichier' => 'Service', // This can be dynamic based on the file type
         ]);
     }
 

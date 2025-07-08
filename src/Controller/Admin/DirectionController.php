@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Direction;
 use App\Form\DirectionForm;
-use App\Form\UploadDirectionForm;
+use App\Form\UploadFileForm;
 use App\Repository\AffectationRepository;
 use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,7 +49,7 @@ final class DirectionController extends AbstractController
     #[Route('/upload', name: 'upload', methods: ['GET', 'POST'])]
     public function upload(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UploadDirectionForm::class);
+        $form = $this->createForm(UploadFileForm::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -68,7 +68,7 @@ final class DirectionController extends AbstractController
                         continue;
                     }
                     // Vérification des doublons
-                    $existingDirection = $entityManager->getRepository(Direction::class)->findOneBy(['typeDirection' => $row[0], 'nomDirection' => $row[1]]);
+                    $existingDirection = $entityManager->getRepository(Direction::class)->findOneBy(['type_direction' => $row[0], 'nom_direction' => $row[1]]);
                     if ($existingDirection) {
                         $this->addFlash('error', 'La direction ' . $row[1] . ' existe déjà.');
                         continue;
@@ -90,8 +90,9 @@ final class DirectionController extends AbstractController
             return $this->redirectToRoute('app_admin_direction_index');
         }
 
-        return $this->render('admin/direction/upload.html.twig', [
+        return $this->render('admin/uploadfiles/upload.html.twig', [
             'form' => $form->createView(),
+            'nom_fichier' => 'Direction', // This can be dynamic based on the file type
         ]);
     }
 
