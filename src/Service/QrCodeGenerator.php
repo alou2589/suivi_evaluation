@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\Builder\BuilderInterface;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Color\Color;
@@ -25,7 +24,7 @@ class QrCodeGenerator
     {
         $url = "info_perso/";
         $path = dirname(__DIR__, 2) . '/public/assets/';
-        $result = new Builder(
+        $builder = new Builder(
             writer: new PngWriter(),
             writerOptions: [],
             validateResult: false,
@@ -39,9 +38,9 @@ class QrCodeGenerator
             logoPath:(string) $path.'img/logo.png',
             logoResizeToHeight: 100,
             logoResizeToWidth: 100,
-            logoPunchoutBackground: true,
-        )->build();
-        $namePng =(string) $nom_qr .'.png';
+        );
+        $result = $builder->build();
+        $namePng= (string) $nom_qr .'.png';
         $result->saveToFile(path: (string) $path.'qr_codes/'.$namePng);
         return $result->getDataUri();
     }
