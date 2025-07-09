@@ -12,13 +12,16 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <div class="d-flex align-items-center">
-                    <h4 class="card-title">Liste des informations</h4>
-                    <a href="{{ path('app_admin_info_perso_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvel agent" class="rounded-pill btn btn-black btn-lg ms-auto" >
-                      <i class="fa fa-plus"></i>
-                      Ajouter
-                    </a>
-                  </div>
+                    <div class="d-flex gap-3 justify-content-end">
+                        <a href="{{ path('app_admin_info_perso_create') }}" title="Nouvel agent" class="rounded-pill btn btn-black" >
+                          <i class="fa fa-plus"></i>
+                          Ajouter
+                        </a>
+                        <a href="{{ path('app_admin_info_perso_upload') }}"   title="Importer agent" class="rounded-pill btn btn-secondary " >
+                          <i class="fa fa-file-upload"></i>
+                          Importer
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

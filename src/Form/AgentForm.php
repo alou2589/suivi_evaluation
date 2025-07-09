@@ -40,9 +40,9 @@ class AgentForm extends AbstractType
                 'constraints' => [
                     new Length([
                         'min' => 5,
-                        'minMessage' => 'Email must be at least {{ limit }} characters long',
+                        'minMessage' => 'Matricule must be at least {{ limit }} characters long',
                         'max' => 7,
-                        'maxMessage' => 'Email cannot be longer than {{ limit }} characters',
+                        'maxMessage' => 'Matricule cannot be longer than {{ limit }} characters',
                     ]),
                     new Regex([
                         'pattern' => '/^\d{6}[A-Z]{1}$/',
@@ -77,6 +77,7 @@ class AgentForm extends AbstractType
                     'C3' => 'C3',
                     'D' => 'D',
                     'E' => 'E',
+                    'NI' => 'NI',
                 ],
                 'placeholder' => 'Selectionnez une hiérarchie',
                 'required' => true,
@@ -90,6 +91,7 @@ class AgentForm extends AbstractType
                     '2ème classe'=> '2ème classe',
                     '3ème classe'=> '3ème classe',
                     '4ème classe'=> '4ème classe',
+                    'NI'=> 'NI',
                 ],
                 'placeholder' => 'Selectionner grade',
                 'required' => 'required',
@@ -101,6 +103,7 @@ class AgentForm extends AbstractType
                 'choices' => [
                     '1er echelon' => '1er echelon',
                     '2eme echelon'=> '1er echelon',
+                    'NI'=> 'NI',
                 ],
                 'placeholder' => 'Selectionner échelon',
                 'required' => 'required',
