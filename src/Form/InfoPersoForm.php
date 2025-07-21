@@ -31,6 +31,7 @@ class InfoPersoForm extends AbstractType
             ->add('date_naissance', DateType::class, [
                 'widget' => 'single_text',
                 'html5' => true,
+                'input'=>'datetime',
                 'label' => 'Date de naissance',
             ])
             ->add('lieu_naissance', TextType::class, [

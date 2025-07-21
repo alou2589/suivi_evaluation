@@ -9,26 +9,30 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\RoundBlockSizeMode;
 use App\Service\AesEncryptDecrypt;
+use League\Flysystem\FilesystemOperator;
 
 class QrCodeGenerator
 {
 
-    protected $aesEncryptDecrypt;
+    protected AesEncryptDecrypt $aesEncryptDecrypt;
+    protected FilesystemOperator $filesystemOperator;
 
-    public function __construct(AesEncryptDecrypt $aesEncryptDecrypt)
+    public function __construct(AesEncryptDecrypt $aesEncryptDecrypt, FilesystemOperator $sftpStorage)
     {
         $this->aesEncryptDecrypt = $aesEncryptDecrypt;
+        $this->filesystemOperator = $sftpStorage;
     }
 
-    public function generateQrCode($recherche, $nom_qr): string
+    public function generateQrCode(string $content, string $nom_qr=''): string
     {
-        $url = "info_perso/";
+        $fileName= $nom_qr.uniqid('', true).'.png';
+        $tempPath = sys_get_temp_dir() . '/' . $fileName;
         $path = dirname(__DIR__, 2) . '/public/assets/';
         $builder = new Builder(
             writer: new PngWriter(),
             writerOptions: [],
             validateResult: false,
-            data: ($this->aesEncryptDecrypt->encrypt((string)$url . $recherche)),
+            data: ((string)$content),
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::High,
             size: 400,
@@ -40,9 +44,19 @@ class QrCodeGenerator
             logoResizeToWidth: 100,
         );
         $result = $builder->build();
-        $namePng= (string) $nom_qr .'.png';
-        $result->saveToFile(path: (string) $path.'qr_codes/'.$namePng);
-        return $result->getDataUri();
+        $result->saveToFile($tempPath);
+        $stream= fopen($tempPath, 'r');
+        $remotePath=(string) $fileName;
+        $this->filesystemOperator->writeStream($remotePath, $stream);
+        fclose($stream);
+        unlink($tempPath); // Delete the temporary file
+
+        return $remotePath;
+    }
+
+    public function getPublicStreamUrl(string $remotePath): ?string
+    {
+        return "/admin/info/perso/qr_code?path=?".urlencode($remotePath);
     }
 }
 

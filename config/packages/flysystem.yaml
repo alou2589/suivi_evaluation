@@ -1,0 +1,12 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        sftp.storage:
+            adapter: 'sftp'
+            options:
+                host: '10.112.26.28'
+                port: 22
+                username: 'adminsftpserver'
+                password: 'Talou.2589'
+                root: '/var/uploads/qr_codes'
+                timeout: 10

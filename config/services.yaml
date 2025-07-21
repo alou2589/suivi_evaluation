@@ -5,8 +5,15 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     photoAgent_directory: '%kernel.project_dir%/public/assets/uploads/photo_agent'
+    upload_directory: '/var/uploads/'
 services:
     # default configuration for services in *this* file
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%upload_directory%'
+    App\Service\QRCodeGenerator:
+        arguments:
+            $sftpStorage: '@flysystem.sftp.storage'
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

@@ -29,7 +29,7 @@ class InfoPerso
     #[ORM\Column(length: 255)]
     private ?string $sexe = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $date_naissance = null;
 
     #[ORM\Column(length: 255)]

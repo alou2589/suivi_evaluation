@@ -9,16 +9,19 @@ use App\Service\AesEncryptDecrypt;
 use App\Service\QrCodeGenerator;
 use App\Form\UploadFileForm;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 #[Route('/admin/info/perso', name: 'app_admin_info_perso_')]
 final class InfoPersoController extends AbstractController
 {
+
     #[Route(name: 'index', methods: ['GET'])]
     public function index(InfoPersoRepository $infoPersoRepository): Response
     {
@@ -41,7 +44,7 @@ final class InfoPersoController extends AbstractController
             $entityManager->flush();
 
             $qr_code = $qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getId());
-            $infoPerso->setQrCode($aesEncryptDecrypt->encrypt((string)$qr_code));
+            $infoPerso->setQrCode((string)$qr_code);
             $entityManager->persist($infoPerso);
             $entityManager->flush();
 
@@ -54,7 +57,7 @@ final class InfoPersoController extends AbstractController
     }
 
     #[Route('/upload', name: 'upload', methods: ['GET', 'POST'])]
-    public function upload(Request $request, EntityManagerInterface $entityManager, QrCodeGenerator $qrCodeGenerator, AesEncryptDecrypt $aesEncryptDecrypt): Response
+    public function uploadList(Request $request, EntityManagerInterface $entityManager, QrCodeGenerator $qrCodeGenerator, AesEncryptDecrypt $aesEncryptDecrypt): Response
     {
         $form = $this->createForm(UploadFileForm::class);
         $form->handleRequest($request);
@@ -85,25 +88,32 @@ final class InfoPersoController extends AbstractController
                     $infoPerso->setQrCode($qr_code);
 
                     // Assuming the columns in the Excel file match the InfoPerso entity fields
-                    $infoPerso->setPrenom($row[0] ? $row[0] : null);
-                    $infoPerso->setNom($row[1]);
-                    $infoPerso->setSexe($row[2]);
-                    $infoPerso->setDateNaissance(($row[3]) ? new \DateTime($row[3]) : null);
-                    $infoPerso->setLieuNaissance($row[4]);
-                    $infoPerso->setCin($row[5]);
-                    $infoPerso->setEmail($row[6]);
-                    $infoPerso->setTelephone($row[7]);
-                    $infoPerso->setSituationMatrimoniale($row[8]);
-                    $infoPerso->setAdresse($row[9]);
+                    $infoPerso->setPrenom($row[0] ?? '');
+                    $infoPerso->setNom($row[1] ?? '');
+                    $infoPerso->setSexe($row[2] ?? '');
+                    $dateString= $row[3];
+                    if(!empty($dateString)){
+                        $dateNaissance= \DateTime::createFromFormat('Y-m-d', $dateString);
+                        if($dateNaissance != false){
+                            $infoPerso->setDateNaissance($dateNaissance);
+                        } else {
+                            throw new \Exception("Format de date invalide : $dateString");
+                        }
+                    }
+                    $infoPerso->setLieuNaissance($row[4] ?? '');
+                    $infoPerso->setCin($row[5] ?? '');
+                    $infoPerso->setEmail($row[6] ?? '');
+                    $infoPerso->setTelephone($row[7] ?? '');
+                    $infoPerso->setSituationMatrimoniale($row[8] ?? '');
+                    $infoPerso->setAdresse($row[9] ?? '');
 
                     $entityManager->persist($infoPerso);
                     $entityManager->flush();
                     // Add other fields as necessary
                     $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getId());
-                    $infoPerso->setQrCode($aesEncryptDecrypt->encrypt((string)$qr_code));
+                    $infoPerso->setQrCode((string)$qr_code);
                     $entityManager->persist($infoPerso);
                     $entityManager->flush();
-                    dump($infoPerso);
                 }
 
 
@@ -121,12 +131,23 @@ final class InfoPersoController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(InfoPerso $infoPerso, AesEncryptDecrypt $aesEncryptDecrypt): Response
+    public function show(InfoPerso $infoPerso, #[Autowire(service: 'sftp.storage')] FilesystemOperator $sftpStroge): Response
     {
-        $qrCode = $aesEncryptDecrypt->decrypt($infoPerso->getQrCode());
+        if(!$infoPerso){
+            throw $this->createNotFoundException('Personne non identifiée :(');
+        }
+        $qrCodeFileName= $infoPerso->getQrCode();
+
+        if($sftpStroge->fileExists($qrCodeFileName)){
+            $qrCodeImageData= $sftpStroge->read($qrCodeFileName);
+            $qrCodeBase64=base64_encode($qrCodeImageData);
+        }
+        else{
+            $qrCodeBase64= null;
+        }
         return $this->render('admin/info_perso/show.html.twig', [
             'info_perso' => $infoPerso,
-            'qr_code' => $qrCode,
+            'qrCodeBase64'=>$qrCodeBase64,
         ]);
     }
 
@@ -149,11 +170,24 @@ final class InfoPersoController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, InfoPerso $infoPerso, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, InfoPerso $infoPerso, EntityManagerInterface $entityManager,#[Autowire(service: 'sftp.storage')] FilesystemOperator $sftpStroge): Response
     {
+        if(!$infoPerso){
+            $this->addFlash('Erreur', 'Info personnelle introuvable :(');
+            return $this->redirectToRoute('app_admin_info_perso_index');
+        }
         if ($this->isCsrfTokenValid('delete'.$infoPerso->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($infoPerso);
             $entityManager->flush();
+        }
+
+        $qrCodePath= $infoPerso->getQrCode();
+        if($qrCodePath && $sftpStroge->fileExists($qrCodePath)){
+            try{
+                $sftpStroge->delete($qrCodePath);
+            } catch(\Throwable $e){
+                $this->addFlash('Alerte', 'QR Code non supprimé sur le serveur distant: '.$e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('app_admin_info_perso_index', [], Response::HTTP_SEE_OTHER);
