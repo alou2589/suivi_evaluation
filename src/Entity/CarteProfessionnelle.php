@@ -6,6 +6,8 @@ use App\Repository\CarteProfessionnelleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CarteProfessionnelleRepository::class)]
 class CarteProfessionnelle
 {
@@ -72,6 +74,9 @@ class CarteProfessionnelle
     public function setDateDelivrance(\DateTime $date_delivrance): static
     {
         $this->date_delivrance = $date_delivrance;
+        $expiration= clone $date_delivrance;
+        $expiration->modify('+4 years');
+        $this->setDateExpiration($expiration);
 
         return $this;
     }
@@ -122,5 +127,18 @@ class CarteProfessionnelle
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

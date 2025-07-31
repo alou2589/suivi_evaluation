@@ -96,8 +96,8 @@
                             <span class="sub-item">Dossiers Administratifs</span>
                           </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#">
+                        <li class="nav-item {{ app.current_route == 'app_admin_carte_professionnelle_index' ? 'active':''}} ">
+                            <a href="{{ path('app_admin_carte_professionnelle_index')}}">
                                 <span class="sub-item">Carte Professionnelle</span>
                             </a>
                         </li>

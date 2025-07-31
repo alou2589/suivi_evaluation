@@ -61,7 +61,6 @@ final class InfoPersoController extends AbstractController
     {
         $form = $this->createForm(UploadFileForm::class);
         $form->handleRequest($request);
-        $qr_code = null;
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle the file upload and processing logic here
             // ...
@@ -85,12 +84,11 @@ final class InfoPersoController extends AbstractController
                         continue;
                     }
                     $infoPerso = new InfoPerso();
-                    $infoPerso->setQrCode($qr_code);
 
                     // Assuming the columns in the Excel file match the InfoPerso entity fields
-                    $infoPerso->setPrenom($row[0] ?? '');
-                    $infoPerso->setNom($row[1] ?? '');
-                    $infoPerso->setSexe($row[2] ?? '');
+                    $infoPerso->setPrenom(trim($row[0]));
+                    $infoPerso->setNom(trim($row[1]));
+                    $infoPerso->setSexe(trim($row[2]));
                     $dateString= $row[3];
                     if(!empty($dateString)){
                         $dateNaissance= \DateTime::createFromFormat('Y-m-d', $dateString);
@@ -100,27 +98,26 @@ final class InfoPersoController extends AbstractController
                             throw new \Exception("Format de date invalide : $dateString");
                         }
                     }
-                    $infoPerso->setLieuNaissance($row[4] ?? '');
-                    $infoPerso->setCin($row[5] ?? '');
-                    $infoPerso->setEmail($row[6] ?? '');
-                    $infoPerso->setTelephone($row[7] ?? '');
-                    $infoPerso->setSituationMatrimoniale($row[8] ?? '');
-                    $infoPerso->setAdresse($row[9] ?? '');
-
-                    $entityManager->persist($infoPerso);
-                    $entityManager->flush();
+                    $infoPerso->setLieuNaissance(trim($row[4]));
+                    $infoPerso->setCin(trim($row[5]));
+                    $infoPerso->setEmail(trim($row[6]));
+                    $infoPerso->setTelephone(trim($row[7]));
+                    $infoPerso->setSituationMatrimoniale(trim($row[8]));
+                    $infoPerso->setAdresse(trim($row[9]));
+                    //$entityManager->flush();
                     // Add other fields as necessary
-                    $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getId());
+                    $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getTelephone());
                     $infoPerso->setQrCode((string)$qr_code);
                     $entityManager->persist($infoPerso);
-                    $entityManager->flush();
                 }
+
+                $entityManager->flush();
 
 
             }
 
             $this->addFlash('success', 'Fichier importé avec succès.');
-            return $this->redirectToRoute('app_admin_direction_index');
+            return $this->redirectToRoute('app_admin_info_perso_index');
         }
 
         return $this->render('admin/uploadfiles/upload.html.twig', [

@@ -1,0 +1,59 @@
+
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Carte Professionnelle' %}
+
+{% block title %}Carte Professionnelle{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex align-items-center">
+                    <h4 class="card-title">Liste des agents</h4>
+                    <a href="{{ path('app_admin_carte_professionnelle_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvel agent" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>Délivré le</th>
+                                    <th>Expire le</th>
+                                    <th>impression</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for carte_professionnelle in carte_professionnelles %}
+                                <tr>
+                                    <td>{{carte_professionnelle.identite.agent.identification.prenom}} {{carte_professionnelle.identite.agent.identification.nom}} - {{ carte_professionnelle.identite.agent.matricule }}</td>
+                                    <td>{{ carte_professionnelle.dateDelivrance ? carte_professionnelle.dateDelivrance|date('Y-m-d') : '' }}</td>
+                                    <td>{{ carte_professionnelle.dateExpiration ? carte_professionnelle.dateExpiration|date('Y-m-d') : '' }}</td>
+                                    <td>{{ carte_professionnelle.statusImpression }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_admin_carte_professionnelle_show', {'id': carte_professionnelle.id}) }}" class="btn"> <i class="fa fa-eye text-primary" aria-hidden="true"></i>  </a>
+                                        <a href="{{ path('app_admin_carte_professionnelle_edit', {'id': carte_professionnelle.id}) }}" class="btn"> <i class="fa fa-edit text-secondary" aria-hidden="true"></i>  </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

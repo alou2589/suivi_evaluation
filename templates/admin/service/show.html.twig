@@ -1,5 +1,5 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = 'Service' %}
+{% set page_title = service.description %}
 
 {% block title %}Service{% endblock %}
 
@@ -9,13 +9,12 @@
     </div>
     <div class="card">
 		<div class="card-header">
-            <div class="d-flex gap-3 align-items-right">
-                <h4 class="card-title"> {{ service.description}} </h4>
+            <div class="d-flex gap-1 justify-content-end">
                 <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_service_index') }}"><i class="fa fa-home"></i> Retour</a>
                 <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_service_edit', {'id': service.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
                 <form action="{{ path('app_admin_service_delete', {id:service.id})}}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
-                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer </button>
                 </form>
             </div>
 		</div>

@@ -23,7 +23,7 @@ class QrCodeGenerator
         $this->filesystemOperator = $sftpStorage;
     }
 
-    public function generateQrCode(string $content, string $nom_qr=''): string
+    public function generateQrCode(string $content, string $nom_qr): string
     {
         $fileName= $nom_qr.uniqid('', true).'.png';
         $tempPath = sys_get_temp_dir() . '/' . $fileName;
@@ -46,7 +46,7 @@ class QrCodeGenerator
         $result = $builder->build();
         $result->saveToFile($tempPath);
         $stream= fopen($tempPath, 'r');
-        $remotePath=(string) $fileName;
+        $remotePath=(string) 'qr_codes/'.$fileName;
         $this->filesystemOperator->writeStream($remotePath, $stream);
         fclose($stream);
         unlink($tempPath); // Delete the temporary file

@@ -1,5 +1,5 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = poste.nomPoste %}
+{% set page_title = poste.description %}
 
 {% block title %}Poste{% endblock %}
 
@@ -14,7 +14,7 @@
                 <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_poste_edit', {'id': poste.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
                 <form action="{{ path('app_admin_poste_delete', {id:poste.id})}}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste.id) }}">
-                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer </button>
                 </form>
             </div>
 		</div>
@@ -37,7 +37,5 @@
 			</div>
 		</div>
 	</div>
-
-
 
 {% endblock %}

@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Service</th>
+                                    <th class="text-center">Description</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -36,6 +37,7 @@
                             {% for service in services %}
                                 <tr>
                                     <td class="text-center">{{ service.nomService }}</td>
+                                    <td class="">{{ service.description }}</td>
                                     <td class="text-center">
                                           <a href="{{ path('app_admin_service_show', {'id': service.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
                                           <a href="{{ path('app_admin_service_edit', {'id': service.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>

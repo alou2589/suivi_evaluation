@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Poste</th>
+                                    <th class="text-center">Description</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -37,6 +38,7 @@
                                 {% for poste in postes %}
                                     <tr>
                                         <td class="text-center">{{ poste.nomPoste }}</td>
+                                        <td class="">{{ poste.description }}</td>
                                         <td class="text-center">
                                           <a href="{{ path('app_admin_poste_show', {'id': poste.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
                                           <a href="{{ path('app_admin_poste_edit', {'id': poste.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>

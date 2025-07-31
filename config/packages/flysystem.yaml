@@ -8,5 +8,5 @@ flysystem:
                 port: 22
                 username: 'adminsftpserver'
                 password: 'Talou.2589'
-                root: '/var/uploads/qr_codes'
+                root: '/var/uploads/'
                 timeout: 10
