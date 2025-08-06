@@ -1,46 +1,91 @@
-{% extends 'base.html.twig' %}
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title =  "Carte Professionnelle" %}
 
-{% block title %}CarteProfessionnelle{% endblock %}
+{% block title %}Carte Professionnelle{% endblock %}
 
 {% block body %}
-    <h1>CarteProfessionnelle</h1>
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+		<div class="card-header">
+            <div class="d-flex gap-3 justify-content-end">
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_carte_professionnelle_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <button class="btn btn-primary rounded-pill " onclick="imprimerSection();" title="Imprimer"><i class="fa fa-print"></i> Imprimer</button>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_carte_professionnelle_edit', {'id': carte_professionnelle.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_carte_professionnelle_delete', {id:carte_professionnelle.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ carte_professionnelle.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
+            </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Maquette</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    <div class="row row-demo-grid">
+                      <div class="col-md-6 ms-auto me-auto">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Agent</th>
+                                    <td>
+                                        <img src="data:image/png;base64,{{ photoBase64 }}" alt="Photo" width="100" height="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Date de délivrance</th>
+                                    <td>{{ carte_professionnelle.dateDelivrance ? carte_professionnelle.dateDelivrance|date('Y-m-d') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date d'expiration</th>
+                                    <td>{{ carte_professionnelle.dateExpiration ? carte_professionnelle.dateExpiration|date('Y-m-d') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status de l'Impression</th>
+                                    <td>{{ carte_professionnelle.statusImpression }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+				<div class="tab-pane fade" id="pills-profile-nobd" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
+					{% include 'admin/carte_professionnelle/maquette.html.twig' %}
+				</div>
+            </div>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ carte_professionnelle.id }}</td>
-            </tr>
-            <tr>
-                <th>Photo_agent</th>
-                <td>{{ carte_professionnelle.photoAgent }}</td>
-            </tr>
-            <tr>
-                <th>Date_delivrance</th>
-                <td>{{ carte_professionnelle.dateDelivrance ? carte_professionnelle.dateDelivrance|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date_expiration</th>
-                <td>{{ carte_professionnelle.dateExpiration ? carte_professionnelle.dateExpiration|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Status_impression</th>
-                <td>{{ carte_professionnelle.statusImpression }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ carte_professionnelle.createdAt ? carte_professionnelle.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ carte_professionnelle.updatedAt ? carte_professionnelle.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_admin_carte_professionnelle_index') }}">back to list</a>
-
-    <a href="{{ path('app_admin_carte_professionnelle_edit', {'id': carte_professionnelle.id}) }}">edit</a>
-
-    {{ include('admin/carte_professionnelle/_delete_form.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('assets/js/imprimerSection.js')}}"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @media print {
+            .hide-on-print {
+                display: none !important;
+            }
+            #section-à-imprimer .profile_details {
+                size: landscape;
+                page: paysage;;
+                width: 800px;
+                height: 600px;
+                margin: 0 auto;
+                padding: 30;
+                background-image: url('{{ asset('assets/img/logo-opacity.png') }}');
+                background-repeat: no-repeat;
+            }
+        }
+    </style>
 {% endblock %}

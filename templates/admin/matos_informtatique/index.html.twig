@@ -1,7 +1,7 @@
 {% extends 'admin/adminbase.html.twig' %}
-{% set page_title = 'Document Administratif' %}
+{% set page_title = 'Matériel Informatique' %}
 
-{% block title %}Document Administratif{% endblock %}
+{% block title %}Matériel Informatique{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -13,11 +13,11 @@
             <div class="card">
                 <div class="card-header">
                   <div class="d-flex gap-3 justify-content-end">
-                    <a href="{{ path('app_admin_doc_admin_create') }}"  title="Nouveau document" class="rounded-pill btn btn-black" >
+                    <a href="{{ path('app_admin_matos_informtatique_create') }}"  title="Nouveau matériel" class="rounded-pill btn btn-black" >
                       <i class="fa fa-plus"></i>
                       Ajouter
                     </a>
-                    <a href="#"   title="Nouveau document" class="rounded-pill btn btn-secondary " >
+                    <a href="#"   title="Nouveau matériel" class="rounded-pill btn btn-secondary " >
                       <i class="fa fa-file-upload"></i>
                       Importer
                     </a>
@@ -28,21 +28,21 @@
                         <table class="display table table-striped table-hover" id="basic-datatables">
                             <thead>
                                 <tr>
-                                    <th>Type</th>
-                                    <th>agent</th>
-                                    <th>document</th>
+                                    <th>Matériel</th>
+                                    <th>Numéro de série</th>
+                                    <th>Date de reception</th>
                                     <th>actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for document_administratif in document_administratifs %}
+                            {% for matos_informatique in matos_informatiques %}
                                 <tr>
-                                    <td>{{ document_administratif.typeDoc }}</td>
-                                    <td>{{ document_administratif.agent.identification.prenom }} {{ document_administratif.agent.identification.nom }}</td>
-                                    <td>{{ document_administratif.nomDoc }}</td>
+                                    <td>{{ matos_informatique.marqueMatos }}{{ matos_informatique.modeleMatos }}</td>
+                                    <td>{{ matos_informatique.snMatos }}</td>
+                                    <td>{{ matos_informatique.dateReception ? matos_informatique.dateReception|date('Y-m-d') : '' }}</td>
                                     <td class="text-center">
-                                      <a href="{{ path('app_admin_doc_admin_show', {'id': document_administratif.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
-                                      <a href="{{ path('app_admin_doc_admin_edit', {'id': document_administratif.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                      <a href="{{ path('app_admin_matos_informtatique_show', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                      <a href="{{ path('app_admin_matos_informtatique_edit', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
                                     </td>
                                 </tr>
                             {% else %}

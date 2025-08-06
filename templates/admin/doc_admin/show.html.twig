@@ -1,42 +1,84 @@
-{% extends 'base.html.twig' %}
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title =  "Document Administratif" %}
 
-{% block title %}DocumentAdministratif{% endblock %}
+{% block title %}Document Administratif{% endblock %}
 
 {% block body %}
-    <h1>DocumentAdministratif</h1>
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+		<div class="card-header">
+            <div class="d-flex gap-3 justify-content-end">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ document_administratif.id }}</td>
-            </tr>
-            <tr>
-                <th>Type_doc</th>
-                <td>{{ document_administratif.typeDoc }}</td>
-            </tr>
-            <tr>
-                <th>Nom_doc</th>
-                <td>{{ document_administratif.nomDoc }}</td>
-            </tr>
-            <tr>
-                <th>Document</th>
-                <td>{{ document_administratif.document }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ document_administratif.createdAt ? document_administratif.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ document_administratif.updatedAt ? document_administratif.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_doc_admin_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_doc_admin_edit', {'id': document_administratif.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_doc_admin_delete', {id:document_administratif.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ document_administratif.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
+            </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    <div class="row row-demo-grid">
+                      <div class="col-md-6 ms-auto me-auto">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Document</th>
+                                    <td>
+                                        <a href="{{ path('app_admin_doc_admin_show_document', {'id': document_administratif.id}) }}" class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-file-alt"></i>
+                                            Voir le document
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Agent</th>
+                                    <td>
+                                            {{ document_administratif.agent.identification.prenom }} {{ document_administratif.agent.identification.nom }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Propriétaire du Document</th>
+                                    <td>{{ document_administratif.agent.identification.prenom }} {{ document_administratif.agent.identification.nom }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Matricule</th>
+                                    <td>{{ document_administratif.agent.matricule }}</td>
+                                </tr>
+                                    <th>Nom du Document</th>
+                                    <td>{{ document_administratif.nomDoc }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_admin_doc_admin_index') }}">back to list</a>
-
-    <a href="{{ path('app_admin_doc_admin_edit', {'id': document_administratif.id}) }}">edit</a>
-
-    {{ include('admin/doc_admin/_delete_form.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('assets/js/imprimerSection.js')}}"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @media print {
+            .hide-on-print {
+                display: none !important;
+            }
+        }
+    </style>
 {% endblock %}

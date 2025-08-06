@@ -37,6 +37,7 @@ class CarteProfessionnelle
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -141,4 +142,5 @@ class CarteProfessionnelle
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
 }

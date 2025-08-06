@@ -89,12 +89,12 @@
                     <p>Documents</p>
                     <span class="caret"></span>
                 </a>
-                <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' ? 'show' : ''}}" id="docs">
+                <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' or app.current_route == 'app_admin_carte_professionnelle_index' ? 'show' : ''}}" id="docs">
                     <ul class="nav nav-collapse">
                         <li class="nav-item {{app.current_route == 'app_admin_doc_admin_index' ? 'active' : ''}} ">
-                          <a href="#">
-                            <span class="sub-item">Dossiers Administratifs</span>
-                          </a>
+                            <a href="{{ path('app_admin_doc_admin_index')}}">
+                                <span class="sub-item">Dossiers Administratifs</span>
+                            </a>
                         </li>
                         <li class="nav-item {{ app.current_route == 'app_admin_carte_professionnelle_index' ? 'active':''}} ">
                             <a href="{{ path('app_admin_carte_professionnelle_index')}}">
@@ -120,6 +120,18 @@
                 <a href="{{ path('app_admin_action_index') }}">
                   <i class="fas fa-book"></i>
                   <p>Action</p>
+                </a>
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Informatique</h4>
+              </li>
+              <li class="nav-item {{app.current_route == 'app_admin_matos_informtatique_index' ? 'active' : ''}}">
+                <a href="{{ path('app_admin_matos_informtatique_index') }}">
+                  <i class="fas fa-laptop"></i>
+                  <p>Matériel Informatique</p>
                 </a>
               </li>
             </ul>

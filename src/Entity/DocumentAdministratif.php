@@ -4,8 +4,13 @@ namespace App\Entity;
 
 use App\Repository\DocumentAdministratifRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+
 
 #[ORM\Entity(repositoryClass: DocumentAdministratifRepository::class)]
+#[HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['nom_doc'], message: 'Un document avec ce nom existe déjà.')]
 class DocumentAdministratif
 {
     #[ORM\Id]
@@ -106,5 +111,18 @@ class DocumentAdministratif
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

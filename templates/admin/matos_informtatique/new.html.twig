@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New MatosInformatique{% endblock %}
+
+{% block body %}
+    <h1>Create new MatosInformatique</h1>
+
+    {{ include('admin/matos_informtatique/_form.html.twig') }}
+
+    <a href="{{ path('app_admin_matos_informtatique_index') }}">back to list</a>
+{% endblock %}

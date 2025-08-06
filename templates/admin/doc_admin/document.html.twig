@@ -1,0 +1,5 @@
+{% if document_administratif.document %}
+    <iframe src="{{ path('app_admin_doc_admin_show_document', {id: document_administratif.id}) }}" width="100%" height="600px"></iframe>
+{% else %}
+    <p>Aucun document disponible</p>
+{% endif %}
