@@ -3,10 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\MatosInformatiqueRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: MatosInformatiqueRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['type_matos', 'marque_matos', 'modele_matos', 'sn_matos'], message: 'Ce matériel informatique existe déjà.')]
+
 class MatosInformatique
 {
     #[ORM\Id]
@@ -37,6 +43,24 @@ class MatosInformatique
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, Attribution>
+     */
+    #[ORM\OneToMany(targetEntity: Attribution::class, mappedBy: 'materiel')]
+    private Collection $attributions;
+
+    /**
+     * @var Collection<int, Maintenance>
+     */
+    #[ORM\OneToMany(targetEntity: Maintenance::class, mappedBy: 'materiel')]
+    private Collection $maintenances;
+
+    public function __construct()
+    {
+        $this->attributions = new ArrayCollection();
+        $this->maintenances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -149,5 +173,65 @@ class MatosInformatique
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, Attribution>
+     */
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
+    }
+
+    public function addAttribution(Attribution $attribution): static
+    {
+        if (!$this->attributions->contains($attribution)) {
+            $this->attributions->add($attribution);
+            $attribution->setMateriel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribution(Attribution $attribution): static
+    {
+        if ($this->attributions->removeElement($attribution)) {
+            // set the owning side to null (unless already changed)
+            if ($attribution->getMateriel() === $this) {
+                $attribution->setMateriel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Maintenance>
+     */
+    public function getMaintenances(): Collection
+    {
+        return $this->maintenances;
+    }
+
+    public function addMaintenance(Maintenance $maintenance): static
+    {
+        if (!$this->maintenances->contains($maintenance)) {
+            $this->maintenances->add($maintenance);
+            $maintenance->setMateriel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaintenance(Maintenance $maintenance): static
+    {
+        if ($this->maintenances->removeElement($maintenance)) {
+            // set the owning side to null (unless already changed)
+            if ($maintenance->getMateriel() === $this) {
+                $maintenance->setMateriel(null);
+            }
+        }
+
+        return $this;
     }
 }

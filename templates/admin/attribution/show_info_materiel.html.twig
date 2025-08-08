@@ -1,0 +1,24 @@
+<div class="row row-demo-grid">
+    <div class="col-md-12 ms-auto me-auto">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th> Type de matériel</th>
+                    <td> {{ attribution.materiel.typeMatos }}</td>
+                </tr>
+                <tr>
+                    <th> Marque matériel</th>
+                    <td> {{ attribution.materiel.marqueMatos }}</td>
+                </tr>
+                <tr>
+                    <th> Modèle matériel</th>
+                    <td> {{ attribution.materiel.modeleMatos }}</td>
+                </tr>
+                <tr>
+                    <th> Date d'attribution du matériel</th>
+                    <td> {{ attribution.dateAttribution ? attribution.dateAttribution|date('d-m-Y') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

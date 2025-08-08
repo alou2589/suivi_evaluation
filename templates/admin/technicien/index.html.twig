@@ -1,7 +1,7 @@
 {% extends 'admin/adminbase.html.twig' %}
-{% set page_title = 'Affectation' %}
+{% set page_title = 'Technicien' %}
 
-{% block title %}Affectation{% endblock %}
+{% block title %}Technicien{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-header">
                   <div class="d-flex align-items-center">
-                    <h4 class="card-title">Liste des affectations</h4>
-                    <a href="{{ path('app_admin_affectation_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle affectation" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                    <h4 class="card-title">Liste des techniciens</h4>
+                    <a href="{{ path('app_admin_technicien_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvel technicien" class="rounded-pill btn btn-black btn-lg ms-auto" >
                       <i class="fa fa-plus"></i>
                       Ajouter
                     </a>
@@ -27,26 +27,22 @@
                                 <tr>
                                     <th class="text-center">Agent</th>
                                     <th class="text-center">Matricule</th>
-                                    <th class="text-center">Service</th>
-                                    <th class="text-center">Poste</th>
                                     <th class="text-center">actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for affectation in affectations %}
+                            {% for technicien in techniciens %}
                                 <tr>
-                                    <td class="text-center">{{ affectation.agent.identification.prenom }} {{ affectation.agent.identification.nom }}</td>
-                                    <td class="text-center">{{ affectation.agent.matricule }}</td>
-                                    <td class="text-center">{{ affectation.service.nomService }}</td>
-                                    <td class="text-center">{{ affectation.poste.nomPoste }}</td>
+                                    <td class="text-center">{{ technicien.infoTechnicien.agent.identification.prenom }} {{ technicien.infoTechnicien.agent.identification.nom }}</td>
+                                    <td class="text-center">{{ technicien.infoTechnicien.agent.matricule }}</td>
                                     <td class="text-center">
-                                        <a href="{{ path('app_admin_affectation_show', {'id': affectation.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
-                                        <a href="{{ path('app_admin_affectation_edit', {'id': affectation.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                        <a href="{{ path('app_admin_technicien_show', {'id': technicien.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                        <a href="{{ path('app_admin_technicien_edit', {'id': technicien.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td class="text-center" colspan="6">no records found</td>
+                                    <td class="text-center" colspan="3">no records found</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

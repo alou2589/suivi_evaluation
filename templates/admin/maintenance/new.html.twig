@@ -1,0 +1,73 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title = 'Maintenance' %}
+
+{% block title %}Maintenance{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Ajouter Maintenance</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 ms-auto me-auto col-lg-4">
+                           {{ form_start(form, {'attr':{'class':'form'}}) }}
+                            <div class="form-group form-group-default">
+                                {{form_row(form.materiel, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Nom complet agent...','id':'agent', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.prestataire, {'attr': {'class': 'form-control ', 'placeholder':'Nom complet du prestataire...','id':'agent', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.status_matos, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'État du matériel...','id':'agent', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                                {{form_row(form.date_maintenance, {'attr': {'class': 'form-control', 'placeholder':'Date de maintenance...','id':'dateAttribution', 'required':'required' }}) }}
+                            </div>
+                            <div class="form-group form-group-default">
+                              {{form_row(form.fiche_maintenance, {'attr':{'class':"form-control "}})}}
+                            </div>
+                            <div class="card-action">
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                                <a class="btn btn-danger" href="{{ path('app_admin_attribution_index') }}">Annuler</a>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+        $(document).ready(function () {
+        // In your Javascript (external .js resource or <script> tag)
+
+            // Custom JavaScript for the service form can be added here
+            console.log("Service form loaded successfully.");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+

@@ -1,0 +1,56 @@
+
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Attribution' %}
+
+{% block title %}Attribution{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex align-items-center">
+                    <h4 class="card-title">Liste des attributions</h4>
+                    <a href="{{ path('app_admin_attribution_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle attribution" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th>Affectaire</th>
+                                    <th>Matériel</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for attribution in attributions %}
+                                <tr>
+                                    <td>{{ attribution.affectaire.agent.identification.prenom }} {{ attribution.affectaire.agent.identification.nom }} - {{ attribution.affectaire.agent.matricule }} </td>
+                                    <td>{{ attribution.materiel.typeMatos|capitalize }} {{ attribution.materiel.marqueMatos|capitalize }}  {{ attribution.materiel.modeleMatos|capitalize }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_admin_attribution_show', {'id': attribution.id}) }}" class="btn"> <i class="fa fa-eye text-primary" aria-hidden="true"></i>  </a>
+                                        <a href="{{ path('app_admin_attribution_edit', {'id': attribution.id}) }}" class="btn"> <i class="fa fa-edit text-secondary" aria-hidden="true"></i>  </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

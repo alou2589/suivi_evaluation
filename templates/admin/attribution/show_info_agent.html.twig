@@ -1,0 +1,40 @@
+<div class="row row-demo-grid">
+    <div class="col-md-12 ms-auto me-auto">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Prenom</th>
+                    <td>{{ attribution.affectaire.agent.identification.prenom }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ attribution.affectaire.agent.identification.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Sexe</th>
+                    <td>{{ attribution.affectaire.agent.identification.sexe }}</td>
+                </tr>
+                <tr>
+                    <th>Date et lieu de naissance</th>
+                    <td> le {{ attribution.affectaire.agent.identification.dateNaissance ? attribution.affectaire.agent.identification.dateNaissance|date('Y-m-d H:i:s') : '' }} à {{ attribution.affectaire.agent.identification.lieuNaissance }} </td>
+                </tr>
+                <tr>
+                    <th>Adresse </th>
+                    <td>{{ attribution.affectaire.agent.identification.adresse }}</td>
+                </tr>
+                <tr>
+                    <th>Adresse email</th>
+                    <td>{{ attribution.affectaire.agent.identification.email }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ attribution.affectaire.agent.identification.telephone }}</td>
+                </tr>
+                <tr>
+                    <th>Situation matrimoniale</th>
+                    <td>{{ attribution.affectaire.agent.identification.situationMatrimoniale }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -13,7 +13,7 @@
             <div class="card">
                 <div class="card-header">
                   <div class="d-flex gap-3 justify-content-end">
-                    <a href="{{ path('app_admin_matos_informtatique_create') }}"  title="Nouveau matériel" class="rounded-pill btn btn-black" >
+                    <a href="{{ path('app_admin_matos_informatique_create') }}"  title="Nouveau matériel" class="rounded-pill btn btn-black" >
                       <i class="fa fa-plus"></i>
                       Ajouter
                     </a>
@@ -37,12 +37,12 @@
                             <tbody>
                             {% for matos_informatique in matos_informatiques %}
                                 <tr>
-                                    <td>{{ matos_informatique.marqueMatos }}{{ matos_informatique.modeleMatos }}</td>
+                                    <td>{{ matos_informatique.marqueMatos|capitalize }} {{ matos_informatique.modeleMatos|capitalize }}</td>
                                     <td>{{ matos_informatique.snMatos }}</td>
                                     <td>{{ matos_informatique.dateReception ? matos_informatique.dateReception|date('Y-m-d') : '' }}</td>
                                     <td class="text-center">
-                                      <a href="{{ path('app_admin_matos_informtatique_show', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
-                                      <a href="{{ path('app_admin_matos_informtatique_edit', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                      <a href="{{ path('app_admin_matos_informatique_show', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                      <a href="{{ path('app_admin_matos_informatique_edit', {'id': matos_informatique.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
                                     </td>
                                 </tr>
                             {% else %}

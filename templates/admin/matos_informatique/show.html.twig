@@ -1,0 +1,82 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title =  "Matériel Informatique" %}
+
+{% block title %}Matériel Informatique{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+		<div class="card-header">
+            <div class="d-flex gap-3 justify-content-end">
+
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_matos_informatique_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_matos_informatique_edit', {'id': matos_informatique.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_matos_informatique_delete', {id: matos_informatique.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ matos_informatique.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
+            </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    <div class="row row-demo-grid">
+                      <div class="col-md-6 ms-auto me-auto">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Type de matériel</th>
+                                    <td>{{ matos_informatique.typeMatos }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Marque & Modèle du matériel</th>
+                                    <td>{{ matos_informatique.marqueMatos }} {{ matos_informatique.modeleMatos }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Numéro de série</th>
+                                    <td>{{ matos_informatique.snMatos }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de reception</th>
+                                    <td>{{ matos_informatique.dateReception ? matos_informatique.dateReception|date('Y-m-d') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Spécification</th>
+                                    <td>
+                                        <a href="{{ path('app_admin_matos_informatique_show_specs', {'id': matos_informatique.id}) }}" class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-file-alt"></i>
+                                            Voir les spécifications
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('assets/js/imprimerSection.js')}}"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @media print {
+            .hide-on-print {
+                display: none !important;
+            }
+        }
+    </style>
+{% endblock %}

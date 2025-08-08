@@ -39,19 +39,19 @@
                 </span>
                 <h4 class="text-section">Ressources Humaines</h4>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_direction_index' ? 'active' : ''}}">
+              <li class="nav-item {{app.current_route in ['app_admin_direction_index', 'app_admin_direction_new', 'app_admin_direction_edit', 'app_admin_direction_show'] ? 'active' : ''}}">
                 <a href="{{ path('app_admin_direction_index') }}">
                   <i class="fas fa-desktop"></i>
                   <p>Direction</p>
                 </a>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_service_index' ? 'active' : ''}}">
+              <li class="nav-item {{app.current_route in ['app_admin_service_index', 'app_admin_service_new', 'app_admin_service_edit', 'app_admin_service_show'] ? 'active' : ''}}">
                 <a href="{{ path('app_admin_service_index') }}">
                   <i class="fas fa-desktop"></i>
                   <p>Service</p>
                 </a>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_poste_index' ? 'active' : ''}}">
+              <li class="nav-item {{app.current_route in ['app_admin_poste_index', 'app_admin_poste_new', 'app_admin_poste_edit', 'app_admin_poste_show'] ? 'active' : ''}}">
                 <a href="{{ path('app_admin_poste_index') }}">
                   <i class="fas fa-desktop"></i>
                   <p>Poste</p>
@@ -65,17 +65,17 @@
                 </a>
                 <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="personnel">
                     <ul class="nav nav-collapse">
-                        <li class="nav-item {{app.current_route == 'app_admin_info_perso_index' ? 'active' : ''}} ">
+                        <li class="nav-item {{app.current_route in ['app_admin_info_perso_index', 'app_admin_info_perso_new', 'app_admin_info_perso_edit', 'app_admin_info_perso_show'] ? 'active' : ''}}">
                           <a href="{{ path('app_admin_info_perso_index') }}">
                             <span class="sub-item">Info Personnelle</span>
                           </a>
                         </li>
-                        <li class="nav-item {{app.current_route == 'app_admin_agent_index' ? 'active' : ''}}">
+                        <li class="nav-item {{app.current_route in ['app_admin_agent_index', 'app_admin_agent_new', 'app_admin_agent_edit', 'app_admin_agent_show'] ? 'active' : ''}}">
                             <a href="{{ path('app_admin_agent_index') }}">
                                 <span class="sub-item">Agent</span>
                             </a>
                         </li>
-                        <li class="nav-item {{app.current_route == 'app_admin_affectation_index' ? 'active' : ''}}">
+                        <li class="nav-item {{app.current_route in ['app_admin_affectation_index', 'app_admin_affectation_new', 'app_admin_affectation_edit', 'app_admin_affectation_show'] ? 'active' : ''}}">
                           <a href="{{ path('app_admin_affectation_index') }}">
                             <span class="sub-item">Affectation</span>
                           </a>
@@ -91,12 +91,12 @@
                 </a>
                 <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' or app.current_route == 'app_admin_carte_professionnelle_index' ? 'show' : ''}}" id="docs">
                     <ul class="nav nav-collapse">
-                        <li class="nav-item {{app.current_route == 'app_admin_doc_admin_index' ? 'active' : ''}} ">
+                        <li class="nav-item {{app.current_route in ['app_admin_doc_admin_index', 'app_admin_doc_admin_new', 'app_admin_doc_admin_edit', 'app_admin_doc_admin_show'] ? 'active' : ''}}">
                             <a href="{{ path('app_admin_doc_admin_index')}}">
                                 <span class="sub-item">Dossiers Administratifs</span>
                             </a>
                         </li>
-                        <li class="nav-item {{ app.current_route == 'app_admin_carte_professionnelle_index' ? 'active':''}} ">
+                        <li class="nav-item {{app.current_route in ['app_admin_carte_professionnelle_index', 'app_admin_carte_professionnelle_new', 'app_admin_carte_professionnelle_edit', 'app_admin_carte_professionnelle_show'] ? 'active' : ''}}">
                             <a href="{{ path('app_admin_carte_professionnelle_index')}}">
                                 <span class="sub-item">Carte Professionnelle</span>
                             </a>
@@ -110,13 +110,13 @@
                 </span>
                 <h4 class="text-section">Suivi Évaluation</h4>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_programme_index' ? 'active' : ''}}">
+              <li class="nav-item {{app.current_route in ['app_admin_programme_index', 'app_admin_programme_new', 'app_admin_programme_edit', 'app_admin_programme_show'] ? 'active' : ''}}">
                 <a href="{{ path('app_admin_programme_index') }}">
                   <i class="fas fa-book"></i>
                   <p>Programme</p>
                 </a>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_action_index' ? 'active' : ''}}">
+              <li class="nav-item {{app.current_route in ['app_admin_action_index', 'app_admin_action_new', 'app_admin_action_edit', 'app_admin_action_show'] ? 'active' : ''}}">
                 <a href="{{ path('app_admin_action_index') }}">
                   <i class="fas fa-book"></i>
                   <p>Action</p>
@@ -128,10 +128,28 @@
                 </span>
                 <h4 class="text-section">Informatique</h4>
               </li>
-              <li class="nav-item {{app.current_route == 'app_admin_matos_informtatique_index' ? 'active' : ''}}">
-                <a href="{{ path('app_admin_matos_informtatique_index') }}">
+              <li class="nav-item {{app.current_route in ['app_admin_matos_informatique_index', 'app_admin_matos_informatique_new', 'app_admin_matos_informatique_edit', 'app_admin_matos_informatique_show'] ? 'active' : ''}}">
+                <a href="{{ path('app_admin_matos_informatique_index') }}">
                   <i class="fas fa-laptop"></i>
                   <p>Matériel Informatique</p>
+                </a>
+              </li>
+              <li class="nav-item {{app.current_route in ['app_admin_attribution_index', 'app_admin_attribution_new', 'app_admin_attribution_edit', 'app_admin_attribution_show'] ? 'active' : ''}}">
+                <a href="{{ path('app_admin_attribution_index') }}">
+                  <i class="fas fa-save"></i>
+                  <p>Attribution Matériel</p>
+                </a>
+              </li>
+              <li class="nav-item {{app.current_route in ['app_admin_technicien_index', 'app_admin_technicien_new', 'app_admin_technicien_edit', 'app_admin_technicien_show'] ? 'active' : ''}}">
+                <a href="{{ path('app_admin_technicien_index') }}">
+                  <i class="fas fa-user-cog"></i>
+                  <p>Technicien</p>
+                </a>
+              </li>
+              <li class="nav-item {{app.current_route in ['app_admin_maintenance_index', 'app_admin_maintenance_create', 'app_admin_maintenance_edit', 'app_admin_maintenance_show'] ? 'active' : ''}}">
+                <a href="{{ path('app_admin_maintenance_index') }}">
+                  <i class="fas fa-cogs"></i>
+                  <p>Maintenance</p>
                 </a>
               </li>
             </ul>

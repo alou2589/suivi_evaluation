@@ -1,7 +1,7 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title =  "Carte Professionnelle" %}
+{% set page_title =  "Maintenance" %}
 
-{% block title %}Carte Professionnelle{% endblock %}
+{% block title %}Maintenance{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -10,11 +10,11 @@
     <div class="card">
 		<div class="card-header">
             <div class="d-flex gap-3 justify-content-end">
-                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_carte_professionnelle_index') }}"><i class="fa fa-home"></i> Retour</a>
-                <button class="btn btn-primary rounded-pill " onclick="imprimerSection();" title="Imprimer"><i class="fa fa-print"></i> Imprimer</button>
-                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_carte_professionnelle_edit', {'id': carte_professionnelle.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
-                <form action="{{ path('app_admin_carte_professionnelle_delete', {id:carte_professionnelle.id})}}" method="POST">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ carte_professionnelle.id) }}">
+
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_maintenance_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_maintenance_edit', {'id': maintenance.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_maintenance_delete', {id:maintenance.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ maintenance.id) }}">
                     <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
                 </form>
             </div>
@@ -24,9 +24,6 @@
 				<li class="nav-item">
 					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true">Informations</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false">Maquette</a>
-				</li>
 			</ul>
 			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
                 <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
@@ -35,31 +32,36 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th>Agent</th>
+                                    <th>Fiche de maintenance</th>
                                     <td>
-                                        <img src="data:image/png;base64,{{ photoBase64 }}" alt="Photo" width="100" height="100">
+                                        <a href="{{ path('app_admin_maintenance_show_fiche_maintenance', {'id': maintenance.id}) }}" class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-file-alt"></i>
+                                            Voir la fiche de maintenance
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Date de délivrance</th>
-                                    <td>{{ carte_professionnelle.dateDelivrance ? carte_professionnelle.dateDelivrance|date('Y-m-d') : '' }}</td>
+                                    <th>Matériel</th>
+                                    <td>
+                                        {{ maintenance.materiel.typeMatos }} {{ maintenance.materiel.marqueMatos }} {{ maintenance.materiel.modeleMatos }} - {{ maintenance.materiel.snMatos }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th>Date d'expiration</th>
-                                    <td>{{ carte_professionnelle.dateExpiration ? carte_professionnelle.dateExpiration|date('Y-m-d') : '' }}</td>
+                                    <th>Prestataire</th>
+                                    <td>{{ maintenance.prestataire }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Status de l'Impression</th>
-                                    <td>{{ carte_professionnelle.statusImpression }}</td>
+                                    <th>Date de maintenance</th>
+                                    <td>{{ maintenance.dateMaintenance|date('d/m/Y') }}</td>
+                                </tr>
+                                    <th>État du matériel</th>
+                                    <td>{{ maintenance.statusMatos }}</td>
                                 </tr>
                             </tbody>
                         </table>
                       </div>
                     </div>
                 </div>
-				<div class="tab-pane fade" id="pills-profile-nobd" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
-					{% include 'admin/carte_professionnelle/maquette.html.twig' %}
-				</div>
             </div>
         </div>
     </div>
@@ -76,9 +78,6 @@
             .hide-on-print {
                 display: none !important;
             }
-            #section-à-imprimer {
-                display: block !important;
-                width
-            }
+        }
     </style>
 {% endblock %}

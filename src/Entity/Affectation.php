@@ -48,9 +48,23 @@ class Affectation
     #[ORM\OneToMany(targetEntity: CarteProfessionnelle::class, mappedBy: 'identite')]
     private Collection $carteProfessionnelles;
 
+    /**
+     * @var Collection<int, Attribution>
+     */
+    #[ORM\OneToMany(targetEntity: Attribution::class, mappedBy: 'affectaire')]
+    private Collection $attributions;
+
+    /**
+     * @var Collection<int, Technicien>
+     */
+    #[ORM\OneToMany(targetEntity: Technicien::class, mappedBy: 'info_technicien')]
+    private Collection $techniciens;
+
     public function __construct()
     {
         $this->carteProfessionnelles = new ArrayCollection();
+        $this->attributions = new ArrayCollection();
+        $this->techniciens = new ArrayCollection();
     }
 
 
@@ -192,6 +206,66 @@ class Affectation
             // set the owning side to null (unless already changed)
             if ($carteProfessionnelle->getIdentite() === $this) {
                 $carteProfessionnelle->setIdentite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Attribution>
+     */
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
+    }
+
+    public function addAttribution(Attribution $attribution): static
+    {
+        if (!$this->attributions->contains($attribution)) {
+            $this->attributions->add($attribution);
+            $attribution->setAffectaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribution(Attribution $attribution): static
+    {
+        if ($this->attributions->removeElement($attribution)) {
+            // set the owning side to null (unless already changed)
+            if ($attribution->getAffectaire() === $this) {
+                $attribution->setAffectaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Technicien>
+     */
+    public function getTechniciens(): Collection
+    {
+        return $this->techniciens;
+    }
+
+    public function addTechnicien(Technicien $technicien): static
+    {
+        if (!$this->techniciens->contains($technicien)) {
+            $this->techniciens->add($technicien);
+            $technicien->setInfoTechnicien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnicien(Technicien $technicien): static
+    {
+        if ($this->techniciens->removeElement($technicien)) {
+            // set the owning side to null (unless already changed)
+            if ($technicien->getInfoTechnicien() === $this) {
+                $technicien->setInfoTechnicien(null);
             }
         }
 

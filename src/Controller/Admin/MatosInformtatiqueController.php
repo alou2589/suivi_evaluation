@@ -15,13 +15,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 
-#[Route('/admin/matos/informtatique', 'app_admin_matos_informtatique_')]
+#[Route('/admin/matos/informatique', 'app_admin_matos_informatique_')]
 final class MatosInformtatiqueController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
     public function index(MatosInformatiqueRepository $matosInformatiqueRepository): Response
     {
-        return $this->render('admin/matos_informtatique/index.html.twig', [
+        return $this->render('admin/matos_informatique/index.html.twig', [
             'matos_informatiques' => $matosInformatiqueRepository->findAll(),
         ]);
     }
@@ -42,10 +42,10 @@ final class MatosInformtatiqueController extends AbstractController
             $entityManager->persist($matosInformatique);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_matos_informtatique_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_matos_informatique_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin/matos_informtatique/new.html.twig', [
+        return $this->render('admin/matos_informatique/new.html.twig', [
             'matos_informatique' => $matosInformatique,
             'form' => $form,
         ]);
@@ -54,7 +54,7 @@ final class MatosInformtatiqueController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(MatosInformatique $matosInformatique): Response
     {
-        return $this->render('admin/matos_informtatique/show.html.twig', [
+        return $this->render('admin/matos_informatique/show.html.twig', [
             'matos_informatique' => $matosInformatique,
         ]);
     }
@@ -88,10 +88,10 @@ final class MatosInformtatiqueController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_matos_informtatique_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_matos_informatique_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin/matos_informtatique/edit.html.twig', [
+        return $this->render('admin/matos_informatique/edit.html.twig', [
             'matos_informatique' => $matosInformatique,
             'form' => $form,
         ]);
@@ -102,7 +102,7 @@ final class MatosInformtatiqueController extends AbstractController
     {
         if(!$matosInformatique){
             $this->addFlash('Erreur', 'Matériel introuvable :(');
-            return $this->redirectToRoute('app_admin_matos_informtatique_index');
+            return $this->redirectToRoute('app_admin_matos_informatique_index');
         }
         if ($this->isCsrfTokenValid('delete'.$matosInformatique->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($matosInformatique);
@@ -118,6 +118,6 @@ final class MatosInformtatiqueController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('app_admin_doc_admin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_admin_matos_informatique_index', [], Response::HTTP_SEE_OTHER);
     }
 }

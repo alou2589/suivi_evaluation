@@ -1,0 +1,58 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Maintenance' %}
+
+{% block title %}Maintenance{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex align-items-center">
+                    <h4 class="card-title">Liste des maintenances</h4>
+                    <a href="{{ path('app_admin_maintenance_create') }}" data-original-title="Add New Row"  data-placement="left"  title="Nouvelle maintenance" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th>Matériel</th>
+                                    <th>Prestataire</th>
+                                    <th>État Matériel</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for maintenance in maintenances %}
+                                <tr>
+                                    <td>{{ maintenance.materiel.typeMatos|capitalize }} {{ maintenance.materiel.marqueMatos|capitalize }} {{ maintenance.materiel.modeleMatos|capitalize }} - {{ maintenance.materiel.snMatos|capitalize }}</td>
+                                    <td>{{ maintenance.prestataire|capitalize }}</td>
+                                    <td>{{ maintenance.statusMatos|capitalize }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_admin_maintenance_show', {'id': maintenance.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                        <a href="{{ path('app_admin_maintenance_edit', {'id': maintenance.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

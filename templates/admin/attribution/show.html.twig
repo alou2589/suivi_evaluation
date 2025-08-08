@@ -1,0 +1,40 @@
+{% extends './admin/adminbase.html.twig' %}
+{% set page_title =  attribution.affectaire.agent.identification.prenom ~ " " ~ attribution.affectaire.agent.identification.nom  %}
+
+{% block title %}Attribution{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="card">
+		<div class="card-header">
+            <div class="d-flex gap-3 justify-content-end">
+                <a class="btn btn-secondary rounded-pill " href="{{ path('app_admin_attribution_index') }}"><i class="fa fa-home"></i> Retour</a>
+                <a class="btn btn-warning rounded-pill" href="{{ path('app_admin_attribution_edit', {'id': attribution.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
+                <form action="{{ path('app_admin_attribution_delete', {id:attribution.id})}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ attribution.id) }}">
+                    <button type="submit" class="btn btn-danger rounded-pill"><i class="fa fa-trash-alt"></i> Supprimer</button>
+                </form>
+            </div>
+		</div>
+		<div class="card-body">
+			<ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-home-tab-nobd" data-bs-toggle="pill" href="#pills-home-nobd" role="tab" aria-controls="pills-home-nobd" aria-selected="true"> <i class="fas fa-user"></i> Agent</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-profile-tab-nobd" data-bs-toggle="pill" href="#pills-profile-nobd" role="tab" aria-controls="pills-profile-nobd" aria-selected="false"> <i class="fas fa-laptop"></i> Matériel</a>
+				</li>
+			</ul>
+			<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                <div class="tab-pane fade show active" id="pills-home-nobd" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                    {% include 'admin/attribution/show_info_agent.html.twig' %}
+                </div>
+				<div class="tab-pane fade" id="pills-profile-nobd" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
+					{% include 'admin/attribution/show_info_materiel.html.twig' %}
+				</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

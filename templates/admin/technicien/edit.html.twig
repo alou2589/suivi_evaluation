@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Technicien{% endblock %}
+
+{% block body %}
+    <h1>Edit Technicien</h1>
+
+    {{ include('admin/technicien/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_admin_technicien_index') }}">back to list</a>
+
+    {{ include('admin/technicien/_delete_form.html.twig') }}
+{% endblock %}

@@ -6,23 +6,52 @@ use App\Entity\MatosInformatique;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class MatosInformatiqueType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('type_matos')
-            ->add('marque_matos')
-            ->add('modele_matos')
-            ->add('sn_matos')
-            ->add('date_reception')
-            ->add('specification')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
+            ->add('type_matos', ChoiceType::class, [
+                'choices' => [
+                    'Ordinateur' => 'ordinateur',
+                    'Imprimante' => 'imprimante',
+                    'Scanner' => 'scanner',
+                    'Autre' => 'autre',
+                ],
+                'placeholder' => 'Sélectionnez un type de matériel',
             ])
-            ->add('updatedAt', null, [
+            ->add('marque_matos', choicetype::class, [
+                'choices' => [
+                    'HP' => 'hp',
+                    'Dell' => 'dell',
+                    'Lenovo' => 'lenovo',
+                    'Apple' => 'apple',
+                    'Autre' => 'autre',
+                ],
+                'placeholder' => 'Sélectionnez une marque',
+            ])
+            ->add('modele_matos', TextType::class, [
+                'label' => 'Modèle du matériel',
+                'required' => false,
+            ])
+            ->add('sn_matos', TextType::class, [
+                'label' => 'Numéro de série',
+                'required' => false,
+            ])
+            ->add('date_reception', DateType::class, [
                 'widget' => 'single_text',
+                'label' => 'Date de réception',
+                'required' => false,
+            ])
+            ->add('specification', FileType::class, [
+                'label' => 'Spécifications',
+                'required' => false,
+                'attr' => ['accept' => '.pdf,.doc,.docx,.txt'],
             ])
         ;
     }
