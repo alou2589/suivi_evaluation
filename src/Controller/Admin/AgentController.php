@@ -10,7 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\User;
 
 #[Route('/admin/agent', name:'app_admin_agent_')]
 final class AgentController extends AbstractController
@@ -24,14 +26,36 @@ final class AgentController extends AbstractController
     }
 
     #[Route('/new', name: 'create', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, UserPasswordHasherInterface $hashPassword, EntityManagerInterface $entityManager, AgentRepository $agentRepository): Response
     {
         $agent = new Agent();
         $form = $this->createForm(AgentForm::class, $agent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user=new User();
+            $prenom= strtolower($this->sanitize($agent->getIdentification()->getPrenom()));
+            $nom= strtolower($this->sanitize($agent->getIdentification()->getNom()));
+            $domain= 'industriecommerce.gouv.sn';
+            $nbagents= $agentRepository->searchdoublonsAgentPrenomNomCount($prenom, $nom);
+            if($nbagents == 0){
+                $email= "{$prenom}.{$nom}@{$domain}";
+            } else {
+                $email= "{$prenom}." . ($nbagents + 1) . ".{$nom}@{$domain}";
+            }
+            $password= 'passer123';
+            $user->setEmail($email);
+            $user->setAgent($agent);
+            $user->setRoles(['ROLE_USER']);
+            $user->setPassword(
+                $hashPassword->hashPassword(
+                    $user,
+                    $password
+                )
+            );
+            $user->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($agent);
+            $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_admin_agent_index', [], Response::HTTP_SEE_OTHER);
@@ -81,5 +105,12 @@ final class AgentController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_agent_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function sanitize(string $text): string
+    {
+        $text= iconv('UTF-8', 'UTF-8//TRANSLIT', $text);
+        $text= preg_replace('/[^a-zA-Z0-9]/', '', $text);
+        return $text;
     }
 }

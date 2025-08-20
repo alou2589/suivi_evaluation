@@ -17,6 +17,19 @@ class AgentRepository extends ServiceEntityRepository
         parent::__construct($registry, Agent::class);
     }
 
+    public function searchdoublonsAgentPrenomNomCount(string $prenom, string $nom): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->join('a.identification', 'i')
+            ->where('i.prenom = :prenom')
+            ->andWhere('i.nom = :nom')
+            ->setParameter('prenom', $prenom)
+            ->setParameter('nom', $nom)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Agent[] Returns an array of Agent objects
     //     */

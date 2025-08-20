@@ -152,6 +152,18 @@
                   <p>Maintenance</p>
                 </a>
               </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Administration Application</h4>
+              </li>
+              <li class="nav-item {{app.current_route in ['app_admin_user_index', 'app_admin_user_new', 'app_admin_user_edit', 'app_admin_user_show'] ? 'active' : ''}}">
+                <a href="{{ path('app_admin_user_index') }}">
+                  <i class="fas fa-users"></i>
+                  <p>Utilisateurs</p>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
