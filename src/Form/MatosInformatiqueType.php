@@ -18,7 +18,8 @@ class MatosInformatiqueType extends AbstractType
         $builder
             ->add('type_matos', ChoiceType::class, [
                 'choices' => [
-                    'Ordinateur' => 'ordinateur',
+                    'Ordinateur Portable' => 'ordinateur portable',
+                    'Ordinateur Fixe' => 'ordinateur fixe',
                     'Imprimante' => 'imprimante',
                     'Scanner' => 'scanner',
                     'Autre' => 'autre',

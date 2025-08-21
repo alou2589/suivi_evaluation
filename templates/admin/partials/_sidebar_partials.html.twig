@@ -1,7 +1,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{path('app_admin_dashboard_index')}}" class="logo">
+            <a href="{{path('app_admin_dashboard_ressources_humaines')}}" class="logo">
               <img
                 src="{{asset('assets/img/kaiadmin/logo_light.svg')}}"
                 alt="navbar brand"
@@ -27,143 +27,181 @@
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
 
-              <li class="nav-item {{app.current_route == 'app_admin_dashboard_index' ? 'active' : ''}}">
-                <a href="{{ path('app_admin_dashboard_index') }}">
-                  <i class="fas fa-home"></i>
-                  <p>Tableau de Bord</p>
-                </a>
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Ressources Humaines</h4>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_direction_index', 'app_admin_direction_new', 'app_admin_direction_edit', 'app_admin_direction_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_direction_index') }}">
-                  <i class="fas fa-desktop"></i>
-                  <p>Direction</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_service_index', 'app_admin_service_new', 'app_admin_service_edit', 'app_admin_service_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_service_index') }}">
-                  <i class="fas fa-desktop"></i>
-                  <p>Service</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_poste_index', 'app_admin_poste_new', 'app_admin_poste_edit', 'app_admin_poste_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_poste_index') }}">
-                  <i class="fas fa-desktop"></i>
-                  <p>Poste</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#personnel">
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#dashboard">
+                      <i class="fas fa-users"></i>
+                      <p>Tableau de Bord</p>
+                      <span class="caret"></span>
+                  </a>
+                  <div class="collapse {{app.current_route == 'app_admin_dashboard_ressources_humaines' or app.current_route == 'app_admin_dashboard_informatique' or app.current_route == 'app_admin_dashboard_cepse' ? 'show' : ''}}" id="dashboard">
+                      <ul class="nav nav-collapse">
+                        {% if is_granted("ROLE_RH_ADMIN") %}
+                            <li class="nav-item {{app.current_route in ['app_admin_dashboard_ressources_humaines'] ? 'active' : ''}}">
+                              <a href="{{ path('app_admin_dashboard_ressources_humaines') }}">
+                                <span class="sub-item">Ressources Humaines</span>
+                              </a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted("ROLE_INFO_ADMIN") %}
+                            <li class="nav-item {{app.current_route in ['app_admin_dashboard_informatique'] ? 'active' : ''}}">
+                                <a href="{{ path('app_admin_dashboard_informatique') }}">
+                                    <span class="sub-item">Informatique</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted("ROLE_CEPSE_ADMIN") %}
+                            <li class="nav-item {{app.current_route in ['app_admin_dashboard_cepse'] ? 'active' : ''}}">
+                              <a href="{{ path('app_admin_dashboard_cepse') }}">
+                                <span class="sub-item">CEPSE</span>
+                              </a>
+                            </li>
+                        {% endif %}
+                      </ul>
+                  </div>
+                </li>
+              {# Pour ceux qui ont le ROLE_RH_ADMIN #}
+              {% if is_granted("ROLE_RH_ADMIN") %}
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">Ressources Humaines</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_direction_index', 'app_admin_direction_new', 'app_admin_direction_edit', 'app_admin_direction_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_direction_index') }}">
+                    <i class="fas fa-desktop"></i>
+                    <p>Direction</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_service_index', 'app_admin_service_new', 'app_admin_service_edit', 'app_admin_service_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_service_index') }}">
+                    <i class="fas fa-desktop"></i>
+                    <p>Service</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_poste_index', 'app_admin_poste_new', 'app_admin_poste_edit', 'app_admin_poste_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_poste_index') }}">
+                    <i class="fas fa-desktop"></i>
+                    <p>Poste</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#personnel">
+                      <i class="fas fa-users"></i>
+                      <p>Personnel</p>
+                      <span class="caret"></span>
+                  </a>
+                  <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="personnel">
+                      <ul class="nav nav-collapse">
+                          <li class="nav-item {{app.current_route in ['app_admin_info_perso_index', 'app_admin_info_perso_new', 'app_admin_info_perso_edit', 'app_admin_info_perso_show'] ? 'active' : ''}}">
+                            <a href="{{ path('app_admin_info_perso_index') }}">
+                              <span class="sub-item">Info Personnelle</span>
+                            </a>
+                          </li>
+                          <li class="nav-item {{app.current_route in ['app_admin_agent_index', 'app_admin_agent_new', 'app_admin_agent_edit', 'app_admin_agent_show'] ? 'active' : ''}}">
+                              <a href="{{ path('app_admin_agent_index') }}">
+                                  <span class="sub-item">Agent</span>
+                              </a>
+                          </li>
+                          <li class="nav-item {{app.current_route in ['app_admin_affectation_index', 'app_admin_affectation_new', 'app_admin_affectation_edit', 'app_admin_affectation_show'] ? 'active' : ''}}">
+                            <a href="{{ path('app_admin_affectation_index') }}">
+                              <span class="sub-item">Affectation</span>
+                            </a>
+                          </li>
+                      </ul>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#docs">
+                      <i class="fas fa-file-alt"></i>
+                      <p>Documents</p>
+                      <span class="caret"></span>
+                  </a>
+                  <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' or app.current_route == 'app_admin_carte_professionnelle_index' ? 'show' : ''}}" id="docs">
+                      <ul class="nav nav-collapse">
+                          <li class="nav-item {{app.current_route in ['app_admin_doc_admin_index', 'app_admin_doc_admin_new', 'app_admin_doc_admin_edit', 'app_admin_doc_admin_show'] ? 'active' : ''}}">
+                              <a href="{{ path('app_admin_doc_admin_index')}}">
+                                  <span class="sub-item">Dossiers Administratifs</span>
+                              </a>
+                          </li>
+                          <li class="nav-item {{app.current_route in ['app_admin_carte_professionnelle_index', 'app_admin_carte_professionnelle_new', 'app_admin_carte_professionnelle_edit', 'app_admin_carte_professionnelle_show'] ? 'active' : ''}}">
+                              <a href="{{ path('app_admin_carte_professionnelle_index')}}">
+                                  <span class="sub-item">Carte Professionnelle</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+                </li>
+
+              {% endif %}
+              {# Pour ceux qui ont le ROLE_CEPSE_ADMIN #}
+              {% if is_granted("ROLE_CEPSE_ADMIN") %}
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">Suivi Évaluation</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_programme_index', 'app_admin_programme_new', 'app_admin_programme_edit', 'app_admin_programme_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_programme_index') }}">
+                    <i class="fas fa-book"></i>
+                    <p>Programme</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_action_index', 'app_admin_action_new', 'app_admin_action_edit', 'app_admin_action_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_action_index') }}">
+                    <i class="fas fa-book"></i>
+                    <p>Action</p>
+                  </a>
+                </li>
+              {% endif %}
+              {# Pour ceux qui ont le ROLE_INFO_ADMIN #}
+              {% if is_granted("ROLE_INFO_ADMIN") %}
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">Informatique</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_matos_informatique_index', 'app_admin_matos_informatique_new', 'app_admin_matos_informatique_edit', 'app_admin_matos_informatique_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_matos_informatique_index') }}">
+                    <i class="fas fa-laptop"></i>
+                    <p>Matériel Informatique</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_attribution_index', 'app_admin_attribution_new', 'app_admin_attribution_edit', 'app_admin_attribution_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_attribution_index') }}">
+                    <i class="fas fa-save"></i>
+                    <p>Attribution Matériel</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_technicien_index', 'app_admin_technicien_new', 'app_admin_technicien_edit', 'app_admin_technicien_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_technicien_index') }}">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Technicien</p>
+                  </a>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_maintenance_index', 'app_admin_maintenance_create', 'app_admin_maintenance_edit', 'app_admin_maintenance_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_maintenance_index') }}">
+                    <i class="fas fa-cogs"></i>
+                    <p>Maintenance</p>
+                  </a>
+                </li>
+              {% endif %}
+              {% if is_granted("ROLE_SUPERADMIN", object = null, field = null) %}
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">Administration Application</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_user_index', 'app_admin_user_new', 'app_admin_user_edit', 'app_admin_user_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_user_index') }}">
                     <i class="fas fa-users"></i>
-                    <p>Personnel</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse {{app.current_route == 'app_admin_info_perso_index' or app.current_route == 'app_admin_agent_index' or app.current_route == 'app_admin_affectation_index' ? 'show' : ''}}" id="personnel">
-                    <ul class="nav nav-collapse">
-                        <li class="nav-item {{app.current_route in ['app_admin_info_perso_index', 'app_admin_info_perso_new', 'app_admin_info_perso_edit', 'app_admin_info_perso_show'] ? 'active' : ''}}">
-                          <a href="{{ path('app_admin_info_perso_index') }}">
-                            <span class="sub-item">Info Personnelle</span>
-                          </a>
-                        </li>
-                        <li class="nav-item {{app.current_route in ['app_admin_agent_index', 'app_admin_agent_new', 'app_admin_agent_edit', 'app_admin_agent_show'] ? 'active' : ''}}">
-                            <a href="{{ path('app_admin_agent_index') }}">
-                                <span class="sub-item">Agent</span>
-                            </a>
-                        </li>
-                        <li class="nav-item {{app.current_route in ['app_admin_affectation_index', 'app_admin_affectation_new', 'app_admin_affectation_edit', 'app_admin_affectation_show'] ? 'active' : ''}}">
-                          <a href="{{ path('app_admin_affectation_index') }}">
-                            <span class="sub-item">Affectation</span>
-                          </a>
-                        </li>
-                    </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#docs">
-                    <i class="fas fa-file-alt"></i>
-                    <p>Documents</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse {{app.current_route == 'app_admin_doc_admin_index' or app.current_route == 'app_admin_carte_professionnelle_index' ? 'show' : ''}}" id="docs">
-                    <ul class="nav nav-collapse">
-                        <li class="nav-item {{app.current_route in ['app_admin_doc_admin_index', 'app_admin_doc_admin_new', 'app_admin_doc_admin_edit', 'app_admin_doc_admin_show'] ? 'active' : ''}}">
-                            <a href="{{ path('app_admin_doc_admin_index')}}">
-                                <span class="sub-item">Dossiers Administratifs</span>
-                            </a>
-                        </li>
-                        <li class="nav-item {{app.current_route in ['app_admin_carte_professionnelle_index', 'app_admin_carte_professionnelle_new', 'app_admin_carte_professionnelle_edit', 'app_admin_carte_professionnelle_show'] ? 'active' : ''}}">
-                            <a href="{{ path('app_admin_carte_professionnelle_index')}}">
-                                <span class="sub-item">Carte Professionnelle</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Suivi Évaluation</h4>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_programme_index', 'app_admin_programme_new', 'app_admin_programme_edit', 'app_admin_programme_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_programme_index') }}">
-                  <i class="fas fa-book"></i>
-                  <p>Programme</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_action_index', 'app_admin_action_new', 'app_admin_action_edit', 'app_admin_action_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_action_index') }}">
-                  <i class="fas fa-book"></i>
-                  <p>Action</p>
-                </a>
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Informatique</h4>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_matos_informatique_index', 'app_admin_matos_informatique_new', 'app_admin_matos_informatique_edit', 'app_admin_matos_informatique_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_matos_informatique_index') }}">
-                  <i class="fas fa-laptop"></i>
-                  <p>Matériel Informatique</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_attribution_index', 'app_admin_attribution_new', 'app_admin_attribution_edit', 'app_admin_attribution_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_attribution_index') }}">
-                  <i class="fas fa-save"></i>
-                  <p>Attribution Matériel</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_technicien_index', 'app_admin_technicien_new', 'app_admin_technicien_edit', 'app_admin_technicien_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_technicien_index') }}">
-                  <i class="fas fa-user-cog"></i>
-                  <p>Technicien</p>
-                </a>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_maintenance_index', 'app_admin_maintenance_create', 'app_admin_maintenance_edit', 'app_admin_maintenance_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_maintenance_index') }}">
-                  <i class="fas fa-cogs"></i>
-                  <p>Maintenance</p>
-                </a>
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Administration Application</h4>
-              </li>
-              <li class="nav-item {{app.current_route in ['app_admin_user_index', 'app_admin_user_new', 'app_admin_user_edit', 'app_admin_user_show'] ? 'active' : ''}}">
-                <a href="{{ path('app_admin_user_index') }}">
-                  <i class="fas fa-users"></i>
-                  <p>Utilisateurs</p>
-                </a>
-              </li>
+                    <p>Utilisateurs</p>
+                  </a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>
