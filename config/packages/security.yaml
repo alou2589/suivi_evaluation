@@ -16,17 +16,24 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            #form_login:
-            #    login_path: app_login
-            #    check_path: app_login
-            #    enable_csrf: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                success_handler: App\Security\LoginSuccessHandler
+                username_parameter: email
+                password_parameter: password
             # by default, the feature allows 5 login attempts er minute
 
 
 
             logout:
                 path: app_logout
-            custom_authenticator: App\Security\LoginFormAuthenticator
+                target: app_login
+                # where to redirect after logout
+                # target: app_any_route
+
+            #custom_authenticator: App\Security\LoginFormAuthenticator
                 # where to redirect after logout
                 # target: app_any_route
 

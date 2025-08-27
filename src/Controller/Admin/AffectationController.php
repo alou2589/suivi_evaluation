@@ -3,9 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Affectation;
+use App\Entity\Agent;
+use App\Entity\Poste;
+use App\Entity\Service;
 use App\Form\AffectationForm;
+use App\Form\UploadFileForm;
 use App\Repository\AffectationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +45,77 @@ final class AffectationController extends AbstractController
         return $this->render('admin/affectation/new.html.twig', [
             'affectation' => $affectation,
             'form' => $form,
+        ]);
+    }
+
+
+
+    #[Route('/upload', name: 'upload', methods: ['GET', 'POST'])]
+    public function upload(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UploadFileForm::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle the file upload and processing logic here
+            // ...
+            $file= $form->get('excel_file')->getData();
+            if ($file) {
+                // Process the uploaded file (e.g., read data, save to database)
+                $spreadsheet= IOFactory::load($file->getPathname());
+                $sheet=$spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray();
+                foreach ($rows as $index=> $row) {
+                    if ($index === 0) {
+                        // Skip header row
+                        continue;
+                    }
+                    $agent=$entityManager->getRepository(Agent::class)->findOneBy(['matricule'=>$row[1]]);
+                    $service=$entityManager->getRepository(Service::class)->findOneBy(['nom_service'=>$row[3]]);
+                    $poste=$entityManager->getRepository(Poste::class)->findOneBy(['nom_poste'=>$row[2]]);
+
+                    if (!$agent || !$service || !$poste) {
+                        $this->addFlash('error', 'La personne ' . $row[0].' n\'existe pas.');
+                        continue;
+                    }
+                    // Vérification des doublons
+                    $existingAffectation = $entityManager->getRepository(Affectation::class)->findOneBy(['agent' => $agent->getId()]);
+                    if ($existingAffectation) {
+                        $this->addFlash('error', ' Cet agent de matricule ' . $row[1] . ' existe déjà.');
+                        continue;
+                    }
+                    $dateStringDebut= $row[4];
+                    if(!empty($dateStringDebut)){
+                        $dateDebut= \DateTime::createFromFormat('Y-m-d', $dateStringDebut);
+                        if($dateDebut != false){
+                            $affectation = new Affectation();
+                            // Assuming the columns in the Excel file match the InfoPerso entity fields
+                            $affectation->setAgent($agent);
+                            $affectation->setPoste($poste);
+                            $affectation->setService($service);
+                            $affectation->setDateDebut($dateDebut);
+                            $affectation->setStatutAffectation($row[5]);
+                            //$entityManager->flush();
+                            // Add other fields as necessary
+                            $entityManager->persist($affectation);
+                        } else {
+                            throw new \Exception("Format de date invalide : $dateStringDebut");
+                        }
+                    }
+                }
+                $entityManager->flush();
+
+
+            }
+
+            $this->addFlash('success', 'Fichier importé avec succès.');
+            return $this->redirectToRoute('app_admin_affectation_index');
+        }
+
+        return $this->render('admin/uploadfiles/upload.html.twig', [
+            'form' => $form->createView(),
+            'nom_fichier' => 'Affectation', // This can be dynamic based on the file type
+            'redirectCancelRoute' => 'app_admin_affectation_index', // Redirect route after cancellation
         ]);
     }
 

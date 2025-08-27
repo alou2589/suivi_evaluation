@@ -82,8 +82,6 @@ final class DirectionController extends AbstractController
                     $entityManager->persist($direction);
                 }
                 $entityManager->flush();
-
-
             }
 
             $this->addFlash('success', 'Fichier importé avec succès.');

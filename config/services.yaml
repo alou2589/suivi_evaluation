@@ -17,6 +17,11 @@ services:
     App\Service\PhotoService:
         arguments:
             $sftpStorage: '@flysystem.sftp.storage'
+    App\Security\LoginSuccessHandler:
+        arguments:
+            - '@router'
+
+
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

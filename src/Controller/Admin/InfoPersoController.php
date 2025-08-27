@@ -4,10 +4,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\InfoPerso;
 use App\Form\InfoPersoForm;
+use App\Form\UploadCniType;
 use App\Repository\InfoPersoRepository;
 use App\Service\AesEncryptDecrypt;
 use App\Service\QrCodeGenerator;
 use App\Form\UploadFileForm;
+use App\Service\OcrService;
+use App\Service\OpenAIService;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/admin/info/perso', name: 'app_admin_info_perso_')]
 final class InfoPersoController extends AbstractController
@@ -83,37 +87,33 @@ final class InfoPersoController extends AbstractController
                         $this->addFlash('error', 'L\'information personnelle avec le CIN ' . $row[5] . ' existe déjà.');
                         continue;
                     }
-                    $infoPerso = new InfoPerso();
-
-                    // Assuming the columns in the Excel file match the InfoPerso entity fields
-                    $infoPerso->setPrenom(trim($row[0]));
-                    $infoPerso->setNom(trim($row[1]));
-                    $infoPerso->setSexe(trim($row[2]));
                     $dateString= $row[3];
                     if(!empty($dateString)){
                         $dateNaissance= \DateTime::createFromFormat('Y-m-d', $dateString);
                         if($dateNaissance != false){
+                            $infoPerso = new InfoPerso();
+                            // Assuming the columns in the Excel file match the InfoPerso entity fields
+                            $infoPerso->setPrenom($row[0]);
+                            $infoPerso->setNom($row[1]);
+                            $infoPerso->setSexe($row[2]);
                             $infoPerso->setDateNaissance($dateNaissance);
+                            $infoPerso->setLieuNaissance($row[4]);
+                            $infoPerso->setCin($row[5]);
+                            $infoPerso->setEmail($row[6]);
+                            $infoPerso->setTelephone($row[7]);
+                            $infoPerso->setSituationMatrimoniale($row[8]);
+                            $infoPerso->setAdresse($row[9]);
+                            //$entityManager->flush();
+                            // Add other fields as necessary
+                            $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getTelephone());
+                            $infoPerso->setQrCode((string)$qr_code);
+                            $entityManager->persist($infoPerso);
                         } else {
                             throw new \Exception("Format de date invalide : $dateString");
                         }
                     }
-                    $infoPerso->setLieuNaissance(trim($row[4]));
-                    $infoPerso->setCin(trim($row[5]));
-                    $infoPerso->setEmail(trim($row[6]));
-                    $infoPerso->setTelephone(trim($row[7]));
-                    $infoPerso->setSituationMatrimoniale(trim($row[8]));
-                    $infoPerso->setAdresse(trim($row[9]));
-                    //$entityManager->flush();
-                    // Add other fields as necessary
-                    $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getTelephone());
-                    $infoPerso->setQrCode((string)$qr_code);
-                    $entityManager->persist($infoPerso);
                 }
-
                 $entityManager->flush();
-
-
             }
 
             $this->addFlash('success', 'Fichier importé avec succès.');

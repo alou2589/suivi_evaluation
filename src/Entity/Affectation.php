@@ -6,6 +6,7 @@ use App\Repository\AffectationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: AffectationRepository::class)]
@@ -27,11 +28,11 @@ class Affectation
     #[ORM\ManyToOne(inversedBy: 'affectations')]
     private ?Service $service = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $date_debut = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $date_debut = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $date_fin = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $date_fin = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -109,24 +110,24 @@ class Affectation
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeImmutable
+    public function getDateDebut(): ?\DateTime
     {
         return $this->date_debut;
     }
 
-    public function setDateDebut(\DateTimeImmutable $date_debut): static
+    public function setDateDebut(\DateTime $date_debut): static
     {
         $this->date_debut = $date_debut;
 
         return $this;
     }
 
-    public function getDateFin(): ?\DateTimeImmutable
+    public function getDateFin(): ?\DateTime
     {
         return $this->date_fin;
     }
 
-    public function setDateFin(?\DateTimeImmutable $date_fin): static
+    public function setDateFin(?\DateTime $date_fin): static
     {
         $this->date_fin = $date_fin;
 
