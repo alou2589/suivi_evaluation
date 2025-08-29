@@ -4,10 +4,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\MatosInformatique;
 use App\Form\MatosInformatiqueType;
+use App\Form\UploadFileForm;
 use App\Repository\MatosInformatiqueRepository;
 use App\Service\SpecificationsMatosInformatique;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Smalot\PdfParser\Parser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +53,96 @@ final class MatosInformtatiqueController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/upload', name: 'upload', methods: ['GET', 'POST'])]
+    public function uploadList(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UploadFileForm::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle the file upload and processing logic here
+            // ...
+            $file= $form->get('excel_file')->getData();
+            $extension= $file->guessExtension();
+            if($file && in_array($extension, ['xlsx','xls'])) {
+                // Process the uploaded file (e.g., read data, save to database)
+                // This is where you would implement your file processing logic
+                $spreadsheet= IOFactory::load($file->getPathname());
+                $sheet=$spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray();
+                foreach ($rows as $index => $row) {
+                    if ($index === 0) {
+                        // Skip header row
+                        continue;
+                    }
+                    // Vérification des doublons
+                    $existingMatosInfo = $entityManager->getRepository(MatosInformatique::class)->findOneBy(['sn_matos' => $row[3]]);
+                    if ($existingMatosInfo) {
+                        $this->addFlash('error', 'L\'information personnelle avec le CIN ' . $row[3] . ' existe déjà.');
+                        continue;
+                    }
+                    $dateString= $row[4];
+                    if(!empty($dateString)){
+                        $dateReception= \DateTime::createFromFormat('Y-m-d', $dateString);
+                        if($dateReception != false){
+                            $matosInfo = new MatosInformatique();
+                            // Assuming the columns in the Excel file match the InfoPerso entity fields
+                            $matosInfo->setTypeMatos($row[0]);
+                            $matosInfo->setMarqueMatos($row[1]);
+                            $matosInfo->setModeleMatos($row[2]);
+                            $matosInfo->setSnMatos($row[3]);
+                            $matosInfo->setDateReception($dateReception);
+                            //$entityManager->flush();
+                            // Add other fields as necessary
+                            $entityManager->persist($matosInfo);
+                        } else {
+                            throw new \Exception("Format de date invalide : $dateString");
+                        }
+                    }
+                }
+                $entityManager->flush();
+            }
+
+            elseif($file && $extension === 'pdf'){
+                $parser= new Parser();
+                $pdf= $parser->parseFile($file->getPathname());
+                $text= $pdf->getText();
+
+                $lignes= explode("\n", $text);
+
+                foreach($lignes as $ligne){
+                    $cols=preg_split('/\s+/', trim($ligne));
+                    if(count($cols)>=4){
+                        $matosInfo= new MatosInformatique();
+                        $matosInfo->setTypeMatos($cols[0]);
+                        $matosInfo->setMarqueMatos($cols[1]);
+                        $matosInfo->setModeleMatos($cols[2]);
+                        $matosInfo->setSnMatos($cols[3]);
+
+                        $existMatosInfo= $entityManager->getRepository(MatosInformatique::class)->findOneBy(['sn_matos'=>$matosInfo->getSnMatos()]);
+                        if(!$existMatosInfo){
+                            $entityManager->persist($matosInfo);
+                        }
+                    }
+                }
+                $entityManager->flush();
+            }
+
+            else{
+                $this->addFlash('error', 'Format excel ou pdf sont permis');
+            }
+
+            $this->addFlash('success', 'Fichier importé avec succès.');
+            return $this->redirectToRoute('app_admin_matos_informatique_index');
+        }
+
+        return $this->render('admin/uploadfiles/upload.html.twig', [
+            'form' => $form->createView(),
+            'nom_fichier' => 'InfoPerso', // This can be dynamic based on the file type
+            'redirectCancelRoute' => 'app_admin_matos_informatique_index', // Redirect route after cancellation
+        ]);
+    }
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(MatosInformatique $matosInformatique): Response

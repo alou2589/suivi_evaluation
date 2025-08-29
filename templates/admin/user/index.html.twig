@@ -12,9 +12,15 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <div class="d-flex align-items-center">
-                    <h4 class="card-title">Liste des utilisateurs</h4>
-
+                  <div class="d-flex gap-3 justify-content-end">
+                    <a href="#"  title="Nouvelle direction" class="rounded-pill btn btn-black" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                    <a href="{{ path('app_admin_user_upload') }}"   title="Nouvelle direction" class="rounded-pill btn btn-secondary " >
+                      <i class="fa fa-file-upload"></i>
+                      Importer Liste
+                    </a>
                   </div>
                 </div>
                 <div class="card-body">

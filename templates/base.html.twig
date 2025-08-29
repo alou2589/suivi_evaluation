@@ -1,41 +1,98 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{% block title %}E-Suivi{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
-
+        <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
         {% block stylesheets %}
-            <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-            <link rel="stylesheet" href="assets/css/bootstrap.css">
-            <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-            <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-            <link rel="stylesheet" href="assets/css/app.css">
+            <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
+            <link rel="stylesheet" href="{{asset('assets/css/plugins.min.css')}}">
+            <link rel="stylesheet" href="{{asset('assets/css/kaiadmin.min.css')}}">
+            <link rel="shortcut icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon">
+            <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
         {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-            <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-            <script src="assets/js/bootstrap.bundle.min.js"></script>
-            <script src="assets/vendors/apexcharts/apexcharts.js"></script>
-            <script   script src="assets/js/pages/dashboard.js"></script>
-            <script src="assets/js/main.js"></script>
-        {% endblock %}
     </head>
     <body>
-        <div id="app">
-            <div id="sidebar" class="active">
-                {% include 'partials/_sidebar_partials.html.twig' %}
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+                {% include '/admin/partials/_sidebar_partials.html.twig' %}
             </div>
-            <div id="main">
-                {% block body %}{% endblock %}
-                <footer>
-                    {% include 'partials/_footer_partials.html.twig' %}
+            <!-- End Sidebar -->
+
+            <div class="main-panel">
+                <div class="main-header">
+                    <div class="main-header-logo">
+                        {% include '/admin/partials/_logo_header_partials.html.twig' %}
+                    </div>
+                    <!--Navbar Header-->
+                    <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                        {% include '/admin/partials/_navbar_partials.html.twig' %}
+                    </nav>
+                    <!--End Navbar-->
+                </div>
+                <div class="container">
+                    <div class="page-inner">
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+                <footer class="footer">
+                    {% include '/admin/partials/_footer_partials.html.twig' %}
                 </footer>
             </div>
+            {% include '/admin/partials/_custom_template.html.twig' %}
         </div>
 
+        {% block javascripts %}
+            <script src="{{asset('assets/js/plugin/webfont/webfont.min.js')}}"></script>
+            <script src="{{asset('assets/js/custom_fontawesome.js')}}"></script>
+            <script src="{{asset('assets/js/setting-demo.js')}}"></script>
+            <script src="{{asset('assets/js/demo.js')}}"></script>
+            <script>
+              WebFont.load({
+                google: { families: ["Public Sans:300,400,500,600,700"] },
+                custom: {
+                  families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                  ],
+                  urls: ["{{asset('assets/css/fonts.min.css')}}"],
+                },
+                active: function () {
+                  sessionStorage.fonts = true;
+                },
+              });
+            </script>
+
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <!-- Core JS Files -->
+            <script src="{{asset('assets/js/core/jquery-3.7.1.min.js')}}"></script>
+            <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
+            <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
+
+            <!-- jQuery Scrollbar -->
+            <script src="{{asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+
+
+            <!-- Datatables -->
+            <script src="{{asset('assets/js/plugin/datatables/datatables.min.js')}}"></script>
+            <script src="{{ asset('assets/js/plugin/datatables/add-row.js') }}"></script>
+
+            <!-- Bootstrap Notify -->
+            <script src="{{asset('assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+            <!-- Sweet Alert -->
+            <script src="{{asset('assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+            <!-- KaiAdmin JS -->
+            <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
+            <script src="{{asset('assets/js/setting-demo.js')}}"></script>
+            <script src="{{asset('assets/js/demo.js')}}"></script>
+
+        {% endblock %}
     </body>
 </html>

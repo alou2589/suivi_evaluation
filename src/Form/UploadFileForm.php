@@ -16,7 +16,7 @@ class UploadFileForm extends AbstractType
                 'label' => 'Fichier Excel',
                 'required' => true,
                 'attr' => [
-                    'accept' => '.xlsx, .xls',
+                    'accept' => '.xlsx, .xls, .pdf',
                     'class' => 'form-control',
                 ],
             ])

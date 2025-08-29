@@ -1,0 +1,43 @@
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="{{path('app_user_home&')}}" class="logo">
+              <img
+                src="{{asset('assets/img/kaiadmin/logo_light.svg')}}"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">Ressources Humaines</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_direction_index', 'app_admin_direction_new', 'app_admin_direction_edit', 'app_admin_direction_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_direction_index') }}">
+                    <i class="fas fa-desktop"></i>
+                    <p>Direction</p>
+                  </a>
+                </li>
+            </ul>
+          </div>
+        </div>

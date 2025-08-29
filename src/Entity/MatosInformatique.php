@@ -32,7 +32,7 @@ class MatosInformatique
     #[ORM\Column(length: 255)]
     private ?string $sn_matos = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $date_reception = null;
 
     #[ORM\Column(length: 255, nullable: true)]
