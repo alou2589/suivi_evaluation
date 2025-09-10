@@ -88,29 +88,25 @@ final class InfoPersoController extends AbstractController
                         continue;
                     }
                     $dateString= $row[3];
-                    if(!empty($dateString)){
-                        $dateNaissance= \DateTime::createFromFormat('Y-m-d', $dateString);
-                        if($dateNaissance != false){
-                            $infoPerso = new InfoPerso();
-                            // Assuming the columns in the Excel file match the InfoPerso entity fields
-                            $infoPerso->setPrenom($row[0]);
-                            $infoPerso->setNom($row[1]);
-                            $infoPerso->setSexe($row[2]);
-                            $infoPerso->setDateNaissance($dateNaissance);
-                            $infoPerso->setLieuNaissance($row[4]);
-                            $infoPerso->setCin($row[5]);
-                            $infoPerso->setEmail($row[6]);
-                            $infoPerso->setTelephone($row[7]);
-                            $infoPerso->setSituationMatrimoniale($row[8]);
-                            $infoPerso->setAdresse($row[9]);
-                            //$entityManager->flush();
-                            // Add other fields as necessary
-                            $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getTelephone());
-                            $infoPerso->setQrCode((string)$qr_code);
-                            $entityManager->persist($infoPerso);
-                        } else {
-                            throw new \Exception("Format de date invalide : $dateString");
-                        }
+                    $dateNaissance= \DateTime::createFromFormat('Y-m-d', $dateString);
+                    if($dateNaissance != false){
+                        $infoPerso = new InfoPerso();
+                        // Assuming the columns in the Excel file match the InfoPerso entity fields
+                        $infoPerso->setPrenom($row[0]??"");
+                        $infoPerso->setNom($row[1]??"");
+                        $infoPerso->setSexe($row[2]??"");
+                        $infoPerso->setDateNaissance($dateNaissance??"");
+                        $infoPerso->setLieuNaissance($row[4]??"");
+                        $infoPerso->setCin($row[5]??"");
+                        $infoPerso->setEmail($row[6]??"");
+                        $infoPerso->setTelephone($row[7]??"");
+                        $infoPerso->setSituationMatrimoniale($row[8]??"");
+                        $infoPerso->setAdresse($row[9]??"");
+                        //$entityManager->flush();
+                        // Add other fields as necessary
+                        $qr_code=$qrCodeGenerator->generateQrCode($infoPerso->getCin(), $infoPerso->getTelephone());
+                        $infoPerso->setQrCode((string)$qr_code);
+                        $entityManager->persist($infoPerso);
                     }
                 }
                 $entityManager->flush();
