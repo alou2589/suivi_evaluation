@@ -59,6 +59,28 @@
                       </ul>
                   </div>
                 </li>
+              {# Pour les utilisateurs sauf le ROLE_SUPERADMIN #}
+              {#{% if is_granted("ROLE_USER") %}
+                <li class="nav-section">
+                  <span class="sidebar-mini-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </span>
+                  <h4 class="text-section">ESPACE PERSONNELLE</h4>
+                </li>
+                <li class="nav-item ">
+                  <a href="#">
+                    <i class="fas fa-desktop"></i>
+                    <p>Mes Documents</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#">
+                    <i class="fas fa-desktop"></i>
+                    <p>Profil</p>
+                  </a>
+                </li>
+              {% endif %}
+              #}
               {# Pour ceux qui ont le ROLE_RH_ADMIN #}
               {% if is_granted("ROLE_RH_ADMIN") %}
                 <li class="nav-section">

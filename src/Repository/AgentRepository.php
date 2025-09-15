@@ -30,6 +30,19 @@ class AgentRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countBySexe(string $sexe): int
+    {
+        return  (int)$this->createQueryBuilder('a')
+            ->select('COUNT(a.id) as count')
+            ->join('a.identification', 'i')
+            ->where('i.sexe = :sexe')
+            ->setParameter('sexe', $sexe)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
+
     //    /**
     //     * @return Agent[] Returns an array of Agent objects
     //     */

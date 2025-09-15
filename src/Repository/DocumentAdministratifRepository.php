@@ -16,6 +16,16 @@ class DocumentAdministratifRepository extends ServiceEntityRepository
         parent::__construct($registry, DocumentAdministratif::class);
     }
 
+    public function countByDocumentExtension(string $extension): int
+    {
+        return (int) $this->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->where('LOWER(d.document) LIKE :extension')
+            ->setParameter('extension', '%' . strtolower($extension) . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return DocumentAdministratif[] Returns an array of DocumentAdministratif objects
     //     */

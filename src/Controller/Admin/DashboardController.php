@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
-    #[Route('/admin/dashboard', name: 'app_admin_dashboard_')]
+#[Route('/admin/dashboard', name: 'app_admin_dashboard_')]
 
 final class DashboardController extends AbstractController
 {
@@ -33,13 +33,27 @@ final class DashboardController extends AbstractController
         $directions= $this->em->getRepository(Direction::class)->findAll();
         $services= $this->em->getRepository(Service::class)->findAll();
         $personnels= $this->em->getRepository(Agent::class)->findAll();
+        $hommes= $this->em->getRepository(Agent::class)->countBySexe('Homme');
+        $femmes= $this->em->getRepository(Agent::class)->countBySexe('Femme');
+        $nbPDF= $this->em->getRepository(DocumentAdministratif::class)->countByDocumentExtension('pdf');
+        $nbDOCX= $this->em->getRepository(DocumentAdministratif::class)->countByDocumentExtension('docx');
+        $nbTypeDirection= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Direction']));
+        $nbTypeAgence= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Agence']));
+        $nbTypeProjets= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Projets']));
         $docs= $this->em->getRepository(DocumentAdministratif::class)->findAll();
         return $this->render('admin/dashboard/index_rh.html.twig', [
             'dashboard_title' => 'Ressources Humaines',
             'nbDirections'=>count($directions),
+            'nbTypeDirection'=>$nbTypeDirection,
+            'nbTypeAgence'=>$nbTypeAgence,
+            'nbTypeProjets'=>$nbTypeProjets,
             'nbServices'=>count($services),
             'nbAgents'=>count($personnels),
+            'nbHommes'=>$hommes,
+            'nbFemmes'=>$femmes,
             'nbDocs'=>count($docs),
+            'nbPDF'=>$nbPDF,
+            'nbDOCX'=>$nbDOCX,
         ]);
     }
 

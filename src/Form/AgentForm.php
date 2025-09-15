@@ -39,14 +39,14 @@ class AgentForm extends AbstractType
                 ],
                 'constraints' => [
                     new Length([
-                        'min' => 7,
+                        'min' => 6,
                         'minMessage' => 'Matricule must be at least {{ limit }} characters long',
                         'max' => 10,
                         'maxMessage' => 'Matricule cannot be longer than {{ limit }} characters',
                     ]),
                     new Regex([
-                        'pattern' => '^(?=.*[A-Z].*)(?=.*\d)([A-Z]\d{9}|\d{9}[A-Z])$^',
-                        'message' => 'Matricule doit comporter entre 7 et 10 digits suivi d\' 1 lettre en majuscule (e.g., 123456A)',
+                        'pattern' => '/^[0-9]{6,10}[A-Z]$/',
+                        'message' => 'Matricule doit comporter entre 6 et 10 digits suivi d\' 1 lettre en majuscule (e.g., 123456A)',
                     ]),
                 ],
             ])
