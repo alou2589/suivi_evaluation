@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
         if(!$existing){
             $user=new User();
             $user->setEmail("superadmin@industriecommerce.gouv.sn");
-            $user->setRoles(['ROLE_SUPERADMIN', 'ROLE_ADMIN']);
+            $user->setRoles(['ROLE_SUPERADMIN']);
             $user->setPseudo("SuperAdmin");
             $user->setPassword(
                 $this->userPasswordHasherInterface->hashPassword($user,'SuperAdmin.2025#')

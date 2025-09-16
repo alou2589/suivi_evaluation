@@ -40,6 +40,8 @@ final class DashboardController extends AbstractController
         $nbTypeDirection= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Direction']));
         $nbTypeAgence= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Agence']));
         $nbTypeProjets= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Projets']));
+        $nbTypeServices= count($this->em->getRepository(Service::class)->findBy(['type_service' => 'Service']));
+        $nbTypeCellules= count($this->em->getRepository(Service::class)->findBy(['type_service' => 'Cellule']));
         $docs= $this->em->getRepository(DocumentAdministratif::class)->findAll();
         return $this->render('admin/dashboard/index_rh.html.twig', [
             'dashboard_title' => 'Ressources Humaines',
@@ -47,6 +49,8 @@ final class DashboardController extends AbstractController
             'nbTypeDirection'=>$nbTypeDirection,
             'nbTypeAgence'=>$nbTypeAgence,
             'nbTypeProjets'=>$nbTypeProjets,
+            'nbTypeServices'=>$nbTypeServices,
+            'nbTypeCellules'=>$nbTypeCellules,
             'nbServices'=>count($services),
             'nbAgents'=>count($personnels),
             'nbHommes'=>$hommes,

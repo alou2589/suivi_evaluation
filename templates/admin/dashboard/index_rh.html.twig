@@ -7,7 +7,7 @@
     <div class="page-header">
         {% include '/admin/partials/_page_header_partials.html.twig' %}
     </div>
-            <!-- Card With Icon States Background -->
+    <!-- Card With Icon States Background -->
             <div class="row">
               <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
@@ -99,17 +99,17 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="numbers">
-                                <h4> <i class="fas fa-building fa-3xs text-primary" title="Direction"></i> {{ nbTypeDirection }}</h4>
+                                <h4> <small>Direction:</small> {{ nbTypeDirection }}</h4>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="numbers">
-                                <h4> <i class="fas fa-store fa-3xs text-secondary" title="Agence"></i> {{ nbTypeAgence }}</h4>
+                                <h4> <small>Agence:</small> {{ nbTypeAgence }}</h4>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="numbers">
-                                <h4> <i class="fas fa-industry fa-3xs text-default" title="Projets"></i> {{ nbTypeProjets }}</h4>
+                                <h4> <small>Projets:</small> {{ nbTypeProjets }}</h4>
                             </div>
                         </div>
                     </div>
@@ -138,12 +138,12 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="numbers">
-                                <h4> <i class="fas fa-building fa-3xs text-primary" title="Service"></i> {{ nbDocs }}</h4>
+                                <h4> <small>Service:</small> {{ nbTypeServices }}</h4>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="numbers">
-                                <h4> <i class="fas fa-city fa-3xs text-primary" title="Cellule"></i> {{ nbDocs }}</h4>
+                                <h4> <small>Cellule:</small> {{ nbTypeCellules }}</h4>
                             </div>
                         </div>
                     </div>
@@ -151,4 +151,13 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+                {% include 'admin/dashboard/charts/rh_charts.html.twig' %}
+            </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{asset('assets/js/plugin/chart.js/chart.min.js')}}"></script>
+    <script src="{{asset('assets/js/type_charts.js')}}"></script>
 {% endblock %}
