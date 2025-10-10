@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Affectation;
 use App\Entity\Agent;
 use App\Entity\Direction;
 use App\Entity\DocumentAdministratif;
+use App\Entity\InfoPerso;
 use App\Entity\MatosInformatique;
 use App\Entity\Service;
 use App\Repository\DirectionRepository;
@@ -13,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 
 #[Route('/admin/dashboard', name: 'app_admin_dashboard_')]
@@ -26,10 +30,64 @@ final class DashboardController extends AbstractController
         $this->em=$em;
     }
 
+
     #[IsGranted("ROLE_RH_ADMIN")]
     #[Route('/rh', name: 'ressources_humaines')]
-    public function indexRH(): Response
+    public function indexRH( ChartBuilderInterface $chartBuilderInterface): Response
     {
+        $chart=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $directions= $this->em->getRepository(Direction::class)->findAll();
+        foreach ($directions as $direction){
+            $direction_names[]=$direction->getNomDirection();
+            $direction_homme_counts[]= $this->em->getRepository(Affectation::class)->countSexeByDirection($direction, 'Homme');
+            $direction_femme_counts[]= $this->em->getRepository(Affectation::class)->countSexeByDirection($direction, 'Femme');
+        }
+        $chart->setData([
+            'labels'=>$direction_names,
+            'datasets'=>[
+                [
+                    'label'=>'Homme',
+                    'backgroundColor'=> '#59d05d',
+                    'borderColor'=>'#59d05d',
+                    'data'=>[$direction_homme_counts]
+                ],
+                [
+                    'label'=>'Femme',
+                    'backgroundColor'=> '#fdaf4b',
+                    'borderColor'=>'#fdaf4b)',
+                    'data'=>[$direction_femme_counts]
+                ],
+            ]
+        ]);
+        $chart->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'legend'=>[
+                'position'=>'bottom'
+            ],
+            'title'=>[
+                'display'=>true,
+                'text'=>'Répartition du personnel par sexe'
+            ],
+            'tooltips'=>[
+                'mode'=>'index',
+                'intersect'=>false,
+            ],
+            'scales'=>[
+                'xAxes'=>[
+                    [
+                        'stacked'=>true,
+                    ],
+                ],
+                'yAxes'=>[
+                    [
+                        'stacked'=>true,
+                    ],
+                ],
+            ],
+        ]);
+
+
         $directions= $this->em->getRepository(Direction::class)->findAll();
         $services= $this->em->getRepository(Service::class)->findAll();
         $personnels= $this->em->getRepository(Agent::class)->findAll();
@@ -58,6 +116,10 @@ final class DashboardController extends AbstractController
             'nbDocs'=>count($docs),
             'nbPDF'=>$nbPDF,
             'nbDOCX'=>$nbDOCX,
+            'chart'=>$chart,
+            'direction_names'=>$direction_names,
+            'direction_homme_counts'=>$direction_homme_counts,
+            'direction_femme_counts'=>$direction_femme_counts,
         ]);
     }
 
@@ -76,6 +138,7 @@ final class DashboardController extends AbstractController
             'nbDesktops'=>count($desktops),
             'nbPrinters'=>count($printers),
             'nbAllOthers'=>count($scanners)+ count($others),
+
         ]);
     }
 

@@ -159,5 +159,53 @@
     {{ parent() }}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{asset('assets/js/plugin/chart.js/chart.min.js')}}"></script>
-    <script src="{{asset('assets/js/type_charts.js')}}"></script>
+    <script>
+        const ctx=document.getElementById("multipleBarChart").getContext("2d");
+        var myMultipleBarChart = new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels: {{ direction_names|json_encode|raw }},
+                datasets: [
+                    {
+                        label: 'Homme',
+                        backgroundColor: '#36A2EB',
+                        borderColor: '#36A2EB',
+                        borderWidth: 1,
+                        data: {{ direction_homme_counts|json_encode|raw }},
+                    },
+                    {
+                        label: 'Femme',
+                        backgroundColor: '#FF6384',
+                        borderColor: '#FF6384',
+                        borderWidth: 1,
+                        data: {{ direction_femme_counts|json_encode|raw }},
+                    }
+                ],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Répartition du personnel par direction et par sexe'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        }
+        });
+    </script>
 {% endblock %}

@@ -59,6 +59,22 @@ class AffectationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function countSexeByDirection($direction, $sexe): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.agent', 'ag')
+            ->leftJoin('a.service', 's')
+            ->leftJoin('ag.identification', 'i')
+            ->andWhere('s.structure_rattachee = :direction')
+            ->andWhere('i.sexe = :sexe')
+            ->setParameter('direction', $direction)
+            ->setParameter('sexe', $sexe)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
     //    /**
     //     * @return Affectation[] Returns an array of Affectation objects
     //     */
