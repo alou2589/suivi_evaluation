@@ -4,7 +4,7 @@ flysystem:
         sftp.storage:
             adapter: 'sftp'
             options:
-                host: '10.112.26.129'
+                host: '10.112.26.21'
                 port: 22
                 username: 'adminsftpserver'
                 password: 'Talou.2589'

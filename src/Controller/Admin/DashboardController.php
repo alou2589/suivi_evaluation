@@ -11,6 +11,7 @@ use App\Entity\MatosInformatique;
 use App\Entity\Service;
 use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Chart\GridLines;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -49,13 +50,13 @@ final class DashboardController extends AbstractController
                     'label'=>'Homme',
                     'backgroundColor'=> '#59d05d',
                     'borderColor'=>'#59d05d',
-                    'data'=>[$direction_homme_counts]
+                    'data'=>array_values($direction_homme_counts)
                 ],
                 [
                     'label'=>'Femme',
                     'backgroundColor'=> '#fdaf4b',
-                    'borderColor'=>'#fdaf4b)',
-                    'data'=>[$direction_femme_counts]
+                    'borderColor'=>'#fdaf4b',
+                    'data'=>array_values($direction_femme_counts)
                 ],
             ]
         ]);
@@ -74,14 +75,21 @@ final class DashboardController extends AbstractController
                 'intersect'=>false,
             ],
             'scales'=>[
-                'xAxes'=>[
+                'x'=>[
                     [
                         'stacked'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ]
                     ],
                 ],
-                'yAxes'=>[
+                'y'=>[
                     [
                         'stacked'=>true,
+                        'beginAtZero'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
                     ],
                 ],
             ],
@@ -91,8 +99,8 @@ final class DashboardController extends AbstractController
         $directions= $this->em->getRepository(Direction::class)->findAll();
         $services= $this->em->getRepository(Service::class)->findAll();
         $personnels= $this->em->getRepository(Agent::class)->findAll();
-        $hommes= $this->em->getRepository(Agent::class)->countBySexe('Homme');
-        $femmes= $this->em->getRepository(Agent::class)->countBySexe('Femme');
+        $hommes= $this->em->getRepository(Affectation::class)->countBySexe('Homme');
+        $femmes= $this->em->getRepository(Affectation::class)->countBySexe('Femme');
         $nbPDF= $this->em->getRepository(DocumentAdministratif::class)->countByDocumentExtension('pdf');
         $nbDOCX= $this->em->getRepository(DocumentAdministratif::class)->countByDocumentExtension('docx');
         $nbTypeDirection= count($this->em->getRepository(Direction::class)->findBy(['type_direction' => 'Direction']));

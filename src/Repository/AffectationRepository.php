@@ -74,6 +74,18 @@ class AffectationRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countBySexe($sexe): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.agent', 'ag')
+            ->leftJoin('ag.identification', 'i')
+            ->andWhere('i.sexe = :sexe')
+            ->setParameter('sexe', $sexe)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
     //    /**
     //     * @return Affectation[] Returns an array of Affectation objects
