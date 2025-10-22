@@ -19,8 +19,8 @@ class DirectionForm extends AbstractType
                 'choices' => [
                     'Direction' => 'direction',
                     'Agence' => 'agence',
-                    'Projet' => 'Projet',
-                    'Prgramme' => 'programme',
+                    'Projet' => 'projet',
+                    'Programme' => 'programme',
                 ],
                 'placeholder' => 'Select a type of direction',
                 'required' => true,

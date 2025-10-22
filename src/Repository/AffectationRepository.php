@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Affectation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use DoctrineExtensions\Query\Mysql;
 /**
  * @extends ServiceEntityRepository<Affectation>
  */
@@ -85,6 +85,74 @@ class AffectationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function countByDirection($direction): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.service', 's')
+            ->andWhere('s.structure_rattachee = :direction')
+            ->setParameter('direction', $direction)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countByService($service): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.service', 's')
+            ->andWhere('s.id = :service')
+            ->setParameter('service', $service)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countByAgeRange($age_min, $age_max): int
+    {
+        $currentYear = (int) date('Y');
+
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.agent', 'ag')
+            ->leftJoin('ag.identification', 'i')
+            ->andWhere('i.date_naissance IS NOT NULL')
+            ->andWhere('(:currentYear - YEAR(i.date_naissance)) > :age_min')
+            ->andWhere('(:currentYear - YEAR(i.date_naissance)) <= :age_max')
+            ->setParameter('currentYear', $currentYear)
+            ->setParameter('age_min', $age_min)
+            ->setParameter('age_max', $age_max)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getAgeByAffectation($affectation): ?int
+    {
+        $currentYear = (int) date('Y');
+
+        return (int) $this->createQueryBuilder('a')
+            ->select('(:currentYear - YEAR(i.date_naissance)) AS age')
+            ->leftJoin('a.agent', 'ag')
+            ->leftJoin('ag.identification', 'i')
+            ->andWhere('a = :affectation')
+            ->andWhere('i.date_naissance IS NOT NULL')
+            ->setParameter('currentYear', $currentYear)
+            ->setParameter('affectation', $affectation)
+            ->getQuery()
+            ->getOneOrNullResult()['age'] ?? null;
+    }
+
+    public function  countByCadreStatutaire($cadre_statuaire): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.agent', 'ag')
+            ->andWhere('ag.cadre_statuaire = :cadre_statuaire')
+            ->setParameter('cadre_statuaire', $cadre_statuaire)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
 
     //    /**

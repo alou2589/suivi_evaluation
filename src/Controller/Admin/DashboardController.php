@@ -20,10 +20,25 @@ use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
 
+
 #[Route('/admin/dashboard', name: 'app_admin_dashboard_')]
 
 final class DashboardController extends AbstractController
 {
+
+    public function getRandomColor($nb_colors)
+    {
+        $colors = [];
+        for ($i = 0; $i < $nb_colors; $i++) {
+            # code...
+            $r = rand(0, 255);
+            $g = rand(0, 255);
+            $b = rand(0, 255);
+            $color = 'rgb(' . $r . ',' . $g . ',' . $b . ')';
+            array_push($colors, $color);
+        }
+        return $colors;
+    }
     private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -36,14 +51,131 @@ final class DashboardController extends AbstractController
     #[Route('/rh', name: 'ressources_humaines')]
     public function indexRH( ChartBuilderInterface $chartBuilderInterface): Response
     {
-        $chart=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartSexeByDirection=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartByDirection=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartByAgeRange=$chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
+        //$chartByService= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
+
+        $personnels= $this->em->getRepository(Affectation::class)->findAll();
         $directions= $this->em->getRepository(Direction::class)->findAll();
+        $services= $this->em->getRepository(Service::class)->findAll();
+        $moins25ans= $this->em->getRepository(Affectation::class)->countByAgeRange(0, 25);
+        $de25a35ans= $this->em->getRepository(Affectation::class)->countByAgeRange(25, 35);
+        $de36a45ans= $this->em->getRepository(Affectation::class)->countByAgeRange(36, 45);
+        $de46a55ans= $this->em->getRepository(Affectation::class)->countByAgeRange(46, 55);
+        $plus55ans= $this->em->getRepository(Affectation::class)->countByAgeRange(55, 100);
+        $direction_names=[];
         foreach ($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
             $direction_homme_counts[]= $this->em->getRepository(Affectation::class)->countSexeByDirection($direction, 'Homme');
             $direction_femme_counts[]= $this->em->getRepository(Affectation::class)->countSexeByDirection($direction, 'Femme');
+            $direction_counts[]= $this->em->getRepository(Affectation::class)->countByDirection($direction);
         }
-        $chart->setData([
+        //foreach( $services as $service){
+        //    $service_names[]=$service->getNomService();
+        //    $service_counts[]= $this->em->getRepository(Affectation::class)->countByService($service);
+        //}
+
+        //$ageAverage= $this->em->getRepository(Affectation::class)->ageAverage();
+        $totalAge=0;
+        $countAge=0;
+        $totalAverageAge=0;
+        foreach($personnels as $personnel){
+            $totalAge+= $this->em->getRepository(Affectation::class)->getAgeByAffectation($personnel);
+            $countAge++;
+            $totalAverageAge=$totalAge/$countAge;
+        }
+
+        $chartByAgeRange->setData([
+            'labels'=>['< 25 ans', '25-35 ans', '36-45 ans', '46-55 ans', '> 55 ans'],
+            'datasets'=>[
+                [
+                    'label'=>'Répartition par tranche d\'âge',
+                    'data'=>[$moins25ans, $de25a35ans, $de36a45ans, $de46a55ans, $plus55ans],
+                    'backgroundColor'=> self::getRandomColor(5),
+                    'borderColor'=> '#FFFF',
+                    'borderWidth'=> 1
+                ]
+            ]
+        ]);
+        $chartByDirection->setData([
+            'labels'=>$direction_names,
+            'datasets'=>[
+                [
+                    'label'=>'Personnel',
+                    'data'=>array_values($direction_counts??null),
+                    'backgroundColor'=> "rgba(54, 162, 235, 0.7)",
+                    'borderColor'=> '#FFFF',
+                    'borderWidth'=> 1
+                ]
+            ]
+        ]);
+
+        //$chartByService->setData([
+        //    'labels'=>$service_names,
+        //    'datasets'=>[
+        //        [
+        //            'data'=>array_values($service_counts),
+        //            'backgroundColor'=> self::getRandomColor(count($service_names)),
+        //            'borderColor'=> '#FFFF',
+        //            'borderWidth'=> 1
+        //        ]
+        //    ]
+        //]);
+        $chartByAgeRange->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'plugins'=>[
+                'legend'=>[
+                    'position'=>'right'
+                ],
+                'title'=>[
+                    'display'=>true,
+                    'text'=>'Répartition du personnel par tranche d\'âge'
+                ],
+            ]
+        ]);
+        $chartByDirection->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'indexAxis'=>'y',
+            'plugins'=>[
+                'legend'=>[
+                    'position'=>'right'
+                ],
+                'title'=>[
+                    'display'=>false,
+                ],
+                'tooltips'=>[
+                    'mode'=>'index',
+                    'intersect'=>false,
+                ],
+            ],
+            'scales'=>[
+                'x'=>[
+                    [
+                        'beginAtZero'=>true,
+                        'max'=>100,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                        'ticks'=>[
+                            'stepSize'=>10,
+                        ]
+                    ]
+                ],
+                'y'=>[
+                    [
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                    ],
+                ],
+            ]
+
+        ]);
+
+        $chartSexeByDirection->setData([
             'labels'=>$direction_names,
             'datasets'=>[
                 [
@@ -60,7 +192,7 @@ final class DashboardController extends AbstractController
                 ],
             ]
         ]);
-        $chart->setOptions([
+        $chartSexeByDirection->setOptions([
             'responsive'=>true,
             'maintainAspectRatio'=>false,
             'legend'=>[
@@ -80,8 +212,8 @@ final class DashboardController extends AbstractController
                         'stacked'=>true,
                         'grid'=>[
                             'display'=>false,
-                        ]
-                    ],
+                        ],
+                    ]
                 ],
                 'y'=>[
                     [
@@ -92,13 +224,10 @@ final class DashboardController extends AbstractController
                         ],
                     ],
                 ],
-            ],
+            ]
         ]);
 
 
-        $directions= $this->em->getRepository(Direction::class)->findAll();
-        $services= $this->em->getRepository(Service::class)->findAll();
-        $personnels= $this->em->getRepository(Agent::class)->findAll();
         $hommes= $this->em->getRepository(Affectation::class)->countBySexe('Homme');
         $femmes= $this->em->getRepository(Affectation::class)->countBySexe('Femme');
         $nbPDF= $this->em->getRepository(DocumentAdministratif::class)->countByDocumentExtension('pdf');
@@ -124,10 +253,19 @@ final class DashboardController extends AbstractController
             'nbDocs'=>count($docs),
             'nbPDF'=>$nbPDF,
             'nbDOCX'=>$nbDOCX,
-            'chart'=>$chart,
+            'chartSexeByDirection'=>$chartSexeByDirection,
+            'chartByDirection'=>$chartByDirection,
+            'chartByAgeRange'=>$chartByAgeRange,
             'direction_names'=>$direction_names,
             'direction_homme_counts'=>$direction_homme_counts,
             'direction_femme_counts'=>$direction_femme_counts,
+            'totalAverageAge'=>(int) round($totalAverageAge),
+            'totalAge'=>$totalAge,
+            'countAge'=>$countAge,
+            'fonctionnaires'=> $this->em->getRepository(Affectation::class)->countByCadreStatutaire('Fonctionnaire'),
+            'nonfonctionnaires'=> $this->em->getRepository(Affectation::class)->countByCadreStatutaire('Non Fonctionnaire'),
+            'contractuels'=> $this->em->getRepository(Affectation::class)->countByCadreStatutaire('Contractuel'),
+            'stagiaires'=> $this->em->getRepository(Affectation::class)->countByCadreStatutaire('Stagiaire'),
         ]);
     }
 
