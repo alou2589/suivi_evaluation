@@ -53,7 +53,9 @@ final class DashboardController extends AbstractController
     {
         $chartSexeByDirection=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
         $chartByDirection=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
-        $chartByAgeRange=$chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
+        $chartByAgeRange=$chartBuilderInterface->createChart(Chart::TYPE_PIE);
+        $chartByHierarchie= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartEvolutionAgent= $chartBuilderInterface->createChart(Chart::TYPE_LINE);
         //$chartByService= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
 
         $personnels= $this->em->getRepository(Affectation::class)->findAll();
@@ -64,6 +66,27 @@ final class DashboardController extends AbstractController
         $de36a45ans= $this->em->getRepository(Affectation::class)->countByAgeRange(36, 45);
         $de46a55ans= $this->em->getRepository(Affectation::class)->countByAgeRange(46, 55);
         $plus55ans= $this->em->getRepository(Affectation::class)->countByAgeRange(55, 100);
+
+        //Évolution des agents au fil des années
+        $agents=$this->em->getRepository(Agent::class)->evolutionAgent();
+        $agentHommes=$this->em->getRepository(Agent::class)->evolutionAgentBySexe('Homme');
+        $agentFemmes=$this->em->getRepository(Agent::class)->evolutionAgentBySexe('Femme');
+        foreach($agents as $agent){
+            $date_records[]=$agent['date_record'];
+            $nb_recrus[]=$agent['nb_recrus'];
+        }
+        foreach($agentHommes as $agent){
+            $nb_recrus_hommes[]=$agent['nb_recrus'];
+        }
+        foreach($agentFemmes as $agent){
+            $nb_recrus_femmes[]=$agent['nb_recrus'];
+        }
+
+        $hierarchieA=$this->em->getRepository(Affectation::class)->countByHierarchie('A');
+        $hierarchieB=$this->em->getRepository(Affectation::class)->countByHierarchie('B');
+        $hierarchieC=$this->em->getRepository(Affectation::class)->countByHierarchie('C');
+        $hierarchieD=$this->em->getRepository(Affectation::class)->countByHierarchie('D');
+        $nonClasse=$this->em->getRepository(Affectation::class)->countByHierarchie('NI');
         $direction_names=[];
         foreach ($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
@@ -90,12 +113,35 @@ final class DashboardController extends AbstractController
             'labels'=>['< 25 ans', '25-35 ans', '36-45 ans', '46-55 ans', '> 55 ans'],
             'datasets'=>[
                 [
-                    'label'=>'Répartition par tranche d\'âge',
                     'data'=>[$moins25ans, $de25a35ans, $de36a45ans, $de46a55ans, $plus55ans],
                     'backgroundColor'=> self::getRandomColor(5),
                     'borderColor'=> '#FFFF',
                     'borderWidth'=> 1
                 ]
+            ]
+        ]);
+        $chartByHierarchie->setData([
+            'labels'=>['A', 'B', 'C', 'D', 'NI'],
+            'datasets'=>[
+                [
+                    'data'=>[$hierarchieA, $hierarchieB, $hierarchieC, $hierarchieD],
+                    'backgroundColor'=> self::getRandomColor(4),
+                    'borderColor'=> '#FFFF',
+                    'borderWidth'=> 1
+                ]
+            ]
+        ]);
+        $chartByHierarchie->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'plugins'=>[
+                'legend'=>[
+                    'position'=>'right'
+                ],
+                'title'=>[
+                    'display'=>false,
+                    'text'=>'Répartition du personnel par tranche d\'âge'
+                ],
             ]
         ]);
         $chartByDirection->setData([
@@ -104,24 +150,13 @@ final class DashboardController extends AbstractController
                 [
                     'label'=>'Personnel',
                     'data'=>array_values($direction_counts??null),
-                    'backgroundColor'=> "rgba(54, 162, 235, 0.7)",
+                    'backgroundColor'=> self::getRandomColor(count($direction_counts)),
                     'borderColor'=> '#FFFF',
                     'borderWidth'=> 1
                 ]
             ]
         ]);
 
-        //$chartByService->setData([
-        //    'labels'=>$service_names,
-        //    'datasets'=>[
-        //        [
-        //            'data'=>array_values($service_counts),
-        //            'backgroundColor'=> self::getRandomColor(count($service_names)),
-        //            'borderColor'=> '#FFFF',
-        //            'borderWidth'=> 1
-        //        ]
-        //    ]
-        //]);
         $chartByAgeRange->setOptions([
             'responsive'=>true,
             'maintainAspectRatio'=>false,
@@ -130,7 +165,7 @@ final class DashboardController extends AbstractController
                     'position'=>'right'
                 ],
                 'title'=>[
-                    'display'=>true,
+                    'display'=>false,
                     'text'=>'Répartition du personnel par tranche d\'âge'
                 ],
             ]
@@ -138,7 +173,7 @@ final class DashboardController extends AbstractController
         $chartByDirection->setOptions([
             'responsive'=>true,
             'maintainAspectRatio'=>false,
-            'indexAxis'=>'y',
+            //'indexAxis'=>'y',
             'plugins'=>[
                 'legend'=>[
                     'position'=>'right'
@@ -149,6 +184,7 @@ final class DashboardController extends AbstractController
                 'tooltips'=>[
                     'mode'=>'index',
                     'intersect'=>false,
+
                 ],
             ],
             'scales'=>[
@@ -227,6 +263,78 @@ final class DashboardController extends AbstractController
             ]
         ]);
 
+        $chartEvolutionAgent->setData([
+            'labels'=>$date_records,
+            'datasets'=>[
+                [
+                    'label'=>'Personnel',
+                    'backgroundColor'=> 'transparent',
+                    'borderColor'=>'#074814ff',
+                    'pointBorderColor'=>"#FFFF",
+                    'pointBorderWidth'=>2,
+                    'pointHoverRadius'=>4,
+                    'pointHoverBorderWidth'=>1,
+                    'pointRadius'=>4,
+                    'fill'=>true,
+                    'border_width'=>2,
+                    'data'=>array_values($nb_recrus)
+                ],
+                [
+                    'label'=>'Homme',
+                    'backgroundColor'=> 'transparent',
+                    'borderColor'=>'#5459dfff',
+                    'pointBorderColor'=>"#FFFF",
+                    'pointBorderWidth'=>2,
+                    'pointHoverRadius'=>4,
+                    'pointHoverBorderWidth'=>1,
+                    'pointRadius'=>4,
+                    'fill'=>true,
+                    'border_width'=>2,
+                    'data'=>array_values($nb_recrus_hommes)
+                ],
+                [
+                    'label'=>'Femme',
+                    'backgroundColor'=> 'transparent',
+                    'borderColor'=>'#d27ac2ff',
+                    'pointBorderColor'=>"#FFFF",
+                    'pointBorderWidth'=>2,
+                    'pointHoverRadius'=>4,
+                    'pointHoverBorderWidth'=>1,
+                    'pointRadius'=>4,
+                    'fill'=>true,
+                    'border_width'=>2,
+                    'data'=>array_values($nb_recrus_femmes)
+                ],
+            ]
+        ]);
+        $chartEvolutionAgent->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'legend'=>[
+                'position'=>'bottom'
+            ],
+            'title'=>[
+                'display'=>false,
+            ],
+            'tooltips'=>[
+                'bodySpacing'=>4,
+                'mode'=>"nearest",
+                'intersect'=>0,
+                'position'=>"nearest",
+                'xPadding'=>10,
+                'yPadding'=>10,
+                'caretPadding'=>10,
+            ],
+            'layout'=>[
+                'padding'=>[
+                    'left'=>15,
+                    'right'=>15,
+                    'top'=>15,
+                    'bottom'=>15
+                ]
+            ]
+        ]);
+
 
         $hommes= $this->em->getRepository(Affectation::class)->countBySexe('Homme');
         $femmes= $this->em->getRepository(Affectation::class)->countBySexe('Femme');
@@ -256,6 +364,10 @@ final class DashboardController extends AbstractController
             'chartSexeByDirection'=>$chartSexeByDirection,
             'chartByDirection'=>$chartByDirection,
             'chartByAgeRange'=>$chartByAgeRange,
+            'chartByHierarchie'=>$chartByHierarchie,
+            'chartEvolutionAgent'=>$chartEvolutionAgent,
+            'date_records'=>$date_records,
+            'nb_recrus'=>$nb_recrus,
             'direction_names'=>$direction_names,
             'direction_homme_counts'=>$direction_homme_counts,
             'direction_femme_counts'=>$direction_femme_counts,

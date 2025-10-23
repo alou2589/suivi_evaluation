@@ -41,6 +41,28 @@ class AgentRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function evolutionAgent(): mixed
+    {
+        return $this->createQueryBuilder('a')
+            ->select('SUBSTRING(a.date_recrutement,1,4) AS date_record, COUNT(a.id) AS nb_recrus')
+            ->groupBy('date_record')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function evolutionAgentBySexe($sexe): mixed
+    {
+        return $this->createQueryBuilder('a')
+            ->select('SUBSTRING(a.date_recrutement,1,4) AS date_record, COUNT(a.id) AS nb_recrus')
+            ->leftJoin('a.identification', 'i')
+            ->andWhere('i.sexe = :sexe')
+            ->groupBy('date_record')
+            ->setParameter('sexe',$sexe)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
 
 

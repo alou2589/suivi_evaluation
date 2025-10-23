@@ -153,6 +153,18 @@ class AffectationRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countByHierarchie($hierarchie):int
+    {
+        return (int) $this->createQueryBuilder('a')
+        ->select('COUNT(a.id)')
+        ->leftJoin('a.agent','ag')
+        ->andWhere('ag.hierarchie LIKE :hierarchie')
+        ->setParameter('hierarchie',$hierarchie.'%')
+        ->getQuery()
+        ->getSingleScalarResult()
+        ;
+    }
+
 
 
     //    /**
