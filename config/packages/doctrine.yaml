@@ -30,6 +30,7 @@ doctrine:
             string_functions:
                 GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
                 YEAR: DoctrineExtensions\Query\Mysql\Year
+                FLOOR: DoctrineExtensions\Query\Mysql\Floor
             numeric_functions:
                 IFNULL: DoctrineExtensions\Query\Mysql\IfNull
             datetime_functions:

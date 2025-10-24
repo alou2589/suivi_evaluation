@@ -56,6 +56,7 @@ final class DashboardController extends AbstractController
         $chartByAgeRange=$chartBuilderInterface->createChart(Chart::TYPE_PIE);
         $chartByHierarchie= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
         $chartEvolutionAgent= $chartBuilderInterface->createChart(Chart::TYPE_LINE);
+        $chartEvolutionAgentByFiveYears= $chartBuilderInterface->createChart(Chart::TYPE_LINE);
         //$chartByService= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
 
         $personnels= $this->em->getRepository(Affectation::class)->findAll();
@@ -69,11 +70,16 @@ final class DashboardController extends AbstractController
 
         //Évolution des agents au fil des années
         $agents=$this->em->getRepository(Agent::class)->evolutionAgent();
+        $agentsByYears=$this->em->getRepository(Agent::class)->evolutionAgentByFiveYear();
         $agentHommes=$this->em->getRepository(Agent::class)->evolutionAgentBySexe('Homme');
         $agentFemmes=$this->em->getRepository(Agent::class)->evolutionAgentBySexe('Femme');
         foreach($agents as $agent){
             $date_records[]=$agent['date_record'];
             $nb_recrus[]=$agent['nb_recrus'];
+        }
+        foreach($agentsByYears as $agent){
+            $periode_5_ans[]=$agent['periode_5_ans'];
+            $total_agents[]=$agent['total_agents'];
         }
         foreach($agentHommes as $agent){
             $nb_recrus_hommes[]=$agent['nb_recrus'];
@@ -109,8 +115,9 @@ final class DashboardController extends AbstractController
             $totalAverageAge=$totalAge/$countAge;
         }
 
+        //Répartition par trache d'âge
         $chartByAgeRange->setData([
-            'labels'=>['< 25 ans', '25-35 ans', '36-45 ans', '46-55 ans', '> 55 ans'],
+            'labels'=>['Plus de 25 ans', '25-35 ans', '36-45 ans', '46-55 ans', 'Plus de 55 ans'],
             'datasets'=>[
                 [
                     'data'=>[$moins25ans, $de25a35ans, $de36a45ans, $de46a55ans, $plus55ans],
@@ -120,6 +127,20 @@ final class DashboardController extends AbstractController
                 ]
             ]
         ]);
+        $chartByAgeRange->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'plugins'=>[
+                'legend'=>[
+                    'position'=>'right'
+                ],
+                'title'=>[
+                    'display'=>false,
+                    'text'=>'Répartition du personnel par tranche d\'âge'
+                ],
+            ]
+        ]);
+        //Répartition par hierarchie
         $chartByHierarchie->setData([
             'labels'=>['A', 'B', 'C', 'D', 'NI'],
             'datasets'=>[
@@ -144,6 +165,8 @@ final class DashboardController extends AbstractController
                 ],
             ]
         ]);
+
+        //Répartition par Direction
         $chartByDirection->setData([
             'labels'=>$direction_names,
             'datasets'=>[
@@ -154,20 +177,6 @@ final class DashboardController extends AbstractController
                     'borderColor'=> '#FFFF',
                     'borderWidth'=> 1
                 ]
-            ]
-        ]);
-
-        $chartByAgeRange->setOptions([
-            'responsive'=>true,
-            'maintainAspectRatio'=>false,
-            'plugins'=>[
-                'legend'=>[
-                    'position'=>'right'
-                ],
-                'title'=>[
-                    'display'=>false,
-                    'text'=>'Répartition du personnel par tranche d\'âge'
-                ],
             ]
         ]);
         $chartByDirection->setOptions([
@@ -211,6 +220,7 @@ final class DashboardController extends AbstractController
 
         ]);
 
+        //Répartition par Sexe et par Direction
         $chartSexeByDirection->setData([
             'labels'=>$direction_names,
             'datasets'=>[
@@ -263,6 +273,53 @@ final class DashboardController extends AbstractController
             ]
         ]);
 
+        //Évolution annuelle des agents
+        $chartEvolutionAgentByFiveYears->setData([
+            'labels'=>$periode_5_ans,
+            'datasets'=>[
+                [
+                    'label'=>'Personnel',
+                    'backgroundColor'=> 'transparent',
+                    'borderColor'=>'#074814ff',
+                    'pointBorderColor'=>"#FFFF",
+                    'pointBorderWidth'=>2,
+                    'pointHoverRadius'=>4,
+                    'pointHoverBorderWidth'=>1,
+                    'pointRadius'=>4,
+                    'fill'=>true,
+                    'border_width'=>2,
+                    'data'=>array_values($total_agents)
+                ],
+            ]
+        ]);
+        $chartEvolutionAgentByFiveYears->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'legend'=>[
+                'position'=>'bottom'
+            ],
+            'title'=>[
+                'display'=>false,
+            ],
+            'tooltips'=>[
+                'bodySpacing'=>4,
+                'mode'=>"nearest",
+                'intersect'=>0,
+                'position'=>"nearest",
+                'xPadding'=>10,
+                'yPadding'=>10,
+                'caretPadding'=>10,
+            ],
+            'layout'=>[
+                'padding'=>[
+                    'left'=>15,
+                    'right'=>15,
+                    'top'=>15,
+                    'bottom'=>15
+                ]
+            ]
+        ]);
+        //Évolution annuelle des agents
         $chartEvolutionAgent->setData([
             'labels'=>$date_records,
             'datasets'=>[
@@ -365,13 +422,20 @@ final class DashboardController extends AbstractController
             'chartByDirection'=>$chartByDirection,
             'chartByAgeRange'=>$chartByAgeRange,
             'chartByHierarchie'=>$chartByHierarchie,
-            'chartEvolutionAgent'=>$chartEvolutionAgent,
+            'chartEvolutionAgentByFiveYears'=>$chartEvolutionAgentByFiveYears,
+            'periode_5_ans'=>$periode_5_ans,
+            'total_agents'=>$total_agents,
             'date_records'=>$date_records,
             'nb_recrus'=>$nb_recrus,
             'direction_names'=>$direction_names,
             'direction_homme_counts'=>$direction_homme_counts,
             'direction_femme_counts'=>$direction_femme_counts,
             'totalAverageAge'=>(int) round($totalAverageAge),
+            'moinsde25ans'=>$moins25ans,
+            'de26a35ans'=>$de25a35ans,
+            'de36a45ans'=>$de36a45ans,
+            'de46a55ans'=>$de46a55ans,
+            'plusde55ans'=>$plus55ans,
             'totalAge'=>$totalAge,
             'countAge'=>$countAge,
             'fonctionnaires'=> $this->em->getRepository(Affectation::class)->countByCadreStatutaire('Fonctionnaire'),

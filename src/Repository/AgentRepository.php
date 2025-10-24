@@ -63,6 +63,38 @@ class AgentRepository extends ServiceEntityRepository
         ;
     }
 
+   //public function evolutionAgentByFiveYear()
+   //{
+   //    return $this->createQueryBuilder('a')
+   //        ->select("DISTINCT(CONCAT(FLOOR(YEAR(date_recrutement)/5)*5, '-', FLOOR(YEAR(date_recrutement)/5)*5+4)) AS periode_5_ans, COUNT(a.id) AS total_agents")
+   //        ->groupBy('periode_5_ans')
+   //        ->orderBy('periode_5_ans')
+   //        ->getQuery()
+   //        ->getResult()
+   //    ;
+   //}
+
+    public function evolutionAgentByFiveYear(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+            SELECT
+                CONCAT(
+                    FLOOR(YEAR(date_recrutement) / 5) * 5,
+                    '-',
+                    FLOOR(YEAR(date_recrutement) / 5) * 5 + 4
+                ) AS periode_5_ans,
+                COUNT(*) AS total_agents
+            FROM agent
+            GROUP BY periode_5_ans
+            ORDER BY periode_5_ans
+        ";
+
+        $stmt = $conn->prepare($sql);
+        return $stmt->executeQuery()->fetchAllAssociative();
+    }
+
+
 
 
 

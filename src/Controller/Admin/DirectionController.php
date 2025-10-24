@@ -99,7 +99,7 @@ final class DirectionController extends AbstractController
     public function show(Direction $direction, AffectationRepository $affectationRepository): Response
     {
         // Fetching all affectations related to the direction and the statut_affectation
-        $affectations = $affectationRepository->findByDirectionStatutAffectation($direction, 'en service');
+        $affectations = $affectationRepository->findAgentsByDirection($direction);
         return $this->render('admin/direction/show.html.twig', [
             'direction' => $direction,
             'affectations' => $affectations,

@@ -1,4 +1,5 @@
 
+
 <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -11,10 +12,21 @@
                     <h5 class="text-center">Âge moyenne du personnel </h5>
                     <h2> <i class="fa fa-birthday-cake text-primary" aria-hidden="true"></i> {{ totalAverageAge }} ans</h2>
                     <hr>
-                    <h6>Fonctionnaires : {{ fonctionnaires }}</h6>
-                    <h6>Non Fonctionnaires : {{ nonfonctionnaires }}</h6>
-                    <h6>Contractuels : {{ contractuels }}</h6>
-                    <h6>Stagiaires : {{ stagiaires }}</h6>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6>Fonctionnaires : {{ fonctionnaires }}</h6>
+                            <h6>Non Fonctionnaires : {{ nonfonctionnaires }}</h6>
+                            <h6>Contractuels : {{ contractuels }}</h6>
+                            <h6>Stagiaires : {{ stagiaires }}</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6>Moins de 25 ans : <strong> {{ moinsde25ans }}</strong></h6>
+                            <h6>De 26 à 35 ans : <strong>{{ de26a35ans }}</strong></h6>
+                            <h6>De 36 à 45 ans :<strong>{{ de36a45ans }}</strong></h6>
+                            <h6>De 46 à 55 ans : <strong>{{ de46a55ans }}</strong></h6>
+                            <h6>Plus de 55 ans :<strong>{{ plusde55ans }}</strong></h6>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <h5 class="text-center">Réparition par Tranche d'âge</h5>
@@ -69,7 +81,7 @@
             <div class="chart-container">
                 {#{ dump(date_records) }#}
                 {#{ dump(nb_recrus) }#}
-                {{render_chart(chartEvolutionAgent)}}
+                {{render_chart(chartEvolutionAgentByFiveYears)}}
             </div>
         </div>
       </div>
