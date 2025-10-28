@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Visite;
 use Doctrine\ORM\EntityManagerInterface;
+use donatj\UserAgent\UserAgentParser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,13 +27,16 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     {
         $user= $token->getUser();
         $roles=$user->getRoles();
+        $parser=new UserAgentParser();
+        $userAgent=$request->headers->get('User-Agent');
+        $navigateur=$parser->parse($userAgent);
         $visite=new Visite();
         $visite->setUser($user);
         $visite->setAction('Connexion');
         $visite->setDateAction(new \DateTime());
         $visite->setPageVisitee('Page accueil');
         $visite->setIpVisiteur($request->getClientIp());
-        $visite->setNavigateur($request->headers->get('User-Agent'));
+        $visite->setNavigateur($navigateur->browser());
 
 
         //if(in_array('ROLE_USER', $roles)){
