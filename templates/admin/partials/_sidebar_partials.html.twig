@@ -223,6 +223,12 @@
                     <p>Utilisateurs</p>
                   </a>
                 </li>
+                <li class="nav-item {{app.current_route in ['app_admin_visite_index', 'app_admin_visite_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_visite_index') }}">
+                    <i class="fas fa-eye"></i>
+                    <p>Visiteurs</p>
+                  </a>
+                </li>
               {% endif %}
             </ul>
           </div>

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Visite{% endblock %}
+
+{% block body %}
+    <h1>Visite</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ visite.id }}</td>
+            </tr>
+            <tr>
+                <th>Date_action</th>
+                <td>{{ visite.dateAction ? visite.dateAction|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Action</th>
+                <td>{{ visite.action }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ visite.createdAt ? visite.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ visite.updatedAt ? visite.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>PageVisitee</th>
+                <td>{{ visite.pageVisitee }}</td>
+            </tr>
+            <tr>
+                <th>IpVisiteur</th>
+                <td>{{ visite.ipVisiteur }}</td>
+            </tr>
+            <tr>
+                <th>Navigateur</th>
+                <td>{{ visite.navigateur }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_visite_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_visite_edit', {'id': visite.id}) }}">edit</a>
+
+    {{ include('admin/visite/_delete_form.html.twig') }}
+{% endblock %}

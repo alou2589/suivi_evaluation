@@ -447,7 +447,7 @@ final class DashboardController extends AbstractController
 
     #[IsGranted("ROLE_INFO_ADMIN")]
     #[Route('/informatique', 'informatique')]
-    public function indexInformatique(): Response
+    public function indexInformatique(ChartBuilderInterface $chartBuilderInterface): Response
     {
         $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
         $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);

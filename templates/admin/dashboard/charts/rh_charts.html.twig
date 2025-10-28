@@ -46,19 +46,49 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-            <div class="card-title">Répartition du personnel par direction</div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Répartition du personnel par direction</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            {{ render_chart(chartByDirection) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="chart-container">
-            {{ render_chart(chartByDirection) }}
-          </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Évolution annuelle des agents</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            {#{ dump(date_records) }#}
+                            {#{ dump(nb_recrus) }#}
+                            {{render_chart(chartEvolutionAgentByFiveYears)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Visites</div>
+            </div>
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
             <div class="card-title">Répartition du personnel par sexe</div>
@@ -67,22 +97,6 @@
           <div class="chart-container">
             {{ render_chart(chartSexeByDirection) }}
           </div>
-        </div>
-      </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-            <div class="card-title">Évolution annuelle des agents</div>
-        </div>
-        <div class="card-body">
-            <div class="chart-container">
-                {#{ dump(date_records) }#}
-                {#{ dump(nb_recrus) }#}
-                {{render_chart(chartEvolutionAgentByFiveYears)}}
-            </div>
         </div>
       </div>
     </div>
