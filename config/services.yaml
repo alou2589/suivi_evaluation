@@ -14,9 +14,9 @@ services:
     App\Service\QRCodeGenerator:
         arguments:
             $sftpStorage: '@flysystem.sftp.storage'
-    #App\DataFixtures\PersonnelFixtures:
-    #    arguments:
-    #        $sftpStorage: '@flysystem.sftp.storage'
+    App\DataFixtures\PersonnelFixtures:
+        arguments:
+            $sftpStorage: '@flysystem.sftp.storage'
     App\Service\PhotoService:
         arguments:
             $sftpStorage: '@flysystem.sftp.storage'
