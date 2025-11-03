@@ -16,6 +16,25 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
         parent::__construct($registry, MatosInformatique::class);
     }
 
+    public function findDistinctTypeMatos(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select("DISTINCT m.type_matos AS types")
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    //public function countByTypeMatos($typeMatos): int
+    //{
+    //    return (int) $this->createQueryBuilder('m')
+    //        ->select('COUNT(m.id)')
+    //        ->andWhere('m.type_matos = :typeMatos')
+    //        ->setParameter('typeMatos', $typeMatos)
+    //        ->getQuery()
+    //        ->getSingleScalarResult();
+    //}
+
 //    /**
 //     * @return MatosInformatique[] Returns an array of MatosInformatique objects
 //     */

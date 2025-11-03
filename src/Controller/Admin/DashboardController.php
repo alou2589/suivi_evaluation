@@ -57,6 +57,8 @@ final class DashboardController extends AbstractController
         $chartByHierarchie= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
         $chartEvolutionAgent= $chartBuilderInterface->createChart(Chart::TYPE_LINE);
         $chartEvolutionAgentByFiveYears= $chartBuilderInterface->createChart(Chart::TYPE_LINE);
+        //$chartByHomme= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
+        //$chartByFemme= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
         //$chartByService= $chartBuilderInterface->createChart(Chart::TYPE_DOUGHNUT);
 
         $personnels= $this->em->getRepository(Affectation::class)->findAll();
@@ -140,6 +142,7 @@ final class DashboardController extends AbstractController
                 ],
             ]
         ]);
+
         //Répartition par hierarchie
         $chartByHierarchie->setData([
             'labels'=>['A', 'B', 'C', 'D', 'NI'],
@@ -418,6 +421,7 @@ final class DashboardController extends AbstractController
             'nbDocs'=>count($docs),
             'nbPDF'=>$nbPDF,
             'nbDOCX'=>$nbDOCX,
+            //'chartByHomme'=>$chartByHomme,
             'chartSexeByDirection'=>$chartSexeByDirection,
             'chartByDirection'=>$chartByDirection,
             'chartByAgeRange'=>$chartByAgeRange,
@@ -449,17 +453,117 @@ final class DashboardController extends AbstractController
     #[Route('/informatique', 'informatique')]
     public function indexInformatique(ChartBuilderInterface $chartBuilderInterface): Response
     {
+        $chartByType=$chartBuilderInterface->createChart(Chart::TYPE_PIE);
+        $chartByMarque=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+
+        $typePrinters=["imprimante noir et blanc","imprimante couleur"];
+        $type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
         $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
         $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);
-        $printers= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"imprimante"]);
+        $printers= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>$typePrinters]);
         $scanners= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"scanner"]);
         $others= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"autre"]);
+
+        $hp=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        $lenovo=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        $lexmark=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        $canon=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        $dell=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        $macbook=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+
+
+
+
+        //===Statistique Parc Informatique
+        //Statistiques Matos par type
+        $chartByType->setData([
+            'labels'=>["Ordi. Portable","Ordi. Fixe","Imprimantes","Scanners","Autres"],
+            'datasets'=>[
+                [
+                    'data'=>[count($laptops),count($desktops),count($printers),count($scanners),count($others)],
+                    'backgroundColor'=> self::getRandomColor(5),
+                    'borderColor'=> '#FFFF',
+                    'borderWidth'=> 1
+                ]
+            ]
+        ]);
+        $chartByType->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'plugins'=>[
+                'legend'=>[
+                    'position'=>'right'
+                ],
+                'title'=>[
+                    'display'=>false,
+                    //'text'=>'Répartition du personnel par tranche d\'âge'
+                ],
+            ]
+        ]);
+
+        //$chartByMarque->setData([
+        //    'labels'=>["HP","LENOVO","LEXMARK","CANON","DELL"],
+        //    'datasets'=>[
+        //        [
+        //            'label'=>'Personnel',
+        //            'data'=>,
+        //            'backgroundColor'=> self::getRandomColor(count($direction_counts)),
+        //            'borderColor'=> '#FFFF',
+        //            'borderWidth'=> 1
+        //        ]
+        //    ]
+        //]);
+        //$chartByMarque->setOptions([
+        //    'responsive'=>true,
+        //    'maintainAspectRatio'=>false,
+        //    //'indexAxis'=>'y',
+        //    'plugins'=>[
+        //        'legend'=>[
+        //            'position'=>'right'
+        //        ],
+        //        'title'=>[
+        //            'display'=>false,
+        //        ],
+        //        'tooltips'=>[
+        //            'mode'=>'index',
+        //            'intersect'=>false,
+//
+        //        ],
+        //    ],
+        //    'scales'=>[
+        //        'x'=>[
+        //            [
+        //                'beginAtZero'=>true,
+        //                'max'=>100,
+        //                'grid'=>[
+        //                    'display'=>false,
+        //                ],
+        //                'ticks'=>[
+        //                    'stepSize'=>10,
+        //                ]
+        //            ]
+        //        ],
+        //        'y'=>[
+        //            [
+        //                'grid'=>[
+        //                    'display'=>false,
+        //                ],
+        //            ],
+        //        ],
+        //    ]
+//
+        //]);
+
+        //Statistiques Matos par Marque
+
         return $this->render('admin/dashboard/index_informatique.html.twig',[
             'dashboard_title'=> 'Informatique',
             'nbLaptops'=>count($laptops),
             'nbDesktops'=>count($desktops),
             'nbPrinters'=>count($printers),
             'nbAllOthers'=>count($scanners)+ count($others),
+            'chartByType'=>$chartByType,
+            'type_matos'=>array_values($type_matos[0])
 
         ]);
     }

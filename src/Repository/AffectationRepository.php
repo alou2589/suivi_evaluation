@@ -16,15 +16,17 @@ class AffectationRepository extends ServiceEntityRepository
         parent::__construct($registry, Affectation::class);
     }
 
-    public function findWithAgentServiceAndPoste(): array
+    public function findAllAffectations():array
     {
         return $this->createQueryBuilder('a')
-            ->leftJoin('a.agent', 'ag')
-            ->leftJoin('a.service', 's')
-            ->leftJoin('a.poste', 'p')
-            ->addSelect('ag', 's', 'p')
+            ->select('a','ag','s','p','i')
+            ->leftJoin('a.agent','ag')
+            ->leftJoin('a.service','s')
+            ->leftJoin('a.poste','p')
+            ->leftJoin('ag.identification','i')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function findAgentsByDirection($direction): array

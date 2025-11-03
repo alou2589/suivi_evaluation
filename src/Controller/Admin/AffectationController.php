@@ -24,7 +24,7 @@ final class AffectationController extends AbstractController
     {
         return $this->render('admin/affectation/index.html.twig', [
             // Replace 1 with the appropriate $id value as needed
-            'affectations' => $affectationRepository->findWithAgentServiceAndPoste(),
+            'affectations' => $affectationRepository->findAllAffectations(),
         ]);
     }
 
