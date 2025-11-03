@@ -25,6 +25,7 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
     }
 
 
+
     //public function countByTypeMatos($typeMatos): int
     //{
     //    return (int) $this->createQueryBuilder('m')

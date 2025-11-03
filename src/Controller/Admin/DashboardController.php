@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Affectation;
 use App\Entity\Agent;
+use App\Entity\Attribution;
 use App\Entity\Direction;
 use App\Entity\DocumentAdministratif;
 use App\Entity\InfoPerso;
@@ -455,8 +456,12 @@ final class DashboardController extends AbstractController
     {
         $chartByType=$chartBuilderInterface->createChart(Chart::TYPE_PIE);
         $chartByMarque=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartByTypeInDirection= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
 
+        //$typeMateriels= ["ordinateur portable","ordinateur fixe","imprimante noir et blanc","imprimante couleur","scanner","autre"];
         $typePrinters=["imprimante noir et blanc","imprimante couleur"];
+        $attributions= $this->em->getRepository(Attribution::class)->findAll();
+        $directions=$this->em->getRepository(Direction::class)->findAll();
         $type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
         $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
         $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);
@@ -470,6 +475,15 @@ final class DashboardController extends AbstractController
         $canon=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
         $dell=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
         $macbook=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+
+        foreach($directions as $direction){
+            $direction_names[]=$direction->getNomDirection();
+            $direction_laptop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('ordinateur portable', $direction);
+            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('ordinateur fixe', $direction);
+            $direction_printer_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('imprimante', $direction);
+            $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('scanner', $direction);
+            $direction_other_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('autre', $direction);
+        }
 
 
 
@@ -500,6 +514,77 @@ final class DashboardController extends AbstractController
                 ],
             ]
         ]);
+
+        //Statistiques par Type et par Status
+        $chartByTypeInDirection->setData([
+            'labels'=>array_values($direction_names),
+            'datasets'=>[
+                [
+                    'label'=>'Laptop',
+                    'backgroundColor'=> '#59d05d',
+                    'borderColor'=>'#59d05d',
+                    'data'=>array_values($direction_laptop_counts),
+                ],
+                [
+                    'label'=>'Desktop',
+                    'backgroundColor'=> '#fdaf4b',
+                    'borderColor'=>'#fdaf4b',
+                    'data'=>array_values($direction_desktop_counts),
+                ],
+                [
+                    'label'=>'Imprimante',
+                    'backgroundColor'=> '#4b79fd',
+                    'borderColor'=>'#4b79fd',
+                    'data'=>array_values($direction_printer_counts),
+                ],
+                [
+                    'label'=>'Scanner',
+                    'backgroundColor'=> '#fd4b7a',
+                    'borderColor'=>'#fd4b7a',
+                    'data'=>array_values($direction_scanner_counts),
+                ],
+                [
+                    'label'=>'Autres',
+                    'backgroundColor'=> '#fd4b7a',
+                    'borderColor'=>'#fd4b7a',
+                    'data'=>array_values($direction_other_counts),
+                ],
+            ]
+        ]);
+        $chartByTypeInDirection->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'legend'=>[
+                'position'=>'bottom'
+            ],
+            'title'=>[
+                'display'=>false,
+            ],
+            'tooltips'=>[
+                'mode'=>'index',
+                'intersect'=>false,
+            ],
+            'scales'=>[
+                'x'=>[
+                    [
+                        'stacked'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                    ]
+                ],
+                'y'=>[
+                    [
+                        'stacked'=>true,
+                        'beginAtZero'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                    ],
+                ],
+            ]
+        ]);
+
 
         //$chartByMarque->setData([
         //    'labels'=>["HP","LENOVO","LEXMARK","CANON","DELL"],
@@ -563,7 +648,7 @@ final class DashboardController extends AbstractController
             'nbPrinters'=>count($printers),
             'nbAllOthers'=>count($scanners)+ count($others),
             'chartByType'=>$chartByType,
-            'type_matos'=>array_values($type_matos[0])
+            'chartByTypeInDirection'=>$chartByTypeInDirection,
 
         ]);
     }
