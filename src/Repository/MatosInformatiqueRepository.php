@@ -37,6 +37,15 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findDistinctMarqueMatos(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select("DISTINCT m.marque_matos AS marques")
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 
     //public function countByTypeMatos($typeMatos): int

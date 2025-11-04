@@ -1,0 +1,58 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Marque ' %}
+
+{% block title %}Marque Matériel{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="d-flex gap-3 justify-content-end">
+                    <a href="{{ path('app_admin_marque_matos_create') }}"  title="Nouveau Marque " class="rounded-pill btn btn-black" >
+                      <i class="fa fa-plus"></i>
+                      Ajouter
+                    </a>
+                    <a href="{{ path('app_admin_marque_matos_upload') }}"   title="Importer liste Marque " class="rounded-pill btn btn-secondary " >
+                      <i class="fa fa-file-upload"></i>
+                      Importer
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover" id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Nom de la Marque</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for marque in marques %}
+                                    <tr>
+                                        <td class="text-center">{{ marque.nomMarque }}</td>
+                                        <td class="text-center">
+                                          <a href="{{ path('app_admin_marque_matos_show', {'id': marque_matos.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                          <a href="{{ path('app_admin_marque_matos_edit', {'id': marque_matos.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+

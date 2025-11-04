@@ -457,11 +457,15 @@ final class DashboardController extends AbstractController
         $chartByType=$chartBuilderInterface->createChart(Chart::TYPE_PIE);
         $chartByMarque=$chartBuilderInterface->createChart(Chart::TYPE_BAR);
         $chartByTypeInDirection= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
+        $chartByTypeAndMarque= $chartBuilderInterface->createChart(Chart::TYPE_BAR);
 
         //$typeMateriels= ["ordinateur portable","ordinateur fixe","imprimante noir et blanc","imprimante couleur","scanner","autre"];
         $typePrinters=["imprimante noir et blanc","imprimante couleur"];
         $attributions= $this->em->getRepository(Attribution::class)->findAll();
         $directions=$this->em->getRepository(Direction::class)->findAll();
+        $materiels=$this->em->getRepository(MatosInformatique::class)->findAll();
+        $type_materiels=["Ordinateur Portable","Ordinateur Fixe","Imprimante","Scanner","Autre"];
+        $marques_matos=$this->em->getRepository(MatosInformatique::class)->findDistinctMarqueMatos();
         $type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
         $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
         $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);
@@ -517,7 +521,74 @@ final class DashboardController extends AbstractController
         ]);
 
         //Statistiques par Type et par Marque
-
+        $chartByTypeAndMarque->setData([
+            'labels'=>array_values($direction_names),
+            'datasets'=>[
+                [
+                    'label'=>'Laptop',
+                    'backgroundColor'=> '#59d05d',
+                    'borderColor'=>'#59d05d',
+                    'data'=>array_values($direction_laptop_counts),
+                ],
+                [
+                    'label'=>'Desktop',
+                    'backgroundColor'=> '#fdaf4b',
+                    'borderColor'=>'#fdaf4b',
+                    'data'=>array_values($direction_desktop_counts),
+                ],
+                [
+                    'label'=>'Imprimante',
+                    'backgroundColor'=> '#4b79fd',
+                    'borderColor'=>'#4b79fd',
+                    'data'=>array_values($direction_printer_counts),
+                ],
+                [
+                    'label'=>'Scanner',
+                    'backgroundColor'=> '#fd4b7a',
+                    'borderColor'=>'#fd4b7a',
+                    'data'=>array_values($direction_scanner_counts),
+                ],
+                [
+                    'label'=>'Autres',
+                    'backgroundColor'=> '#fd4b7a',
+                    'borderColor'=>'#fd4b7a',
+                    'data'=>array_values($direction_other_counts),
+                ],
+            ]
+        ]);
+        $chartByTypeInDirection->setOptions([
+            'responsive'=>true,
+            'maintainAspectRatio'=>false,
+            'legend'=>[
+                'position'=>'bottom'
+            ],
+            'title'=>[
+                'display'=>false,
+            ],
+            'tooltips'=>[
+                'mode'=>'index',
+                'intersect'=>false,
+            ],
+            'scales'=>[
+                'x'=>[
+                    [
+                        'stacked'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                    ]
+                ],
+                'y'=>[
+                    [
+                        'stacked'=>true,
+                        'beginAtZero'=>true,
+                        'grid'=>[
+                            'display'=>false,
+                        ],
+                    ],
+                ],
+            ]
+        ]);
         //Statistiques par Type et par Direction
         $chartByTypeInDirection->setData([
             'labels'=>array_values($direction_names),
