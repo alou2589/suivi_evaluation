@@ -24,6 +24,19 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countByTypeAndMarque($typeMatos, $marqueMatos): int
+    {
+        return (int) $this->createQueryBuilder('m')
+            ->select("COUNT(m.id)")
+            ->andwhere('m.type_matos= :type_matos')
+            ->andwhere('m.marque_matos= :marque_matos')
+            ->setParameter('type_matos', $typeMatos)
+            ->setParameter('marque_matos', $marqueMatos)
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
 
 
     //public function countByTypeMatos($typeMatos): int

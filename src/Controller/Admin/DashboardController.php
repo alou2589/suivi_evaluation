@@ -478,11 +478,12 @@ final class DashboardController extends AbstractController
 
         foreach($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
-            $direction_laptop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('ordinateur portable', $direction);
-            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('ordinateur fixe', $direction);
-            $direction_printer_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('imprimante', $direction);
-            $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('scanner', $direction);
-            $direction_other_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('autre', $direction);
+            $direction_laptop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Portable', $direction);
+            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Fixe', $direction);
+            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
+            $direction_printer_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Imprimante', $direction);
+            $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Scanner', $direction);
+            $direction_other_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Autre', $direction);
         }
 
 
@@ -515,7 +516,9 @@ final class DashboardController extends AbstractController
             ]
         ]);
 
-        //Statistiques par Type et par Status
+        //Statistiques par Type et par Marque
+
+        //Statistiques par Type et par Direction
         $chartByTypeInDirection->setData([
             'labels'=>array_values($direction_names),
             'datasets'=>[

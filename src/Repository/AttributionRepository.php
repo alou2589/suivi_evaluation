@@ -25,11 +25,13 @@ class AttributionRepository extends ServiceEntityRepository
             ->leftJoin('aff.service', 's')
             ->andWhere('m.type_matos LIKE :typeMatos')
             ->andWhere('s.structure_rattachee = :direction')
-            ->setParameter('typeMatos', $typeMatos . '%')
+            ->setParameter('typeMatos', $typeMatos.'%')
             ->setParameter('direction', $direction)
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+
 
     //    /**
     //     * @return Attribution[] Returns an array of Attribution objects
