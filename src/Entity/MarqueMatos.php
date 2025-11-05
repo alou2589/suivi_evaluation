@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MarqueMatosRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -28,6 +30,17 @@ class MarqueMatos
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, MatosInformatique>
+     */
+    #[ORM\OneToMany(targetEntity: MatosInformatique::class, mappedBy: 'marque_matos')]
+    private Collection $matosInformatiques;
+
+    public function __construct()
+    {
+        $this->matosInformatiques = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,5 +106,35 @@ class MarqueMatos
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, MatosInformatique>
+     */
+    public function getMatosInformatiques(): Collection
+    {
+        return $this->matosInformatiques;
+    }
+
+    public function addMatosInformatique(MatosInformatique $matosInformatique): static
+    {
+        if (!$this->matosInformatiques->contains($matosInformatique)) {
+            $this->matosInformatiques->add($matosInformatique);
+            $matosInformatique->setMarqueMatos($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatosInformatique(MatosInformatique $matosInformatique): static
+    {
+        if ($this->matosInformatiques->removeElement($matosInformatique)) {
+            // set the owning side to null (unless already changed)
+            if ($matosInformatique->getMarqueMatos() === $this) {
+                $matosInformatique->setMarqueMatos(null);
+            }
+        }
+
+        return $this;
     }
 }

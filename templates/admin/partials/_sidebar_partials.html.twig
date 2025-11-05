@@ -209,6 +209,12 @@
                     <p>Maintenance</p>
                   </a>
                 </li>
+                <li class="nav-item {{app.current_route in ['app_admin_marque_matos_index', 'app_admin_marque_matos_new', 'app_admin_marque_matos_edit', 'app_admin_marque_matos_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_marque_matos_index') }}">
+                    <i class="fas fa-tags"></i>
+                    <p>Marque Matériel</p>
+                  </a>
+                </li>
               {% endif %}
               {% if is_granted("ROLE_SUPERADMIN", object = null, field = null) %}
                 <li class="nav-section">

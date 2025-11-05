@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: MatosInformatiqueRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['type_matos', 'marque_matos', 'modele_matos', 'sn_matos'], message: 'Ce matériel informatique existe déjà.')]
+#[UniqueEntity(fields: ['type_matos', 'modele_matos', 'sn_matos'], message: 'Ce matériel informatique existe déjà.')]
 
 class MatosInformatique
 {
@@ -22,9 +22,6 @@ class MatosInformatique
 
     #[ORM\Column(length: 255)]
     private ?string $type_matos = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $marque_matos = null;
 
     #[ORM\Column(length: 255)]
     private ?string $modele_matos = null;
@@ -56,6 +53,9 @@ class MatosInformatique
     #[ORM\OneToMany(targetEntity: Maintenance::class, mappedBy: 'materiel')]
     private Collection $maintenances;
 
+    #[ORM\ManyToOne(inversedBy: 'matosInformatiques')]
+    private ?MarqueMatos $marque_matos = null;
+
     public function __construct()
     {
         $this->attributions = new ArrayCollection();
@@ -75,18 +75,6 @@ class MatosInformatique
     public function setTypeMatos(string $type_matos): static
     {
         $this->type_matos = $type_matos;
-
-        return $this;
-    }
-
-    public function getMarqueMatos(): ?string
-    {
-        return $this->marque_matos;
-    }
-
-    public function setMarqueMatos(string $marque_matos): static
-    {
-        $this->marque_matos = $marque_matos;
 
         return $this;
     }
@@ -231,6 +219,18 @@ class MatosInformatique
                 $maintenance->setMateriel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMarqueMatos(): ?MarqueMatos
+    {
+        return $this->marque_matos;
+    }
+
+    public function setMarqueMatos(?MarqueMatos $marque_matos): static
+    {
+        $this->marque_matos = $marque_matos;
 
         return $this;
     }
