@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\MarqueMatos;
 use App\Entity\MatosInformatique;
 use App\Form\MatosInformatiqueType;
 use App\Form\UploadFileForm;
@@ -77,6 +78,8 @@ final class MatosInformtatiqueController extends AbstractController
                     }
                     // Vérification des doublons
                     $existingMatosInfo = $entityManager->getRepository(MatosInformatique::class)->findOneBy(['sn_matos' => $row[3]]);
+                    $marque_matos=$entityManager->getRepository(MarqueMatos::class)->findOneBy(['nom_marque'=>$row[1]]);
+
                     if ($existingMatosInfo) {
                         $this->addFlash('error', 'L\'information personnelle avec le CIN ' . $row[3] . ' existe déjà.');
                         continue;
@@ -88,7 +91,7 @@ final class MatosInformtatiqueController extends AbstractController
                             $matosInfo = new MatosInformatique();
                             // Assuming the columns in the Excel file match the InfoPerso entity fields
                             $matosInfo->setTypeMatos($row[0]);
-                            $matosInfo->setMarqueMatos($row[1]);
+                            $matosInfo->setMarqueMatos($marque_matos);
                             $matosInfo->setModeleMatos($row[2]);
                             $matosInfo->setSnMatos($row[3]);
                             $matosInfo->setDateReception($dateReception);
@@ -102,32 +105,6 @@ final class MatosInformtatiqueController extends AbstractController
                 }
                 $entityManager->flush();
             }
-
-            elseif($file && $extension === 'pdf'){
-                $parser= new Parser();
-                $pdf= $parser->parseFile($file->getPathname());
-                $text= $pdf->getText();
-
-                $lignes= explode("\n", $text);
-
-                foreach($lignes as $ligne){
-                    $cols=preg_split('/\s+/', trim($ligne));
-                    if(count($cols)>=4){
-                        $matosInfo= new MatosInformatique();
-                        $matosInfo->setTypeMatos($cols[0]);
-                        $matosInfo->setMarqueMatos($cols[1]);
-                        $matosInfo->setModeleMatos($cols[2]);
-                        $matosInfo->setSnMatos($cols[3]);
-
-                        $existMatosInfo= $entityManager->getRepository(MatosInformatique::class)->findOneBy(['sn_matos'=>$matosInfo->getSnMatos()]);
-                        if(!$existMatosInfo){
-                            $entityManager->persist($matosInfo);
-                        }
-                    }
-                }
-                $entityManager->flush();
-            }
-
             else{
                 $this->addFlash('error', 'Format excel ou pdf sont permis');
             }

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TypeMatos{% endblock %}
+
+{% block body %}
+    <h1>TypeMatos</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ type_mato.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom_type</th>
+                <td>{{ type_mato.nomType }}</td>
+            </tr>
+            <tr>
+                <th>Description_type</th>
+                <td>{{ type_mato.descriptionType }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ type_mato.createdAt ? type_mato.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ type_mato.updatedAt ? type_mato.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_type_matos_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_type_matos_edit', {'id': type_mato.id}) }}">edit</a>
+
+    {{ include('admin/type_matos/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'admin/adminbase.html.twig' %}
-{% set page_title = 'Marque ' %}
+{% set page_title = 'Type de Matériel' %}
 
-{% block title %}Marque Matériel{% endblock %}
+{% block title %}Type de Matériel{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -13,13 +13,9 @@
             <div class="card">
                 <div class="card-header">
                   <div class="d-flex gap-3 justify-content-end">
-                    <a href="{{ path('app_admin_marque_matos_create') }}"  title="Nouveau Marque " class="rounded-pill btn btn-black" >
+                    <a href="{{ path('app_admin_type_matos_create') }}"  title="Nouveau Type de Matériel" class="rounded-pill btn btn-black" >
                       <i class="fa fa-plus"></i>
                       Ajouter
-                    </a>
-                    <a href="{{ path('app_admin_marque_matos_upload') }}"   title="Importer liste Marque " class="rounded-pill btn btn-secondary " >
-                      <i class="fa fa-file-upload"></i>
-                      Importer
                     </a>
                   </div>
                 </div>
@@ -28,18 +24,18 @@
                         <table class="display table table-striped table-hover" id="basic-datatables">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Nom de la Marque</th>
+                                    <th class="text-center">Nom</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {% for marque in marques %}
+                                {% for type in types %}
                                     <tr>
-                                        <td class="text-center">{{ marque.nomMarque }}</td>
+                                        <td class="text-center">{{ type.nomType }}</td>
                                         <td class="text-center">
-                                          <a href="{{ path('app_admin_marque_matos_show', {'id': marque.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
-                                          <a href="{{ path('app_admin_marque_matos_edit', {'id': marque.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                          <a href="{{ path('app_admin_type_matos_show', {'id': type.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                          <a href="{{ path('app_admin_type_matos_edit', {'id': type.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

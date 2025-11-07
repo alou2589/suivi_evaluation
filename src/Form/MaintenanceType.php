@@ -47,7 +47,7 @@ class MaintenanceType extends AbstractType
                     if($materiel->getId()== 0) {
                         return null;
                     }
-                    return $materiel->getTypeMatos() . ' ' . $materiel->getMarqueMatos() . ' ' . $materiel->getModeleMatos().' '.$materiel->getSnMatos();
+                    return $materiel->getTypeMatos() . ' ' . $materiel->getMarqueMatos()->getNomMarque() . ' ' . $materiel->getModeleMatos().' '.$materiel->getSnMatos();
                 },
                 'required' => false,
                 'attr' => [

@@ -56,6 +56,7 @@ class MatosInformatique
     #[ORM\ManyToOne(inversedBy: 'matosInformatiques')]
     private ?MarqueMatos $marque_matos = null;
 
+
     public function __construct()
     {
         $this->attributions = new ArrayCollection();
@@ -234,4 +235,5 @@ class MatosInformatique
 
         return $this;
     }
+
 }

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit TypeMatos{% endblock %}
+
+{% block body %}
+    <h1>Edit TypeMatos</h1>
+
+    {{ include('admin/type_matos/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_admin_type_matos_index') }}">back to list</a>
+
+    {{ include('admin/type_matos/_delete_form.html.twig') }}
+{% endblock %}

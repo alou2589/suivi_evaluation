@@ -34,7 +34,7 @@
                             <tbody>
                             {% for maintenance in maintenances %}
                                 <tr>
-                                    <td>{{ maintenance.materiel.typeMatos|capitalize }} {{ maintenance.materiel.marqueMatos|capitalize }} {{ maintenance.materiel.modeleMatos|capitalize }} - {{ maintenance.materiel.snMatos|capitalize }}</td>
+                                    <td>{{ maintenance.materiel.typeMatos|capitalize }} {{ maintenance.materiel.marqueMatos.nomMarque|capitalize }} {{ maintenance.materiel.modeleMatos|capitalize }} - {{ maintenance.materiel.snMatos|capitalize }}</td>
                                     <td>{{ maintenance.prestataire|capitalize }}</td>
                                     <td>{{ maintenance.statusMatos|capitalize }}</td>
                                     <td class="text-center">

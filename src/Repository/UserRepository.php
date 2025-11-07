@@ -33,7 +33,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findAllUserAgents(){
+    public function findAllUserAgents()
+    {
         return $this->createQueryBuilder('u')
             ->where('u.id != 1')
             ->leftJoin('u.agent', 'a')

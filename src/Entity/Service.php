@@ -45,6 +45,7 @@ class Service
     #[ORM\OneToMany(targetEntity: Affectation::class, mappedBy: 'service')]
     private Collection $affectations;
 
+
     public function __construct()
     {
         $this->affectations = new ArrayCollection();
@@ -171,4 +172,5 @@ class Service
 
         return $this;
     }
+
 }

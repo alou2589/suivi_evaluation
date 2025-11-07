@@ -35,7 +35,7 @@
                             {% for attribution in attributions %}
                                 <tr>
                                     <td>{{ attribution.affectaire.agent.identification.prenom }} {{ attribution.affectaire.agent.identification.nom }} - {{ attribution.affectaire.agent.matricule }} </td>
-                                    <td>{{ attribution.materiel.typeMatos|capitalize }} {{ attribution.materiel.marqueMatos|capitalize }}  {{ attribution.materiel.modeleMatos|capitalize }}</td>
+                                    <td>{{ attribution.materiel.typeMatos|capitalize }} {{ attribution.materiel.marqueMatos.nomMarque|capitalize }}  {{ attribution.materiel.modeleMatos|capitalize }}</td>
                                     <td class="text-center">
                                         <a href="{{ path('app_admin_attribution_show', {'id': attribution.id}) }}" class="btn"> <i class="fa fa-eye text-primary" aria-hidden="true"></i>  </a>
                                         <a href="{{ path('app_admin_attribution_edit', {'id': attribution.id}) }}" class="btn"> <i class="fa fa-edit text-secondary" aria-hidden="true"></i>  </a>

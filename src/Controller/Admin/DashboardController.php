@@ -8,10 +8,12 @@ use App\Entity\Attribution;
 use App\Entity\Direction;
 use App\Entity\DocumentAdministratif;
 use App\Entity\InfoPerso;
+use App\Entity\MarqueMatos;
 use App\Entity\MatosInformatique;
 use App\Entity\Service;
 use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Math;
 use PhpOffice\PhpSpreadsheet\Chart\GridLines;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -464,21 +466,20 @@ final class DashboardController extends AbstractController
         $attributions= $this->em->getRepository(Attribution::class)->findAll();
         $directions=$this->em->getRepository(Direction::class)->findAll();
         $materiels=$this->em->getRepository(MatosInformatique::class)->findAll();
-        $type_materiels=["Ordinateur Portable","Ordinateur Fixe","Imprimante","Scanner","Autre"];
-        $marques_matos=$this->em->getRepository(MatosInformatique::class)->findDistinctMarqueMatos();
-        $type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
+        $type_materiels=['Ordinateur Portable','Ordinateur Fixe','Imprimante','Scanner','Autre'];
+        //$type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
         $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
         $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);
         $printers= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>$typePrinters]);
         $scanners= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"scanner"]);
         $others= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"autre"]);
 
-        $hp=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
-        $lenovo=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
-        $lexmark=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
-        $canon=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
-        $dell=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
-        $macbook=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$hp=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$lenovo=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$lexmark=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$canon=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$dell=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
+        //$macbook=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
 
         foreach($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
@@ -489,10 +490,11 @@ final class DashboardController extends AbstractController
             $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Scanner', $direction);
             $direction_other_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Autre', $direction);
         }
-
-
-
-
+        $marque_materiels=$this->em->getRepository(MarqueMatos::class)->findAll();
+        foreach($marque_materiels as $marque_materiel){
+            $laptop_counts[]= $this->em->getRepository(MatosInformatique::class)->countByMarqueAndGroupByType($marque_materiel);
+        }
+        //===Statistique Parc Informatique
         //===Statistique Parc Informatique
         //Statistiques Matos par type
         $chartByType->setData([
@@ -556,7 +558,7 @@ final class DashboardController extends AbstractController
                 ],
             ]
         ]);
-        $chartByTypeInDirection->setOptions([
+        $chartByTypeAndMarque->setOptions([
             'responsive'=>true,
             'maintainAspectRatio'=>false,
             'legend'=>[
@@ -660,59 +662,6 @@ final class DashboardController extends AbstractController
         ]);
 
 
-        //$chartByMarque->setData([
-        //    'labels'=>["HP","LENOVO","LEXMARK","CANON","DELL"],
-        //    'datasets'=>[
-        //        [
-        //            'label'=>'Personnel',
-        //            'data'=>,
-        //            'backgroundColor'=> self::getRandomColor(count($direction_counts)),
-        //            'borderColor'=> '#FFFF',
-        //            'borderWidth'=> 1
-        //        ]
-        //    ]
-        //]);
-        //$chartByMarque->setOptions([
-        //    'responsive'=>true,
-        //    'maintainAspectRatio'=>false,
-        //    //'indexAxis'=>'y',
-        //    'plugins'=>[
-        //        'legend'=>[
-        //            'position'=>'right'
-        //        ],
-        //        'title'=>[
-        //            'display'=>false,
-        //        ],
-        //        'tooltips'=>[
-        //            'mode'=>'index',
-        //            'intersect'=>false,
-//
-        //        ],
-        //    ],
-        //    'scales'=>[
-        //        'x'=>[
-        //            [
-        //                'beginAtZero'=>true,
-        //                'max'=>100,
-        //                'grid'=>[
-        //                    'display'=>false,
-        //                ],
-        //                'ticks'=>[
-        //                    'stepSize'=>10,
-        //                ]
-        //            ]
-        //        ],
-        //        'y'=>[
-        //            [
-        //                'grid'=>[
-        //                    'display'=>false,
-        //                ],
-        //            ],
-        //        ],
-        //    ]
-//
-        //]);
-
         //Statistiques Matos par Marque
 
         return $this->render('admin/dashboard/index_informatique.html.twig',[
@@ -723,6 +672,9 @@ final class DashboardController extends AbstractController
             'nbAllOthers'=>count($scanners)+ count($others),
             'chartByType'=>$chartByType,
             'chartByTypeInDirection'=>$chartByTypeInDirection,
+            'laptop_counts'=> $laptop_counts,
+            //'datasets'=>json_encode($datasets),
+            //'datas'=>json_encode($datas),
 
         ]);
     }

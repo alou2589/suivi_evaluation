@@ -99,7 +99,9 @@ class Poste
 
         return $this;
     }
-          #[ORM\PrePersist]
+
+
+    #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
         $this->createdAt = new \DateTimeImmutable();

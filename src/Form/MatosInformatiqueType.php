@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\MarqueMatos;
 use App\Entity\MatosInformatique;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,15 +28,14 @@ class MatosInformatiqueType extends AbstractType
                 ],
                 'placeholder' => 'Sélectionnez un type de matériel',
             ])
-            ->add('marque_matos', choicetype::class, [
-                'choices' => [
-                    'HP' => 'hp',
-                    'Dell' => 'dell',
-                    'Lenovo' => 'lenovo',
-                    'Apple' => 'apple',
-                    'Autre' => 'autre',
+            ->add('marque_matos', EntityType::class, [
+                'class' => MarqueMatos::class,
+                'choice_label' => 'nom_marque',
+                'required' => false,
+                'attr' => [
+                    'data-placeholder' => 'Select une marque',
+                    'class' => 'js-example-basic-single',
                 ],
-                'placeholder' => 'Sélectionnez une marque',
             ])
             ->add('modele_matos', TextType::class, [
                 'label' => 'Modèle du matériel',

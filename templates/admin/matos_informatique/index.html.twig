@@ -37,7 +37,7 @@
                             <tbody>
                             {% for matos_informatique in matos_informatiques %}
                                 <tr>
-                                    <td>{{ matos_informatique.marqueMatos|capitalize }} {{ matos_informatique.modeleMatos|capitalize }}</td>
+                                    <td>{{ matos_informatique.marqueMatos.nomMarque|capitalize }} {{ matos_informatique.modeleMatos|capitalize }}</td>
                                     <td>{{ matos_informatique.snMatos }}</td>
                                     <td>{{ matos_informatique.dateReception ? matos_informatique.dateReception|date('Y-m-d') : '' }}</td>
                                     <td class="text-center">

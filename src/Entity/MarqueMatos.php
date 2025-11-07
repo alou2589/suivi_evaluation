@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['code_action'], message: 'Une action avec ce code existe déjà.')]
+#[UniqueEntity(fields: ['nom_marque'], message: 'Une action avec ce code existe déjà.')]
 #[ORM\Entity(repositoryClass: MarqueMatosRepository::class)]
 class MarqueMatos
 {
@@ -36,6 +36,7 @@ class MarqueMatos
      */
     #[ORM\OneToMany(targetEntity: MatosInformatique::class, mappedBy: 'marque_matos')]
     private Collection $matosInformatiques;
+
 
     public function __construct()
     {
@@ -137,4 +138,6 @@ class MarqueMatos
 
         return $this;
     }
+
+
 }
