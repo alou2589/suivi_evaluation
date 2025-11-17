@@ -20,6 +20,7 @@ class ServiceForm extends AbstractType
                 'choices' => [
                     'Service' => 'service',
                     'Cellule' => 'cellule',
+                    'Autre' => 'autre',
                 ],
                 'placeholder' => 'Select a type of service',
                 'required' => true,
@@ -27,7 +28,8 @@ class ServiceForm extends AbstractType
                     'class' => 'form-select',
                 ],
             ])
-            ->add('nom_service')
+            ->add(
+            'nom_service')
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'attr' => [

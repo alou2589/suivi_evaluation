@@ -21,6 +21,7 @@ class AppFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
+
         $existing= $manager->getRepository(User::class)->findOneBy(['email'=>'superadmin@industriecommerce.gouv.sn']);
         if(!$existing){
             $user=new User();
