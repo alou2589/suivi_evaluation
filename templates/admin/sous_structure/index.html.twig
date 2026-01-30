@@ -1,0 +1,58 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set page_title = 'Sous Structure' %}
+
+{% block title %}Sous Structure{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        {% include '/admin/partials/_page_header_partials.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex gap-3 justify-content-end">
+                        <h4 class="card-title">Liste des sous structures</h4>
+                        <a href="{{ path('app_admin_sous_structure_create') }}" title="Nouvelle sous structure" class="rounded-pill btn btn-black btn-lg ms-auto" >
+                          <i class="fa fa-plus"></i>
+                          Ajouter
+                        </a>
+                        <a href="{{ path('app_admin_sous_structure_upload') }}"   title="Importer sous structure" class="rounded-pill btn btn-secondary " >
+                          <i class="fa fa-file-upload"></i>
+                          Importer
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table table-striped table-hover"  id="basic-datatables">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Sous Structure</th>
+                                    <th class="text-center">Description</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for sous_structure in sous_structures %}
+                                <tr>
+                                    <td class="text-center">{{ sous_structure.nomSousStructure }}</td>
+                                    <td class="">{{ sous_structure.description }}</td>
+                                    <td class="text-center">
+                                          <a href="{{ path('app_admin_sous_structure_show', {'id': sous_structure.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                                          <a href="{{ path('app_admin_sous_structure_edit', {'id': sous_structure.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                                        </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="2">Pas d'enregistrement effectué</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

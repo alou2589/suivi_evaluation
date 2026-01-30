@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\Direction;
 use App\Entity\Service;
+use App\Entity\SousStructure;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -11,25 +11,14 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ServiceForm extends AbstractType
+class SousStructureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
-            ->add('type_service', ChoiceType::class, [
-                'choices' => [
-                    'Service' => 'service',
-                    'Cellule' => 'cellule',
-                    'Autre' => 'autre',
-                ],
-                'placeholder' => 'Select a type of service',
-                'required' => true,
-                'attr' => [
-                    'class' => 'form-select',
-                ],
-            ])
             ->add(
-            'nom_service')
+            'nom_sous_structure')
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'attr' => [
@@ -44,21 +33,12 @@ class ServiceForm extends AbstractType
                 ],
 
             ])
-            ->add('structure_rattachee', EntityType::class, [
-                'class' => Direction::class,
-                'choice_label' => 'nom_direction',
-                'required' => false,
-                'attr' => [
-                    'data-placeholder' => 'Select a direction',
-                    'class' => 'js-example-basic-single',
-                ],
-            ])
             ->add('service_rattache', EntityType::class, [
                 'class' => Service::class,
                 'choice_label' => 'nom_service',
                 'required' => false,
                 'attr' => [
-                    'data-placeholder' => 'Selectionner le service rattaché',
+                    'data-placeholder' => 'Select a direction',
                     'class' => 'js-example-basic-single',
                 ],
             ])
@@ -68,7 +48,7 @@ class ServiceForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Service::class,
+            'data_class' => SousStructure::class,
         ]);
     }
 }

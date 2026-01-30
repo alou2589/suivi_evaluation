@@ -37,11 +37,12 @@ class MarqueMatos
     #[ORM\OneToMany(targetEntity: MatosInformatique::class, mappedBy: 'marque_matos')]
     private Collection $matosInformatiques;
 
-
     public function __construct()
     {
         $this->matosInformatiques = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -138,6 +139,4 @@ class MarqueMatos
 
         return $this;
     }
-
-
 }

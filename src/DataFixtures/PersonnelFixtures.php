@@ -149,13 +149,13 @@ class PersonnelFixtures extends Fixture
             $agent->setStatus($faker->randomElement($status_agent));
             $manager->persist($agent);
             //Affectation
-            $affectation->setAgent($agent);
-            $affectation->setPoste($faker->randomElement($postes));
-            $affectation->setService($faker->randomElement($services));
-            $affectation->setDateDebut($faker->dateTimeBetween('-10 years', 'now'));
-            $affectation->setDateFin($faker->optional(0.2)->dateTimeBetween('now', '+3 years'));
-            $affectation->setStatutAffectation($faker->randomElement(['En poste', 'Muté', 'En congé', 'Suspendu']));
-            $manager->persist($affectation);
+            //$affectation->setAgent($agent);
+            //$affectation->setPoste($faker->randomElement($postes));
+            //$affectation->setService($faker->randomElement($services));
+            //$affectation->setDateDebut($faker->dateTimeBetween('-10 years', 'now'));
+            //$affectation->setDateFin($faker->optional(0.2)->dateTimeBetween('now', '+3 years'));
+            //$affectation->setStatutAffectation($faker->randomElement(['En poste', 'Muté', 'En congé', 'Suspendu']));
+            //$manager->persist($affectation);
         }
 
         $manager->flush();

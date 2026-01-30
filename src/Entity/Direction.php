@@ -43,9 +43,19 @@ class Direction
     #[ORM\Column(length: 255)]
     private ?string $type_direction = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'directions')]
+    private ?self $direction_parent = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'direction_parent')]
+    private Collection $directions;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->directions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,6 +162,48 @@ class Direction
     public function setTypeDirection(string $type_direction): static
     {
         $this->type_direction = $type_direction;
+
+        return $this;
+    }
+
+    public function getDirectionParent(): ?self
+    {
+        return $this->direction_parent;
+    }
+
+    public function setDirectionParent(?self $direction_parent): static
+    {
+        $this->direction_parent = $direction_parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getDirections(): Collection
+    {
+        return $this->directions;
+    }
+
+    public function addDirection(self $direction): static
+    {
+        if (!$this->directions->contains($direction)) {
+            $this->directions->add($direction);
+            $direction->setDirectionParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDirection(self $direction): static
+    {
+        if ($this->directions->removeElement($direction)) {
+            // set the owning side to null (unless already changed)
+            if ($direction->getDirectionParent() === $this) {
+                $direction->setDirectionParent(null);
+            }
+        }
 
         return $this;
     }

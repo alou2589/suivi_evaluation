@@ -1,0 +1,41 @@
+<div class="row row-demo-grid">
+    <div class="col-md-12 ms-auto me-auto">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td colspan="3">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="card card-stats card-primary card-round">
+                              <div class="card-body card-secondary">
+                                <div class="row">
+                                  <div class="col-5">
+                                    <div class="icon-big text-center">
+                                      <i class="fas fa-users"></i>
+                                    </div>
+                                  </div>
+                                  <div class="col-7 col-stats">
+                                    <div class="numbers">
+                                      <p class="card-category">Effectif</p>
+                                      <h4 class="card-title">{{ affectations|length}}</h4>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Service</th>
+                    <td>{{ service.nomService }}</td>
+                    <td>{{ service.description }}</td>
+                </tr>
+                <tr>
+                    <th>Direction</th>
+                    <td>{{ service.structureRattachee.nomDirection }}</td>
+                    <td>{{ service.structureRattachee.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

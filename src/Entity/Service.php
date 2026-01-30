@@ -45,10 +45,27 @@ class Service
     #[ORM\OneToMany(targetEntity: Affectation::class, mappedBy: 'service')]
     private Collection $affectations;
 
+    /**
+     * @var Collection<int, SousStructure>
+     */
+    #[ORM\OneToMany(targetEntity: SousStructure::class, mappedBy: 'service_rattache')]
+    private Collection $sousStructures;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'services')]
+    private ?self $service_parent = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'service_parent')]
+    private Collection $services;
+
 
     public function __construct()
     {
         $this->affectations = new ArrayCollection();
+        $this->sousStructures = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
 
@@ -167,6 +184,78 @@ class Service
             // set the owning side to null (unless already changed)
             if ($affectation->getService() === $this) {
                 $affectation->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SousStructure>
+     */
+    public function getSousStructures(): Collection
+    {
+        return $this->sousStructures;
+    }
+
+    public function addSousStructure(SousStructure $sousStructure): static
+    {
+        if (!$this->sousStructures->contains($sousStructure)) {
+            $this->sousStructures->add($sousStructure);
+            $sousStructure->setServiceRattache($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSousStructure(SousStructure $sousStructure): static
+    {
+        if ($this->sousStructures->removeElement($sousStructure)) {
+            // set the owning side to null (unless already changed)
+            if ($sousStructure->getServiceRattache() === $this) {
+                $sousStructure->setServiceRattache(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getServiceParent(): ?self
+    {
+        return $this->service_parent;
+    }
+
+    public function setServiceParent(?self $service_parent): static
+    {
+        $this->service_parent = $service_parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(self $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setServiceParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(self $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getServiceParent() === $this) {
+                $service->setServiceParent(null);
             }
         }
 

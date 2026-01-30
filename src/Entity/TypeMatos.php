@@ -3,9 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\TypeMatosRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeMatosRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 class TypeMatos
 {
     #[ORM\Id]
@@ -24,6 +28,17 @@ class TypeMatos
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, MatosInformatique>
+     */
+    #[ORM\OneToMany(targetEntity: MatosInformatique::class, mappedBy: 'type_materiel')]
+    private Collection $matosInformatiques;
+
+    public function __construct()
+    {
+        $this->matosInformatiques = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,5 +104,35 @@ class TypeMatos
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, MatosInformatique>
+     */
+    public function getMatosInformatiques(): Collection
+    {
+        return $this->matosInformatiques;
+    }
+
+    public function addMatosInformatique(MatosInformatique $matosInformatique): static
+    {
+        if (!$this->matosInformatiques->contains($matosInformatique)) {
+            $this->matosInformatiques->add($matosInformatique);
+            $matosInformatique->setTypeMateriel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatosInformatique(MatosInformatique $matosInformatique): static
+    {
+        if ($this->matosInformatiques->removeElement($matosInformatique)) {
+            // set the owning side to null (unless already changed)
+            if ($matosInformatique->getTypeMateriel() === $this) {
+                $matosInformatique->setTypeMateriel(null);
+            }
+        }
+
+        return $this;
     }
 }

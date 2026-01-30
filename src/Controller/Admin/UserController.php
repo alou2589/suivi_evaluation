@@ -29,13 +29,20 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'create', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordHasherInterface->hashPassword(
+                    $user,
+                    "passer123"
+                )
+            );
+            $user->setIsActive(false);
             $entityManager->persist($user);
             $entityManager->flush();
 

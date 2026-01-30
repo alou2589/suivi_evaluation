@@ -1,0 +1,27 @@
+<div class="table-responsive" >
+    <table class="display table table-striped table-hover" id="basic-datatables">
+        <thead>
+            <tr>
+                <th class="text-center">Nom complet</th>
+                <th class="text-center">Matricule</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for affectation in affectations %}
+                <tr>
+                    <td class="text-center">{{ affectation.agent.identification.prenom }} {{ affectation.agent.identification.nom }}</td>
+                    <td class="text-center">{{ affectation.agent.matricule }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('app_admin_agent_show', {'id': affectation.agent.id}) }}" class="btn"> <i class="fa fa-eye text-primary"></i></a>
+                        <a href="{{ path('app_admin_agent_edit', {'id': affectation.agent.id}) }}" class="btn"> <i class="fa fa-edit text-secondary"></i></a>
+                    </td>
+                </tr>
+        {% else %}
+            <tr>
+                <td class="text-center" colspan="3">Pas d'enregistrement</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

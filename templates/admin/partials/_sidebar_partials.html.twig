@@ -81,6 +81,12 @@
                     <p>Service</p>
                   </a>
                 </li>
+                <li class="nav-item {{app.current_route in ['app_admin_sous_structure_index', 'app_admin_sous_structure_new', 'app_admin_sous_structure_edit', 'app_admin_sous_structure_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_sous_structure_index') }}">
+                    <i class="fas fa-desktop"></i>
+                    <p>Sous Structure</p>
+                  </a>
+                </li>
                 <li class="nav-item {{app.current_route in ['app_admin_poste_index', 'app_admin_poste_new', 'app_admin_poste_edit', 'app_admin_poste_show'] ? 'active' : ''}}">
                   <a href="{{ path('app_admin_poste_index') }}">
                     <i class="fas fa-desktop"></i>
@@ -164,6 +170,12 @@
                     <i class="fa fa-ellipsis-h"></i>
                   </span>
                   <h4 class="text-section">Administration TIC</h4>
+                </li>
+                <li class="nav-item {{app.current_route in ['app_admin_type_matos_index', 'app_admin_type_matos_new', 'app_admin_type_matos_edit', 'app_admin_type_matos_show'] ? 'active' : ''}}">
+                  <a href="{{ path('app_admin_type_matos_index') }}">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Type de matériel</p>
+                  </a>
                 </li>
                 <li class="nav-item {{app.current_route in ['app_admin_matos_informatique_index', 'app_admin_matos_informatique_new', 'app_admin_matos_informatique_edit', 'app_admin_matos_informatique_show'] ? 'active' : ''}}">
                   <a href="{{ path('app_admin_matos_informatique_index') }}">

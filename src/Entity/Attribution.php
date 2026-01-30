@@ -20,9 +20,6 @@ class Attribution
     #[ORM\ManyToOne(inversedBy: 'attributions')]
     private ?Affectation $affectaire = null;
 
-    #[ORM\ManyToOne(inversedBy: 'attributions')]
-    private ?MatosInformatique $materiel = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $date_attribution = null;
 
@@ -31,6 +28,9 @@ class Attribution
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'attributions')]
+    private ?MatosInformatique $materiel = null;
 
     public function getId(): ?int
     {
@@ -45,18 +45,6 @@ class Attribution
     public function setAffectaire(?Affectation $affectaire): static
     {
         $this->affectaire = $affectaire;
-
-        return $this;
-    }
-
-    public function getMateriel(): ?MatosInformatique
-    {
-        return $this->materiel;
-    }
-
-    public function setMateriel(?MatosInformatique $materiel): static
-    {
-        $this->materiel = $materiel;
 
         return $this;
     }
@@ -108,5 +96,17 @@ class Attribution
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getMateriel(): ?MatosInformatique
+    {
+        return $this->materiel;
+    }
+
+    public function setMateriel(?MatosInformatique $materiel): static
+    {
+        $this->materiel = $materiel;
+
+        return $this;
     }
 }

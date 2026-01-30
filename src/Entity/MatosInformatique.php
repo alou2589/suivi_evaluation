@@ -21,9 +21,6 @@ class MatosInformatique
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $type_matos = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $modele_matos = null;
 
     #[ORM\Column(length: 255)]
@@ -41,11 +38,6 @@ class MatosInformatique
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    /**
-     * @var Collection<int, Attribution>
-     */
-    #[ORM\OneToMany(targetEntity: Attribution::class, mappedBy: 'materiel')]
-    private Collection $attributions;
 
     /**
      * @var Collection<int, Maintenance>
@@ -56,28 +48,25 @@ class MatosInformatique
     #[ORM\ManyToOne(inversedBy: 'matosInformatiques')]
     private ?MarqueMatos $marque_matos = null;
 
+    /**
+     * @var Collection<int, Attribution>
+     */
+    #[ORM\OneToMany(targetEntity: Attribution::class, mappedBy: 'materiel')]
+    private Collection $attributions;
+
+    #[ORM\ManyToOne(inversedBy: 'matosInformatiques')]
+    private ?TypeMatos $type_materiel = null;
+
 
     public function __construct()
     {
-        $this->attributions = new ArrayCollection();
         $this->maintenances = new ArrayCollection();
+        $this->attributions = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTypeMatos(): ?string
-    {
-        return $this->type_matos;
-    }
-
-    public function setTypeMatos(string $type_matos): static
-    {
-        $this->type_matos = $type_matos;
-
-        return $this;
     }
 
     public function getModeleMatos(): ?string
@@ -164,35 +153,6 @@ class MatosInformatique
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    /**
-     * @return Collection<int, Attribution>
-     */
-    public function getAttributions(): Collection
-    {
-        return $this->attributions;
-    }
-
-    public function addAttribution(Attribution $attribution): static
-    {
-        if (!$this->attributions->contains($attribution)) {
-            $this->attributions->add($attribution);
-            $attribution->setMateriel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAttribution(Attribution $attribution): static
-    {
-        if ($this->attributions->removeElement($attribution)) {
-            // set the owning side to null (unless already changed)
-            if ($attribution->getMateriel() === $this) {
-                $attribution->setMateriel(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Maintenance>
@@ -235,5 +195,48 @@ class MatosInformatique
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Attribution>
+     */
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
+    }
+
+    public function addAttribution(Attribution $attribution): static
+    {
+        if (!$this->attributions->contains($attribution)) {
+            $this->attributions->add($attribution);
+            $attribution->setMateriel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribution(Attribution $attribution): static
+    {
+        if ($this->attributions->removeElement($attribution)) {
+            // set the owning side to null (unless already changed)
+            if ($attribution->getMateriel() === $this) {
+                $attribution->setMateriel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTypeMateriel(): ?TypeMatos
+    {
+        return $this->type_materiel;
+    }
+
+    public function setTypeMateriel(?TypeMatos $type_materiel): static
+    {
+        $this->type_materiel = $type_materiel;
+
+        return $this;
+    }
+
 
 }

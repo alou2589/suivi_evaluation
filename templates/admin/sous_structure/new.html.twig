@@ -1,7 +1,7 @@
 {% extends './admin/adminbase.html.twig' %}
-{% set page_title = 'Matériel Informatique' %}
+{% set page_title = 'Sous Structure' %}
 
-{% block title %}Matériel Informatique{% endblock %}
+{% block title %}Sous Structure{% endblock %}
 
 {% block body %}
     <div class="page-header">
@@ -11,33 +11,25 @@
         <div class="col-md-12">
            <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Ajouter Matériel Informatique</div>
+                    <div class="card-title">Ajouter sous structure</div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6 ms-auto me-auto col-lg-4">
-                           {{ form_start(form, {'attr':{'class':'form'}}) }}
+                        <div class="col-md-6 col-lg-4">
+                            {{ form_start(form, {'attr':{'class':'form'}}) }}
+
                             <div class="form-group form-group-default">
-                                {{form_row(form.marque_matos, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Nom de la marque...','id':'nomMarque', 'required':'required' }}) }}
+                                {{form_row(form.nom_sous_structure, {'attr': {'class': 'form-control', 'placeholder':'Nom de la sous structure...','id':'nomSousStructure', 'required':'required' }}) }}
                             </div>
                             <div class="form-group form-group-default">
-                                {{form_row(form.type_materiel, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Type de matériel...','id':'typeMatos', 'required':'required' }}) }}
+                                {{form_row(form.service_rattache, {'attr': {'class': 'form-control js-example-basic-single', 'placeholder':'Nom de la direction...','id':'nomDirection', 'required':'required' }}) }}
                             </div>
                             <div class="form-group form-group-default">
-                                {{form_row(form.modele_matos, {'attr': {'class': 'form-control', 'placeholder':'Modèle de matériel...','id':'modeleMatos', 'required':'required' }}) }}
-                            </div>
-                            <div class="form-group form-group-default">
-                                {{form_row(form.sn_matos, {'attr': {'class': 'form-control', 'placeholder':'Numéro de série...','id':'snMatos', 'required':'required' }}) }}
-                            </div>
-                            <div class="form-group form-group-default">
-                                {{form_row(form.date_reception, {'attr': {'class': 'form-control', 'placeholder':'Date de Réception...','id':'dateReception', 'required':'required' }}) }}
-                            </div>
-                            <div class="form-group form-group-default">
-                              {{form_row(form.specification, {'attr':{'class':"form-control "}})}}
+                                {{form_row(form.description, {'attr': {'class': 'form-control','id':'comment', 'required':'required' }}) }}
                             </div>
                             <div class="card-action">
                                 <button type="submit" class="btn btn-primary">Valider</button>
-                                <a class="btn btn-danger" href="{{ path('app_admin_matos_informatique_index') }}">Annuler</a>
+                                <a class="btn btn-danger" href="{{ path('app_admin_sous_structure_index') }}">Annuler</a>
                             </div>
                             {{ form_end(form) }}
                         </div>

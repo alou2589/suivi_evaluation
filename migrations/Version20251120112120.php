@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20251106092650 extends AbstractMigration
+final class Version20251120112120 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,14 @@ final class Version20251106092650 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE sous_structure ADD service_rattache_id INT DEFAULT NULL');
+        $this->addSql('CREATE TABLE sous_structure (id INT AUTO_INCREMENT NOT NULL, service_rattache_id INT DEFAULT NULL, nom_sous_structure VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_7408DCA5253803B5 (service_rattache_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE sous_structure ADD CONSTRAINT FK_7408DCA5253803B5 FOREIGN KEY (service_rattache_id) REFERENCES service (id)');
-        $this->addSql('CREATE INDEX IDX_7408DCA5253803B5 ON sous_structure (service_rattache_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE sous_structure DROP FOREIGN KEY FK_7408DCA5253803B5');
-        $this->addSql('DROP INDEX IDX_7408DCA5253803B5 ON sous_structure');
-        $this->addSql('ALTER TABLE sous_structure DROP service_rattache_id');
+        $this->addSql('DROP TABLE sous_structure');
     }
 }

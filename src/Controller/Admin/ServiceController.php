@@ -67,11 +67,7 @@ final class ServiceController extends AbstractController
                         continue;
                     }
                     $direction=$entityManager->getRepository(Direction::class)->findOneBy(['nom_direction' => $row[2]]);
-                    if (!$direction) {
-                        $this->addFlash('error', 'La direction ' . $row[2] . ' n\'existe pas.');
-                        continue;
-                    }
-
+                    
                     // Vérification des doublons
                     $existingService = $entityManager->getRepository(Service::class)->findOneBy(['type_service' => $row[0],'nom_service' => $row[1], 'structure_rattachee' => $direction]);
                     if ($existingService) {
