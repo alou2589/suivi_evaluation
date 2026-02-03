@@ -53,9 +53,9 @@ class ServiceForm extends AbstractType
                     'class' => 'js-example-basic-single',
                 ],
             ])
-            ->add('service_rattache', EntityType::class, [
+            ->add('service_parent', EntityType::class, [
                 'class' => Service::class,
-                'choice_label' => 'nom_service',
+                'choice_label' => 'description',
                 'required' => false,
                 'attr' => [
                     'data-placeholder' => 'Selectionner le service rattaché',
