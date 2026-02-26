@@ -16,20 +16,36 @@ class AttributionRepository extends ServiceEntityRepository
         parent::__construct($registry, Attribution::class);
     }
 
-    public function countByTypeMatosInDirection($typeMatos, $direction): int
+    public function countByTypeMatosInDirection(string $typeMatos, $direction): int
     {
         return (int) $this->createQueryBuilder('a')
             ->select('COUNT(a.id)')
             ->leftJoin('a.materiel', 'm')
             ->leftJoin('a.affectaire', 'aff')
             ->leftJoin('aff.service', 's')
-            ->andWhere('m.type_matos LIKE :typeMatos')
+            ->leftJoin('m.type_materiel','tm')
+            ->andWhere('tm.nom_type LIKE :typeMatos')
             ->andWhere('s.structure_rattachee = :direction')
             ->setParameter('typeMatos', $typeMatos.'%')
             ->setParameter('direction', $direction)
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    //public function countByTypeMatosInDirection($typeMatos, $direction): int
+    //{
+    //    return (int) $this->createQueryBuilder('a')
+    //        ->select('COUNT(a.id)')
+    //        ->leftJoin('a.materiel', 'm')
+    //        ->leftJoin('a.affectaire', 'aff')
+    //        ->leftJoin('aff.service', 's')
+    //        ->andWhere('m.type_matos LIKE :typeMatos')
+    //        ->andWhere('s.structure_rattachee = :direction')
+    //        ->setParameter('typeMatos', $typeMatos.'%')
+    //        ->setParameter('direction', $direction)
+    //        ->getQuery()
+    //        ->getSingleScalarResult();
+    //}
 
 
 

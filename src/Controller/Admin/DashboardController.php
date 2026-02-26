@@ -468,11 +468,11 @@ final class DashboardController extends AbstractController
         $materiels=$this->em->getRepository(MatosInformatique::class)->findAll();
         $type_materiels=['Ordinateur Portable','Ordinateur Fixe','Imprimante','Scanner','Autre'];
         //$type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
-        $laptops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur portable"]);
-        $desktops= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"ordinateur fixe"]);
-        $printers= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>$typePrinters]);
-        $scanners= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"scanner"]);
-        $others= $this->em->getRepository(MatosInformatique::class)->findBy(['type_matos'=>"autre"]);
+        $laptops= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Ordinateur Portable');
+        $desktops= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Ordinateur Fixe');
+        $printers= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Imprimante');
+        $scanners= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Scanner');
+        $others= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Autre');
 
         //$hp=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
         //$lenovo=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
