@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\MarqueMatos;
 use App\Entity\MatosInformatique;
+use App\Entity\TypeMatos;
 use App\Form\MatosInformatiqueType;
 use App\Form\UploadFileForm;
 use App\Repository\MatosInformatiqueRepository;
@@ -79,7 +80,7 @@ final class MatosInformtatiqueController extends AbstractController
                     // Vérification des doublons
                     $existingMatosInfo = $entityManager->getRepository(MatosInformatique::class)->findOneBy(['sn_matos' => $row[3]]);
                     $marque_matos=$entityManager->getRepository(MarqueMatos::class)->findOneBy(['nom_marque'=>$row[1]]);
-
+                    $type_materiel=$entityManager->getRepository(TypeMatos::class)->findOneBy(['nom_type'=>$row[0]]);
                     if ($existingMatosInfo) {
                         $this->addFlash('error', 'L\'information personnelle avec le CIN ' . $row[3] . ' existe déjà.');
                         continue;
@@ -90,7 +91,7 @@ final class MatosInformtatiqueController extends AbstractController
                         if($dateReception != false){
                             $matosInfo = new MatosInformatique();
                             // Assuming the columns in the Excel file match the InfoPerso entity fields
-                            $matosInfo->setTypeMatos($row[0]);
+                            $matosInfo->setTypeMateriel($type_materiel);
                             $matosInfo->setMarqueMatos($marque_matos);
                             $matosInfo->setModeleMatos($row[2]);
                             $matosInfo->setSnMatos($row[3]);

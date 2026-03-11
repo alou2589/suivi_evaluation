@@ -16,6 +16,16 @@ class MaintenanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Maintenance::class);
     }
 
+    public function countByStatusMatos(string $statusMatos): int
+    {
+        return (int) $this->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->where('m.status_matos = :statusMatos')
+            ->setParameter('statusMatos', $statusMatos)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Maintenance[] Returns an array of Maintenance objects
     //     */

@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: MatosInformatiqueRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['type_matos', 'modele_matos', 'sn_matos'], message: 'Ce matériel informatique existe déjà.')]
+#[UniqueEntity(fields: ['modele_matos', 'sn_matos'], message: 'Ce matériel informatique existe déjà.')]
 
 class MatosInformatique
 {

@@ -43,7 +43,7 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Ordi. Fixe</p>
+                          <p class="card-category">Unité Centrale</p>
                           <h4 class="card-title">{{ nbDesktops}}</h4>
                         </div>
                       </div>
@@ -85,8 +85,8 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Scanners & Autres</p>
-                          <h4 class="card-title">{{ nbAllOthers}}</h4>
+                          <p class="card-category">All In One</p>
+                          <h4 class="card-title">{{ nbAllInOnes}}</h4>
                         </div>
                       </div>
                     </div>
@@ -110,7 +110,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category"> Matos Attribué</p>
-                          <h4 class="card-title">{{ nbLaptops }}</h4>
+                          <h4 class="card-title">{{ attributions|length }}</h4>
                         </div>
                       </div>
                     </div>
@@ -131,7 +131,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Stock</p>
-                          <h4 class="card-title">{{ nbDesktops}}</h4>
+                          <h4 class="card-title">{{ materiels|length - attributions|length }} </h4>
                         </div>
                       </div>
                     </div>
@@ -152,7 +152,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">En Panne</p>
-                          <h4 class="card-title">{{ nbPrinters }}</h4>
+                          <h4 class="card-title">{{ matosEnPanne + matosEnReparation }}</h4>
                         </div>
                       </div>
                     </div>
@@ -173,7 +173,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Amorti</p>
-                          <h4 class="card-title">{{ nbAllOthers}}</h4>
+                          <h4 class="card-title">{{ matosAmortis}}</h4>
                         </div>
                       </div>
                     </div>

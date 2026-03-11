@@ -21,11 +21,13 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
         return (int) $this->createQueryBuilder('m')
             ->select('COUNT(m.id)')
             ->join('m.type_materiel','tm')
-            ->where('tm.nom_type = :typeMatos')
-            ->setParameter('typeMatos', $typeMatos)
+            ->where('tm.nom_type LIKE :typeMatos')
+            ->setParameter('typeMatos', $typeMatos.'%')
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+
 
     //public function countByTypeAndMarque($typeMatos, $marqueMatos): int
     //{
@@ -54,10 +56,10 @@ class MatosInformatiqueRepository extends ServiceEntityRepository
    {
        return $this->createQueryBuilder('m')
            ->select('mm.nom_marque AS marque,
-               SUM(CASE WHEN m.type_matos = \'Ordinateur Portable%\' THEN 1 ELSE 0 END) AS laptop,
-               SUM(CASE WHEN m.type_matos = \'Ordinateur Fixe%\' THEN 1 ELSE 0 END) AS desktop,
-               SUM(CASE WHEN m.type_matos LIKE \'Imprimante%\' THEN 1 ELSE 0 END) AS printer,
-               SUM(CASE WHEN m.type_matos LIKE \'Scanner%\' THEN 1 ELSE 0 END) AS scanner')
+               SUM(CASE WHEN tm.nom_type LIKE \'Ordinateur Portable%\' THEN 1 ELSE 0 END) AS laptop,
+               SUM(CASE WHEN tm.nom_type LIKE \'Ordinateur Fixe%\' THEN 1 ELSE 0 END) AS desktop,
+               SUM(CASE WHEN tm.nom_type LIKE \'Imprimante%\' THEN 1 ELSE 0 END) AS printer,
+               SUM(CASE WHEN tm.nom_type LIKE \'Scanner%\' THEN 1 ELSE 0 END) AS scanner')
            ->leftJoin('m.marque_matos', 'mm')
            ->leftJoin('m.type_materiel','tm')
            ->groupBy('mm.nom_marque')

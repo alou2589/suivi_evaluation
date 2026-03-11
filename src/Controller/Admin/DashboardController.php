@@ -7,22 +7,17 @@ use App\Entity\Agent;
 use App\Entity\Attribution;
 use App\Entity\Direction;
 use App\Entity\DocumentAdministratif;
-use App\Entity\InfoPerso;
+use App\Entity\Maintenance;
 use App\Entity\MarqueMatos;
 use App\Entity\MatosInformatique;
 use App\Entity\Service;
-use App\Repository\DirectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Math;
-use PhpOffice\PhpSpreadsheet\Chart\GridLines;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
-
-
 
 #[Route('/admin/dashboard', name: 'app_admin_dashboard_')]
 
@@ -463,17 +458,27 @@ final class DashboardController extends AbstractController
 
         //$typeMateriels= ["ordinateur portable","ordinateur fixe","imprimante noir et blanc","imprimante couleur","scanner","autre"];
         $typePrinters=["imprimante noir et blanc","imprimante couleur"];
-        $attributions= $this->em->getRepository(Attribution::class)->findAll();
         $directions=$this->em->getRepository(Direction::class)->findAll();
         $materiels=$this->em->getRepository(MatosInformatique::class)->findAll();
-        $type_materiels=['Ordinateur Portable','Ordinateur Fixe','Imprimante','Scanner','Autre'];
+        $type_materiels=['Ordinateur Portable','UC','Imprimante','Scanner','Autre'];
         //$type_matos[]=$this->em->getRepository(MatosInformatique::class)->findDistinctTypeMatos();
         $laptops= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Ordinateur Portable');
-        $desktops= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Ordinateur Fixe');
+        $desktops= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('UC');
         $printers= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Imprimante');
         $scanners= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Scanner');
-        $others= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Autre');
+        $allinones= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('All-In-One');
+        $moniteurs= $this->em->getRepository(MatosInformatique::class)->countByTypeMatos('Moniteur');
 
+        // Matériels attribués par type
+        $attributions= $this->em->getRepository(Attribution::class)->findAll();
+        //Matériels en stock
+        $stocks= count($materiels)-count($attributions);
+
+        //Matériels par état
+        $enpanne=$this->em->getRepository(Maintenance::class)->countByStatusMatos('En Panne');
+        $enreparation=$this->em->getRepository(Maintenance::class)->countByStatusMatos('En Réparation');
+        $amortis=$this->em->getRepository(Maintenance::class)->countByStatusMatos('Hors Service');
+        $enservice=$this->em->getRepository(Maintenance::class)->countByStatusMatos('En Service');
         //$hp=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
         //$lenovo=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
         //$lexmark=$this->em->getRepository(MatosInformatique::class)->findBy(["marque_matos"=>"HP"]);
@@ -484,11 +489,11 @@ final class DashboardController extends AbstractController
         foreach($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
             $direction_laptop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Portable', $direction);
-            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Fixe', $direction);
-            $direction_desktop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
+            $direction_uc_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Fixe', $direction);
+            $direction_uc_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
             $direction_printer_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Imprimante', $direction);
             $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Scanner', $direction);
-            $direction_other_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Autre', $direction);
+            $direction_allinones_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
         }
         $marque_materiels=$this->em->getRepository(MarqueMatos::class)->findAll();
         foreach($marque_materiels as $marque_materiel){
@@ -498,10 +503,10 @@ final class DashboardController extends AbstractController
         //===Statistique Parc Informatique
         //Statistiques Matos par type
         $chartByType->setData([
-            'labels'=>["Ordi. Portable","Ordi. Fixe","Imprimantes","Scanners","Autres"],
+            'labels'=>["Ordi. Portable","UC","Imprimantes","Scanners","All In One", "Moniteurs"],
             'datasets'=>[
                 [
-                    'data'=>[count($laptops),count($desktops),count($printers),count($scanners),count($others)],
+                    'data'=>[$laptops,$desktops,$printers,$scanners,$allinones],
                     'backgroundColor'=> self::getRandomColor(5),
                     'borderColor'=> '#FFFF',
                     'borderWidth'=> 1
@@ -533,10 +538,10 @@ final class DashboardController extends AbstractController
                     'data'=>array_values($direction_laptop_counts),
                 ],
                 [
-                    'label'=>'Desktop',
+                    'label'=>'UC',
                     'backgroundColor'=> '#fdaf4b',
                     'borderColor'=>'#fdaf4b',
-                    'data'=>array_values($direction_desktop_counts),
+                    'data'=>array_values($direction_uc_counts),
                 ],
                 [
                     'label'=>'Imprimante',
@@ -551,10 +556,10 @@ final class DashboardController extends AbstractController
                     'data'=>array_values($direction_scanner_counts),
                 ],
                 [
-                    'label'=>'Autres',
+                    'label'=>'All-In-One',
                     'backgroundColor'=> '#fd4b7a',
                     'borderColor'=>'#fd4b7a',
-                    'data'=>array_values($direction_other_counts),
+                    'data'=>array_values($direction_allinones_counts),
                 ],
             ]
         ]);
@@ -596,16 +601,16 @@ final class DashboardController extends AbstractController
             'labels'=>array_values($direction_names),
             'datasets'=>[
                 [
-                    'label'=>'Laptop',
+                    'label'=>'Ordinateur Portable',
                     'backgroundColor'=> '#59d05d',
                     'borderColor'=>'#59d05d',
                     'data'=>array_values($direction_laptop_counts),
                 ],
                 [
-                    'label'=>'Desktop',
+                    'label'=>'UC',
                     'backgroundColor'=> '#fdaf4b',
                     'borderColor'=>'#fdaf4b',
-                    'data'=>array_values($direction_desktop_counts),
+                    'data'=>array_values($direction_uc_counts),
                 ],
                 [
                     'label'=>'Imprimante',
@@ -620,10 +625,10 @@ final class DashboardController extends AbstractController
                     'data'=>array_values($direction_scanner_counts),
                 ],
                 [
-                    'label'=>'Autres',
+                    'label'=>'All-In-One',
                     'backgroundColor'=> '#fd4b7a',
                     'borderColor'=>'#fd4b7a',
-                    'data'=>array_values($direction_other_counts),
+                    'data'=>array_values($direction_allinones_counts),
                 ],
             ]
         ]);
@@ -666,13 +671,22 @@ final class DashboardController extends AbstractController
 
         return $this->render('admin/dashboard/index_informatique.html.twig',[
             'dashboard_title'=> 'Informatique',
-            'nbLaptops'=>count($laptops),
-            'nbDesktops'=>count($desktops),
-            'nbPrinters'=>count($printers),
-            'nbAllOthers'=>count($scanners)+ count($others),
+            'nbLaptops'=>$laptops,
+            'nbDesktops'=>$desktops,
+            'nbPrinters'=>$printers,
+            'nbScanners'=>$scanners,
+            'nbAllInOnes'=>$allinones,
+            'nbMoniteurs'=>$moniteurs,
             'chartByType'=>$chartByType,
             'chartByTypeInDirection'=>$chartByTypeInDirection,
             'laptop_counts'=> $laptop_counts,
+            'materiels'=> $materiels,
+            'attributions'=> $attributions,
+            'stocks'=>$stocks,
+            'matosEnPanne'=>$enpanne,
+            'matosEnReparation'=>$enreparation,
+            'matosAmortis'=>$amortis,
+            'matosEnService'=>$enservice,
             //'datasets'=>json_encode($datasets),
             //'datas'=>json_encode($datas),
 

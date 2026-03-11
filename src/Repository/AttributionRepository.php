@@ -32,6 +32,18 @@ class AttributionRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countByTypeMatos(string $typeMatos): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->leftJoin('a.materiel', 'm')
+            ->leftJoin('m.type_materiel','tm')
+            ->andWhere('tm.nom_type LIKE :typeMatos')
+            ->setParameter('typeMatos', $typeMatos.'%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //public function countByTypeMatosInDirection($typeMatos, $direction): int
     //{
     //    return (int) $this->createQueryBuilder('a')
