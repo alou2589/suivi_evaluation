@@ -489,11 +489,10 @@ final class DashboardController extends AbstractController
         foreach($directions as $direction){
             $direction_names[]=$direction->getNomDirection();
             $direction_laptop_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Portable', $direction);
-            $direction_uc_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Ordinateur Fixe', $direction);
-            $direction_uc_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
+            $direction_uc_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('UC', $direction);
             $direction_printer_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Imprimante', $direction);
             $direction_scanner_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('Scanner', $direction);
-            $direction_allinones_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All In One', $direction);
+            $direction_allinones_counts[]=$this->em->getRepository(Attribution::class)->countByTypeMatosInDirection('All-In-One', $direction);
         }
         $marque_materiels=$this->em->getRepository(MarqueMatos::class)->findAll();
         foreach($marque_materiels as $marque_materiel){
